@@ -137,7 +137,40 @@
         </p>
     </div>
 </div>
+    <div class="problem">
+    <p><strong>Problème 4 : (Problème de Josephus)</strong><br><br>
 
+    Dans le royaume fictif de Sikinia, les condamnés à mort sont placés en cercle et numérotés de 1 à n.
+    
+    En commençant par le numéro 2, un prisonnier sur deux est éliminé successivement, en suivant le cercle, jusqu’à ce qu’il ne reste qu’un seul survivant.
+    
+    <br><br>
+    <strong>Question :</strong> Pour un entier n donné, comment déterminer la position du survivant ?
+    </p>
+
+    <p class="difficulty">Difficulté : ★★★★☆</p>
+
+    <button onclick="toggleSolution('sol4')">Voir solution</button>
+
+    <div id="sol4" class="solution">
+        <p>
+        Ce problème est connu sous le nom de problème de Josephus.
+        
+        Lorsque l’on élimine un élément sur deux, la position du survivant peut être déterminée en écrivant n sous la forme :
+        
+        n = 2^k + l
+        
+        où 2^k est la plus grande puissance de 2 inférieure ou égale à n.
+        
+        La position du survivant est alors :
+        
+        J(n) = 2l + 1
+        
+        Cette formule peut être démontrée par récurrence ou en analysant la structure du processus d’élimination.
+        </p>
+    </div>
+    </div>
+    
 <script>
 function toggleSolution(id) {
     var el = document.getElementById(id);
