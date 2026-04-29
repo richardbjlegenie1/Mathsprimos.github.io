@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Problèmes Mathématiques</title>
+
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00bcd4;
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #00bcd4;
+        }
+
+        .problem {
+            background: #111;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #00bcd4;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0097a7;
+        }
+
+        .solution {
+            margin-top: 15px;
+            display: none;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .difficulty {
+            margin-top: 10px;
+            font-style: italic;
+            color: #aaa;
+        }
+
+        a {
+            color: #00bcd4;
+            text-decoration: none;
+        }
+
+        .back {
+            display: block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="index.html" class="back">← Retour à l'accueil</a>
+
+<h1>Problèmes Mathématiques</h1>
+
+<!-- 🟢 Niveau Facile -->
+<h2>🟢 Niveau Facile</h2>
+
+<div class="problem">
+    <p><strong>Problème 1 :</strong><br>
+    Montrer que : 1 + 2 + ... + n = n(n+1)/2
+    </p>
+
+    <p class="difficulty">Difficulté : ★☆☆☆☆</p>
+
+    <button onclick="toggleSolution('sol1')">Voir solution</button>
+
+    <div id="sol1" class="solution">
+        <p>
+        On peut associer les termes : (1+n), (2+n-1), etc. Chaque paire vaut n+1.
+        Il y a n/2 paires → somme = n(n+1)/2.
+        </p>
+    </div>
+</div>
+
+<!-- 🟡 Niveau Intermédiaire -->
+<h2>🟡 Niveau Intermédiaire</h2>
+
+<div class="problem">
+    <p><strong>Problème 2 :</strong><br>
+    Calculer la somme des carrés : 1² + 2² + ... + n²
+    </p>
+
+    <p class="difficulty">Difficulté : ★★☆☆☆</p>
+
+    <button onclick="toggleSolution('sol2')">Voir solution</button>
+
+    <div id="sol2" class="solution">
+        <p>
+        La formule est : n(n+1)(2n+1)/6.
+        Elle se démontre par récurrence ou méthodes classiques.
+        </p>
+    </div>
+</div>
+
+<!-- 🔴 Niveau Avancé -->
+<h2>🔴 Niveau Avancé (IMC / Olympiades)</h2>
+
+<div class="problem">
+    <p><strong>Problème 3 :</strong><br>
+    Trouver tous les entiers n tels que n² + n + 1 soit premier.
+    </p>
+
+    <p class="difficulty">Difficulté : ★★★★☆</p>
+
+    <button onclick="toggleSolution('sol3')">Voir solution</button>
+
+    <div id="sol3" class="solution">
+        <p>
+        On teste plusieurs valeurs. Pour n ≥ 2, l'expression devient souvent composée.
+        Les cas particuliers donnent les solutions.
+        (À compléter avec une vraie démonstration détaillée)
+        </p>
+    </div>
+</div>
+
+<script>
+function toggleSolution(id) {
+    var el = document.getElementById(id);
+    if (el.style.display === "none") {
+        el.style.display = "block";
+    } else {
+        el.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
