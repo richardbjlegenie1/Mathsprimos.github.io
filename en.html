@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathsprimos - Passionate Mathematics Student</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color: #ffffff;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav h1 {
+            font-size: 1.5rem;
+            color: #00ff88;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00ff88;
+        }
+
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #accueil {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 2rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #00ff88;
+        }
+
+        .projet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .projet {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .projet:hover {
+            transform: translateY(-10px);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        input, textarea {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #000;
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <h1>Mathsprimos</h1>
+
+            <!-- 🌍 Bouton langues -->
+        <div style="text-align:right; padding:10px;">
+    <a href="index.html">FR</a> |
+            
+    <a href="en.html">EN</a> |
+    <a href="zh.html">中文</a> |
+    <a href="es.html">ES</a> |
+    <a href="ru.html">RU</a> |
+    <a href="ko.html">KO</a> |
+    <a href="ewe.html">EWE</a>
+        </div>
+            
+            <ul>
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#apropos">À propos</a></li>
+                <li><a href="#projets">Projets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="accueil">
+        <div class="hero">
+            <h2>Étudiant passionné en Mathématiques</h2>
+            <p>Objectif : Intégrer les meilleures institutions de pointe comme Tsinghua University et exceller en mathématiques.</p>
+            <a href="#apropos" class="btn">Découvrir mon parcours</a>
+        </div>
+    </section>
+
+    <section id="apropos">
+        <h2>À propos</h2>
+        <p>Étudiant à l'Université de Lomé, Togo. Passionné par les mathématiques avancées, les concours internationaux (comme l'IMC) et les applications en finance et informatique.</p>
+        <p>Je prépare activement des bourses pour Tsinghua University pour une L1 en mathématiques/informatique.</p>
+    </section>
+
+    <section id="projets">
+        <h2>Projets Mathématiques</h2>
+        <div class="projet-grid">
+            <div class="projet">
+                <h3>Modélisation Financière</h3>
+                <p>Algorithmes pour transferts cross-border avec Wise et Payoneer.</p>
+            </div>
+            <div class="projet">
+                <h3>Préparation IMC 2026</h3>
+                <p>Entraînement intensif pour le International Mathematics Competition.</p>
+            </div>
+            <div class="projet">
+                <h3>Optimisation Logistique</h3>
+                <p>Modèles mathématiques pour ports ouest-africains (Lomé).</p>
+            </div>
+            <div class="projet">
+    <h3>Problèmes mathématiques</h3>
+    <p>Collection de problèmes mathématiques avancés.</p>
+    <a href="Problèmes.html" class="btn">Voir</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Envoyez-moi un message pour collaborations, opportunités ou questions sur les maths/IMC/Tsinghua.</p>
+        <form action="https://formspree.io/f/xpqbarql" method="POST">
+            <input type="text" name="name" placeholder="Votre nom" required>
+            <input type="email" name="email" placeholder="Votre email" required>
+            <textarea name="message" placeholder="Votre message" rows="5" required></textarea>
+            <input type="hidden" name="_subject" value="Nouveau message de ABONI">
+            <input type="hidden" name="_next" value="?message=envoye">
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 ABONI. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.search.includes('message=envoye')) {
+                alert('Message envoyé avec succès ! Merci.');
+            }
+        });
+    </script>
+</body>
+  </html>
