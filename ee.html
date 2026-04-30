@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ee">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathsprimos - Nusrɔ̃ la ƒe Matematik</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color: #ffffff;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav h1 {
+            font-size: 1.5rem;
+            color: #00ff88;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #00ff88;
+        }
+
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 2rem;
+            cursor: pointer;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #00ff88;
+        }
+
+        .projet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .projet {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            margin: auto;
+            gap: 1rem;
+        }
+
+        input, textarea {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #000;
+            margin-top: 5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <h1>Mathsprimos</h1>
+
+        <div style="position:absolute; right:20px; top:20px;">
+            <a href="index.html">FR</a> |
+            <a href="en.html">EN</a> |
+            <a href="zh.html">中文</a> |
+            <a href="es.html">ES</a> |
+            <a href="ru.html">RU</a> |
+            <a href="ko.html">KO</a> |
+            <a href="ewe.html">EWE</a>
+        </div>
+
+        <ul>
+            <li><a href="#home">Dzi</a></li>
+            <li><a href="#about">Ŋutinya</a></li>
+            <li><a href="#projects">Dzidzɔwo</a></li>
+            <li><a href="#contact">Dɔwɔnu</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="home">
+    <div class="hero">
+        <h2>Matematik dɔwɔla si lɔ̃a nu</h2>
+        <p>Dzidzɔ: Yina kɔkɔe sukuwo me abe Tsinghua University eye woɖe matematik me ŋusẽ.</p>
+        <a href="#about" class="btn">Kpɔ nye nɔnɔme</a>
+    </div>
+</section>
+
+<section id="about">
+    <h2>Ŋutinya</h2>
+    <p>Me nye nusrɔ̃la si le Lomé, Togo. Melɔ̃ matematik kɔkɔe, kɔŋutɔwo ƒe asitɔwo (abe IMC) kple numetoto le finance kple computer science me.</p>
+    <p>Menye gbe le didi be magblɔ kɔkɔe suku Tsinghua University.</p>
+</section>
+
+<section id="projects">
+    <h2>Matematik Dzidzɔwo</h2>
+
+    <div class="projet-grid">
+
+        <div class="projet">
+            <h3>Finance ƒe model</h3>
+            <p>Algos si wole Wise kple Payoneer wɔwɔ me.</p>
+        </div>
+
+        <div class="projet">
+            <h3>IMC 2026 Gbedodo</h3>
+            <p>Gbeɖeka gɔmesese ɖe matematik asitɔwo me.</p>
+        </div>
+
+        <div class="projet">
+            <h3>Logistics ƒe nɔnɔme</h3>
+            <p>Matematik modelwo le Lomé kple Afrika west me.</p>
+        </div>
+
+        <div class="projet">
+            <h3>Matematik mbɔ</h3>
+            <p>Mbɔ kɔkɔe ƒe nɔnɔmetata.</p>
+            <a href="problemes.html" class="btn">Kpɔ</a>
+        </div>
+
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Dɔwɔnu</h2>
+    <p>Na nye nyawo ɖe kɔkɔe, asitɔwo alo matematik ŋuti.</p>
+
+    <form action="https://formspree.io/f/xpqbarql" method="POST">
+        <input type="text" name="name" placeholder="Wò ŋkɔ" required>
+        <input type="email" name="email" placeholder="Wò email" required>
+        <textarea name="message" placeholder="Wò nyawo" rows="5" required></textarea>
+        <button type="submit" class="btn">Ðe</button>
+    </form>
+</section>
+
+<footer>
+    <p>&copy; 2026 ABONI. Nuwo katã le mía si.</p>
+</footer>
+
+</body>
+</html>
