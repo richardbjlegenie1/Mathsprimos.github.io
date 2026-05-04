@@ -319,6 +319,155 @@
     </div>
 
 </section>
+
+<section id="problems">
+<h2>Advanced IMC / Putnam-Level Problems</h2>
+
+<style>
+.problem {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+.solution {
+    display: none;
+    margin-top: 15px;
+    color: #ccc;
+}
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00ff88;
+}
+</style>
+
+<script>
+function toggle(id){
+    var x = document.getElementById(id);
+    x.style.display = (x.style.display === "block") ? "none" : "block";
+}
+</script>
+
+<!-- PROBLEM 1 -->
+<div class="problem">
+<b>Problem 1 (Number Theory)</b><br>
+Prove that √2 is irrational.
+
+<button onclick="toggle('s1')">Solution</button>
+<div id="s1" class="solution">
+Assume √2 = p/q in lowest terms. Then 2q² = p² → p even → p=2k.
+Substitute: 2q² = 4k² → q² = 2k² → q even.
+Contradiction since p,q not coprime.
+</div>
+</div>
+
+<!-- PROBLEM 2 -->
+<div class="problem">
+<b>Problem 2 (Combinatorics)</b><br>
+Count binary strings of length n with no consecutive 1s.
+
+<button onclick="toggle('s2')">Solution</button>
+<div id="s2" class="solution">
+Let a_n be count. Either starts with 0 → a_{n-1}, or 10 → a_{n-2}.
+Thus a_n = a_{n-1} + a_{n-2} (Fibonacci).
+</div>
+</div>
+
+<!-- PROBLEM 3 -->
+<div class="problem">
+<b>Problem 3 (Algebra)</b><br>
+Find all real solutions of x³ - 3x + 1 = 0.
+
+<button onclick="toggle('s3')">Solution</button>
+<div id="s3" class="solution">
+Use substitution x = 2cosθ → leads to trigonometric solution.
+Solutions: x = 2cos(2πk/9).
+</div>
+</div>
+
+<!-- PROBLEM 4 -->
+<div class="problem">
+<b>Problem 4 (Inequality)</b><br>
+For a,b,c > 0 prove:
+(a²+b²+c²)² ≥ 3(a³b + b³c + c³a)
+
+<button onclick="toggle('s4')">Solution</button>
+<div id="s4" class="solution">
+Apply rearrangement inequality or homogenization + symmetry.
+</div>
+</div>
+
+<!-- PROBLEM 5 -->
+<div class="problem">
+<b>Problem 5 (Number Theory)</b><br>
+Show infinitely many primes.
+
+<button onclick="toggle('s5')">Solution</button>
+<div id="s5" class="solution">
+Classic Euclid: product of primes +1 not divisible by any known prime.
+</div>
+</div>
+
+<!-- PROBLEM 6 -->
+<div class="problem">
+<b>Problem 6 (Analysis)</b><br>
+Compute limit: lim (1 + 1/n)^n
+
+<button onclick="toggle('s6')">Solution</button>
+<div id="s6" class="solution">
+Standard limit defining e.
+</div>
+</div>
+
+<!-- PROBLEM 7 -->
+<div class="problem">
+<b>Problem 7 (Combinatorics)</b><br>
+Number of permutations with no fixed points.
+
+<button onclick="toggle('s7')">Solution</button>
+<div id="s7" class="solution">
+Derangements: !n ≈ n!/e.
+</div>
+</div>
+
+<!-- PROBLEM 8 -->
+<div class="problem">
+<b>Problem 8 (Number Theory)</b><br>
+Prove that for any integer n, n³ - n is divisible by 6.
+
+<button onclick="toggle('s8')">Solution</button>
+<div id="s8" class="solution">
+n(n-1)(n+1) product of 3 consecutive integers → divisible by 2 and 3.
+</div>
+</div>
+
+<!-- PROBLEM 9 -->
+<div class="problem">
+<b>Problem 9 (Algebra)</b><br>
+Find all f such that f(x+y)=f(x)+f(y).
+
+<button onclick="toggle('s9')">Solution</button>
+<div id="s9" class="solution">
+Cauchy equation → linear if continuity assumed.
+</div>
+</div>
+
+<!-- PROBLEM 10 -->
+<div class="problem">
+<b>Problem 10 (Geometry)</b><br>
+Sum of angles in triangle.
+
+<button onclick="toggle('s10')">Solution</button>
+<div id="s10" class="solution">
+π radians or 180°.
+</div>
+</div>
+
+</section>
 <script>
 function toggleSolution(id) {
     var el = document.getElementById(id);
