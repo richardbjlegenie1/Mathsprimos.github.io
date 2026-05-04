@@ -1,26 +1,288 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <title>Problèmes Mathématiques</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Problèmes Mathématiques</h1>
-        <h2>Section en Français</h2>
-        <p>Voici quelques problèmes mathématiques de niveau Putnam:</p>
-        <ul>
-            <li>Problème 1: ...</li>
-            <li>Problème 2: ...</li>
-            <li>Problème 3: ...</li>
-        </ul>
+<meta charset="UTF-8">
+<title>Advanced Math Training (IMC / Putnam)</title>
 
-        <h2>English Section</h2>
-        <p>Here are some Putnam-level math problems:</p>
-        <ul>
-            <li>Problem 1: ...</li>
-            <li>Problem 2: ...</li>
-            <li>Problem 3: ...</li>
-        </ul>
-    </div>
+<!-- MathJax -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+body {
+    background: #0d0d0d;
+    color: white;
+    font-family: Arial;
+    padding: 40px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #00bcd4;
+}
+
+.problem {
+    background: #111;
+    padding: 25px;
+    margin-top: 25px;
+    border-radius: 12px;
+}
+
+.solution {
+    display: none;
+    margin-top: 15px;
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #00bcd4;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0097a7;
+}
+
+.difficulty {
+    color: #aaa;
+    font-style: italic;
+}
+</style>
+
+<script>
+function toggle(id){
+    let el = document.getElementById(id);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+</script>
+
+</head>
+
+<body>
+
+<h1>Advanced Mathematics Training Platform</h1>
+
+<!-- ====================== -->
+<h2>🟢 Fundamentals</h2>
+
+<div class="problem">
+<b>Problème 1 :</b><br>
+Montrer que :
+\[
+1 + 2 + \cdots + n = \frac{n(n+1)}{2}
+\]
+
+<div class="difficulty">Difficulté : ★☆☆☆☆</div>
+
+<button onclick="toggle('sol1')">Voir solution</button>
+
+<div id="sol1" class="solution">
+
+<b>Preuve 1 (méthode de Gauss)</b><br><br>
+
+On écrit la somme deux fois :
+\[
+S = 1 + 2 + \cdots + n
+\]
+\[
+S = n + (n-1) + \cdots + 1
+\]
+
+En additionnant :
+\[
+2S = (n+1) + (n+1) + \cdots + (n+1)
+\]
+
+Il y a \(n\) termes :
+\[
+2S = n(n+1)
+\Rightarrow S = \frac{n(n+1)}{2}
+\]
+
+<b>Preuve 2 (récurrence)</b><br><br>
+
+Initialisation : \(n=1\) → OK  
+Hérédité : supposer vrai pour \(n\), montrer pour \(n+1\)
+
+\[
+S_{n+1} = S_n + (n+1)
+\]
+
+\[
+= \frac{n(n+1)}{2} + (n+1)
+= \frac{(n+1)(n+2)}{2}
+\]
+
+Donc vrai.
+
+</div>
+</div>
+
+<!-- ====================== -->
+<h2>🟡 Intermediate</h2>
+
+<div class="problem">
+<b>Problème 2 :</b><br>
+Calculer :
+\[
+1^2 + 2^2 + \cdots + n^2
+\]
+
+<div class="difficulty">Difficulté : ★★☆☆☆</div>
+
+<button onclick="toggle('sol2')">Voir solution</button>
+
+<div id="sol2" class="solution">
+
+<b>Résultat :</b>
+\[
+\frac{n(n+1)(2n+1)}{6}
+\]
+
+<b>Preuve (récurrence)</b><br><br>
+
+On suppose vrai pour \(n\).
+
+\[
+S_{n+1} = S_n + (n+1)^2
+\]
+
+\[
+= \frac{n(n+1)(2n+1)}{6} + (n+1)^2
+\]
+
+Factorisation → donne :
+\[
+\frac{(n+1)(n+2)(2n+3)}{6}
+\]
+
+Donc formule valide.
+
+</div>
+</div>
+
+<!-- ====================== -->
+<h2>🔴 IMC Level</h2>
+
+<div class="problem">
+<b>Problème 3 :</b><br>
+Trouver tous les entiers \(n\) tels que :
+\[
+n^2 + n + 1
+\]
+soit premier.
+
+<div class="difficulty">Difficulté : ★★★★☆</div>
+
+<button onclick="toggle('sol3')">Voir solution</button>
+
+<div id="sol3" class="solution">
+
+On étudie modulo 3 :
+
+\[
+n \equiv 0,1,2 \mod 3
+\]
+
+Cas 1 : \(n \equiv 1\)
+\[
+n^2+n+1 \equiv 1+1+1 = 3 \equiv 0
+\]
+
+Donc divisible par 3 → composé si >3.
+
+Donc seuls petits cas possibles.
+
+Test :
+\[
+n=0 →1,\quad n=1→3,\quad n=2→7
+\]
+
+Au-delà → composé.
+
+Conclusion : \(n=0,1,2\)
+
+</div>
+</div>
+
+<!-- ====================== -->
+<h2>🔥 Putnam Level</h2>
+
+<div class="problem">
+<b>Problème 4 :</b><br>
+Montrer que :
+\[
+(a+b+c)\left(\frac{1}{a}+\frac{1}{b}+\frac{1}{c}\right) \ge 9
+\]
+
+<div class="difficulty">Difficulté : ★★★★★</div>
+
+<button onclick="toggle('sol4')">Voir solution</button>
+
+<div id="sol4" class="solution">
+
+Développons :
+
+\[
+= 3 + \sum \frac{a}{b}
+\]
+
+Or :
+\[
+\frac{a}{b} + \frac{b}{a} \ge 2
+\]
+
+Donc :
+\[
+\sum \frac{a}{b} \ge 6
+\]
+
+Conclusion :
+\[
+≥ 3 + 6 = 9
+\]
+
+</div>
+</div>
+
+<!-- ====================== -->
+<h2>🚀 Analysis</h2>
+
+<div class="problem">
+<b>Problème 5 :</b><br>
+Calculer :
+\[
+\lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n
+\]
+
+<button onclick="toggle('sol5')">Voir solution</button>
+
+<div id="sol5" class="solution">
+
+On prend le logarithme :
+
+\[
+\ln L = \lim n \ln\left(1+\frac{1}{n}\right)
+\]
+
+Utiliser développement limité :
+\[
+\ln(1+x) \sim x
+\]
+
+Donc :
+\[
+\ln L = 1
+\Rightarrow L = e
+\]
+
+</div>
+</div>
+
 </body>
-</html>
+                                                  </html>
