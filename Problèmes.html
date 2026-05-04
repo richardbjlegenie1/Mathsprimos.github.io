@@ -612,6 +612,150 @@ Taking limit → 1
 </div>
 
 </section>
+
+<section id="problems">
+<h2>Putnam-Level Problems (Advanced)</h2>
+
+<style>
+.problem {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+.solution {
+    display: none;
+    margin-top: 15px;
+    color: #ccc;
+}
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00ff88;
+}
+</style>
+
+<script>
+function toggle(id){
+    var x = document.getElementById(id);
+    x.style.display = (x.style.display === "block") ? "none" : "block";
+}
+</script>
+
+<!-- PROBLEM 1 -->
+<div class="problem">
+<b>Problem 1 (Number Theory)</b><br>
+Prove that there are infinitely many primes congruent to 1 modulo 4.
+
+<button onclick="toggle('s1')">Solution</button>
+<div id="s1" class="solution">
+Suppose finitely many: p₁,...,p_k all ≡1 mod 4.
+
+Consider N = (2p₁p₂...p_k)² + 1.
+
+Then N ≡ 1 mod 4.
+
+Let q be a prime divisor of N. Then:
+(2p₁...p_k)² ≡ -1 (mod q)
+
+So -1 is a quadratic residue mod q → q ≡ 1 mod 4.
+
+Also q is not among p_i (since N ≡1 mod p_i).
+
+Contradiction → infinitely many such primes.
+</div>
+</div>
+
+<!-- PROBLEM 2 -->
+<div class="problem">
+<b>Problem 2 (Combinatorics)</b><br>
+Evaluate:
+Sum_{k=0}^n (-1)^k C(n,k) / (k+1)
+
+<button onclick="toggle('s2')">Solution</button>
+<div id="s2" class="solution">
+Use identity:
+1/(k+1) = ∫₀¹ x^k dx
+
+So sum becomes:
+∫₀¹ Σ (-1)^k C(n,k) x^k dx
+
+= ∫₀¹ (1 - x)^n dx
+
+= 1/(n+1)
+
+Thus result:
+1/(n+1)
+</div>
+</div>
+
+<!-- PROBLEM 3 -->
+<div class="problem">
+<b>Problem 3 (Inequality)</b><br>
+Let a,b,c > 0. Prove:
+(a+b+c)(1/a + 1/b + 1/c) ≥ 9
+
+<button onclick="toggle('s3')">Solution</button>
+<div id="s3" class="solution">
+By AM-HM or direct expansion:
+
+(a+b+c)(1/a + 1/b + 1/c)
+= Σ a/b + Σ b/a + 3
+
+Using inequality:
+a/b + b/a ≥ 2
+
+So total ≥ 6 + 3 = 9.
+</div>
+</div>
+
+<!-- PROBLEM 4 -->
+<div class="problem">
+<b>Problem 4 (Algebra / Functional)</b><br>
+Find all functions f: ℝ → ℝ such that:
+f(x+y) + f(x−y) = 2f(x)f(y)
+
+<button onclick="toggle('s4')">Solution</button>
+<div id="s4" class="solution">
+Set y=0:
+f(x)+f(x)=2f(x)f(0) → f(0)=1
+
+Try exponential form:
+f(x)=cosh(ax) or cos(ax)
+
+Indeed:
+cosh(x+y)+cosh(x−y)=2cosh(x)cosh(y)
+
+Similarly for cosine.
+
+Thus solutions:
+f(x)=cos(ax) or f(x)=cosh(ax)
+</div>
+</div>
+
+<!-- PROBLEM 5 -->
+<div class="problem">
+<b>Problem 5 (Analysis / Series)</b><br>
+Evaluate:
+Σ_{n=1}^∞ 1 / (n(n+1))
+
+<button onclick="toggle('s5')">Solution</button>
+<div id="s5" class="solution">
+Use telescoping:
+
+1/(n(n+1)) = 1/n - 1/(n+1)
+
+Sum becomes:
+1 - 1/(N+1)
+
+Taking limit → 1
+</div>
+</div>
+
+</section>
 <script>
 function toggleSolution(id) {
     var el = document.getElementById(id);
