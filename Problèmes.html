@@ -756,6 +756,123 @@ Taking limit → 1
 </div>
 
 </section>
+
+<section id="problems">
+<h2>Putnam-Level Problems (High Difficulty)</h2>
+
+<style>
+.problem {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+.solution {
+    display: none;
+    margin-top: 15px;
+    color: #ccc;
+}
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00ff88;
+}
+</style>
+
+<script>
+function toggle(id){
+    var x = document.getElementById(id);
+    x.style.display = (x.style.display === "block") ? "none" : "block";
+}
+</script>
+
+<!-- PROBLEM 1 -->
+<div class="problem">
+<b>Problem 1 (Number Theory – Quadratic Residues)</b><br>
+Let p be a prime with p ≡ 1 (mod 4).  
+Prove that there exists an integer x such that:
+x² ≡ -1 (mod p).
+
+<button onclick="toggle('s1')">Solution</button>
+<div id="s1" class="solution">
+
+Idea: Use Fermat + group structure.
+
+Consider multiplicative group (ℤ/pℤ)* of order p−1.  
+Since p ≡ 1 mod 4 → 4 | (p−1)
+
+Let g be a generator.  
+Then any element = g^k.
+
+Take x = g^{(p−1)/4}.
+
+Then:
+x² = g^{(p−1)/2}
+
+By Euler’s criterion:
+g^{(p−1)/2} ≡ -1 (mod p)
+
+Thus x² ≡ -1 mod p.
+
+</div>
+</div>
+
+<!-- PROBLEM 2 -->
+<div class="problem">
+<b>Problem 2 (Combinatorics – Double Counting)</b><br>
+Let S be a set with n elements.  
+Show that the number of ways to choose two subsets A ⊆ B ⊆ S is 3^n.
+
+<button onclick="toggle('s2')">Solution</button>
+<div id="s2" class="solution">
+
+Each element of S has 3 possibilities:
+
+1) Not in B  
+2) In B but not in A  
+3) In A (thus also in B)
+
+So each element contributes 3 choices independently.
+
+Total number:
+3^n
+
+</div>
+</div>
+
+<!-- PROBLEM 3 -->
+<div class="problem">
+<b>Problem 3 (Analysis – Series Trick)</b><br>
+Evaluate:
+∑_{n=1}^∞ 1 / (n(n+1)(n+2))
+
+<button onclick="toggle('s3')">Solution</button>
+<div id="s3" class="solution">
+
+Use partial fractions:
+
+1/(n(n+1)(n+2)) = A/n + B/(n+1) + C/(n+2)
+
+Solving:
+= 1/2 (1/n - 2/(n+1) + 1/(n+2))
+
+Now sum:
+
+Sum telescopes:
+
+S_N = 1/2[(1/1 - 2/2 + 1/3) + (1/2 - 2/3 + 1/4) + ...]
+
+Everything cancels except:
+
+S = 1/4
+
+</div>
+</div>
+
+</section>
 <script>
 function toggleSolution(id) {
     var el = document.getElementById(id);
