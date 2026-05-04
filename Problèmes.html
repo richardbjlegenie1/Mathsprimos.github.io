@@ -171,6 +171,154 @@
     </div>
     </div>
     
+<section id="problems">
+    <h2>Advanced Mathematics Problems (IMC Level)</h2>
+
+    <style>
+        .problem {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .solution {
+            display: none;
+            margin-top: 15px;
+            color: #ccc;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background: #00ff88;
+            color: #000;
+        }
+    </style>
+
+    <script>
+        function toggle(id){
+            var x = document.getElementById(id);
+            x.style.display = (x.style.display === "block") ? "none" : "block";
+        }
+    </script>
+
+    <!-- PROBLEM 1 -->
+    <div class="problem">
+        <b>Problem 1 (Number Theory)</b><br>
+        Prove that there are infinitely many primes of the form 4n + 3.
+
+        <button onclick="toggle('s1')">Solution</button>
+        <div id="s1" class="solution">
+            Suppose finitely many: p₁,...,pₖ. Consider N = 4(p₁...pₖ) - 1.
+            Then N ≡ 3 mod 4. Any prime divisor q of N satisfies q ≡ 3 mod 4.
+            But q is not among p₁,...,pₖ. Contradiction.
+        </div>
+    </div>
+
+    <!-- PROBLEM 2 -->
+    <div class="problem">
+        <b>Problem 2 (Algebra)</b><br>
+        Solve in reals: x⁴ - 5x² + 4 = 0.
+
+        <button onclick="toggle('s2')">Solution</button>
+        <div id="s2" class="solution">
+            Let y = x². Then y² -5y +4 = 0 → (y-1)(y-4)=0.
+            So y=1 or 4 → x = ±1, ±2.
+        </div>
+    </div>
+
+    <!-- PROBLEM 3 -->
+    <div class="problem">
+        <b>Problem 3 (Inequality)</b><br>
+        For positive a,b,c prove:
+        (a²+b²+c²) ≥ ab+bc+ca.
+
+        <button onclick="toggle('s3')">Solution</button>
+        <div id="s3" class="solution">
+            (a-b)²+(b-c)²+(c-a)² ≥ 0 → gives result.
+        </div>
+    </div>
+
+    <!-- PROBLEM 4 -->
+    <div class="problem">
+        <b>Problem 4 (Combinatorics)</b><br>
+        Number of ways to choose 2 elements from n?
+
+        <button onclick="toggle('s4')">Solution</button>
+        <div id="s4" class="solution">
+            C(n,2) = n(n-1)/2.
+        </div>
+    </div>
+
+    <!-- PROBLEM 5 -->
+    <div class="problem">
+        <b>Problem 5 (Sequences)</b><br>
+        Find limit of uₙ₊₁ = (uₙ + 3)/2.
+
+        <button onclick="toggle('s5')">Solution</button>
+        <div id="s5" class="solution">
+            Limit L satisfies L = (L+3)/2 → L = 3.
+        </div>
+    </div>
+
+    <!-- PROBLEM 6 -->
+    <div class="problem">
+        <b>Problem 6 (Number Theory)</b><br>
+        Prove 9 divides 10ⁿ - 1.
+
+        <button onclick="toggle('s6')">Solution</button>
+        <div id="s6" class="solution">
+            10 ≡ 1 mod 9 → 10ⁿ ≡ 1 → result.
+        </div>
+    </div>
+
+    <!-- PROBLEM 7 -->
+    <div class="problem">
+        <b>Problem 7 (Function)</b><br>
+        Find minimum of f(x)=x²-6x+5.
+
+        <button onclick="toggle('s7')">Solution</button>
+        <div id="s7" class="solution">
+            Vertex x=3 → f(3) = -4.
+        </div>
+    </div>
+
+    <!-- PROBLEM 8 -->
+    <div class="problem">
+        <b>Problem 8 (Combinatorics)</b><br>
+        How many subsets of size k from n?
+
+        <button onclick="toggle('s8')">Solution</button>
+        <div id="s8" class="solution">
+            C(n,k) = n! / (k!(n-k)!).
+        </div>
+    </div>
+
+    <!-- PROBLEM 9 -->
+    <div class="problem">
+        <b>Problem 9 (Inequality)</b><br>
+        Prove (a+b)/2 ≥ √(ab).
+
+        <button onclick="toggle('s9')">Solution</button>
+        <div id="s9" class="solution">
+            (√a - √b)² ≥ 0 → gives AM ≥ GM.
+        </div>
+    </div>
+
+    <!-- PROBLEM 10 -->
+    <div class="problem">
+        <b>Problem 10 (Series)</b><br>
+        Sum of geometric series ∑(k=0→n) r^k.
+
+        <button onclick="toggle('s10')">Solution</button>
+        <div id="s10" class="solution">
+            S = (1 - r^{n+1}) / (1 - r), r ≠ 1.
+        </div>
+    </div>
+
+</section>
 <script>
 function toggleSolution(id) {
     var el = document.getElementById(id);
