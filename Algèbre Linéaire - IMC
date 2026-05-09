@@ -1,1 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algèbre Linéaire — IMC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e10;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --steel: #2c3e50;
+    --muted: #6b6560;
+    --highlight: #fff9e6;
+    --border: #d4c9b0;
+    --theorem-bg: #f0eade;
+    --proof-bg: #fafaf8;
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    background: var(--steel);
+    color: var(--paper);
+    padding: 4rem 3rem 3rem;
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+  }
+
+  .header-decoration {
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .header-decoration::before {
+    content: '';
+    position: absolute;
+    inset: 30px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: rgba(245,240,232,0.6);
+    display: block;
+    font-size: 0.6em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+
+  header p {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(245,240,232,0.6);
+    margin-top: 1rem;
+    max-width: 600px;
+  }
+
+  /* ── NAV / TOC ── */
+  nav {
+    background: var(--ink);
+    padding: 1.5rem 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem 6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CHAPTER ── */
+  .chapter {
+    margin-bottom: 5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter:nth-child(2) { animation-delay: 0.08s; }
+  .chapter:nth-child(3) { animation-delay: 0.16s; }
+  .chapter:nth-child(4) { animation-delay: 0.24s; }
+  .chapter:nth-child(5) { animation-delay: 0.32s; }
+  .chapter:nth-child(6) { animation-delay: 0.40s; }
+  .chapter:nth-child(7) { animation-delay: 0.48s; }
+
+  .chapter-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .chapter-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--steel);
+  }
+
+  .chapter-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+
+  /* ── BLOCKS ── */
+  .block {
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid;
+    position: relative;
+  }
+
+  .block-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .theorem {
+    background: var(--theorem-bg);
+    border-color: var(--accent);
+  }
+  .theorem .block-label { color: var(--accent); }
+
+  .lemma {
+    background: #eef2f7;
+    border-color: #3498db;
+  }
+  .lemma .block-label { color: #2980b9; }
+
+  .corollary {
+    background: #f0f7ee;
+    border-color: #27ae60;
+  }
+  .corollary .block-label { color: #1e8449; }
+
+  .definition {
+    background: #fdf6e3;
+    border-color: var(--gold);
+  }
+  .definition .block-label { color: var(--gold); }
+
+  .proof {
+    background: var(--proof-bg);
+    border-color: var(--border);
+    border-style: dashed;
+  }
+  .proof .block-label { color: var(--muted); }
+
+  .example {
+    background: #fafafa;
+    border-color: #9b59b6;
+  }
+  .example .block-label { color: #8e44ad; }
+
+  .warning {
+    background: #fff5f5;
+    border-color: var(--accent);
+    border-style: dotted;
+  }
+  .warning .block-label { color: var(--accent); }
+
+  .imc-problem {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: var(--paper);
+    border: none;
+    border-radius: 2px;
+    padding: 1.5rem 1.75rem;
+    margin: 2rem 0;
+  }
+  .imc-problem .block-label {
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  .imc-problem p { color: rgba(245,240,232,0.9); }
+
+  /* ── MATH ── */
+  .math-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  .math-inline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: rgba(44,62,80,0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+    color: var(--steel);
+  }
+
+  /* ── KEY RESULTS ── */
+  .key-result {
+    border: 1px solid var(--accent);
+    background: white;
+    padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+  .key-result::before {
+    content: '★';
+    position: absolute;
+    left: 1rem;
+    top: 1.2rem;
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+
+  /* ── SECTION ── */
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2rem 0 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  p { margin-bottom: 0.75rem; }
+
+  ul, ol {
+    padding-left: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  li { margin-bottom: 0.3rem; }
+
+  /* ── QED ── */
+  .qed {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ── GRID FOR FORMULAS ── */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .formula-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  .formula-card .formula-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .formula-card .formula-eq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--steel);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    z-index: 9999;
+    transition: width 0.1s;
+    width: 0%;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    main { padding: 2rem 1.25rem 4rem; }
+    header { padding: 2.5rem 1.5rem 2rem; }
+    nav { padding: 1rem 1.5rem; }
+    .chapter-num { font-size: 2.5rem; }
+    .chapter-title { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<header>
+  <div class="header-decoration"></div>
+  <div class="badge">IMC — Préparation Concours</div>
+  <h1>
+    <em>Cours de préparation</em>
+    Algèbre Linéaire
+  </h1>
+  <p>Espaces vectoriels, déterminants, valeurs propres — du fondamental au niveau olympique.</p>
+</header>
+
+<nav>
+  <a href="#ch1">I. Espaces vectoriels</a>
+  <a href="#ch2">II. Applications linéaires</a>
+  <a href="#ch3">III. Déterminants</a>
+  <a href="#ch4">IV. Valeurs propres</a>
+  <a href="#ch5">V. Formes canoniques</a>
+  <a href="#ch6">VI. Espaces euclidiens</a>
+  <a href="#ch7">VII. Problèmes IMC</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CHAPITRE 1 -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <span class="chapter-num">I</span>
+    <div>
+      <div class="chapter-title">Espaces vectoriels</div>
+      <div class="chapter-subtitle">Structures fondamentales et dimension</div>
+    </div>
+  </div>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Espace vectoriel</div>
+    <p>Un <em>espace vectoriel</em> sur un corps <span class="math-inline">𝕂</span> (= ℝ ou ℂ) est un ensemble <span class="math-inline">V</span> muni d'une addition et d'une multiplication scalaire vérifiant les 8 axiomes habituels.</p>
+    <p>Exemples fondamentaux : <span class="math-inline">𝕂ⁿ</span>, <span class="math-inline">M_{n,m}(𝕂)</span>, <span class="math-inline">𝕂[X]</span>, <span class="math-inline">C([a,b])</span>, l'espace nul <span class="math-inline">{0}</span>.</p>
+  </div>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Sous-espace vectoriel</div>
+    <p>Un sous-ensemble <span class="math-inline">W ⊆ V</span> est un <em>sous-espace vectoriel</em> si et seulement si :</p>
+    <ul>
+      <li><span class="math-inline">0 ∈ W</span></li>
+      <li><span class="math-inline">∀ u,v ∈ W, u + v ∈ W</span></li>
+      <li><span class="math-inline">∀ λ ∈ 𝕂, ∀ u ∈ W, λu ∈ W</span></li>
+    </ul>
+  </div>
+
+  <h3>Bases et dimension</h3>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Famille libre, génératrice, base</div>
+    <p>Une famille <span class="math-inline">(e₁,...,eₙ)</span> est :</p>
+    <ul>
+      <li><strong>Libre</strong> si <span class="math-inline">λ₁e₁+...+λₙeₙ = 0 ⟹ λᵢ = 0 ∀i</span></li>
+      <li><strong>Génératrice</strong> si <span class="math-inline">Vect(e₁,...,eₙ) = V</span></li>
+      <li><strong>Base</strong> si libre et génératrice simultanément</li>
+    </ul>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Théorème — Théorème de la base incomplète</div>
+    <p>Toute famille libre peut être complétée en une base. Toute famille génératrice contient une base. En particulier, tout espace vectoriel de dimension finie possède une base.</p>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Théorème — Invariance de la dimension</div>
+    <p>Toutes les bases d'un espace vectoriel <span class="math-inline">V</span> ont le même cardinal, appelé la <em>dimension</em> de <span class="math-inline">V</span>, notée <span class="math-inline">dim V</span>.</p>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Formule de Grassmann</div>
+    <p>Si <span class="math-inline">F</span> et <span class="math-inline">G</span> sont des sous-espaces de <span class="math-inline">V</span> de dimension finie :</p>
+    <div class="math-display">dim(F + G) = dim F + dim G − dim(F ∩ G)</div>
+  </div>
+
+  <div class="block example">
+    <div class="block-label">Exemple IMC typique</div>
+    <p>Soient <span class="math-inline">F,G</span> deux sous-espaces de <span class="math-inline">ℝ⁵</span> avec <span class="math-inline">dim F = 3</span> et <span class="math-inline">dim G = 3</span>. Montrer que <span class="math-inline">F ∩ G ≠ {0}</span>.</p>
+    <p><strong>Solution :</strong> Par Grassmann, <span class="math-inline">dim(F∩G) = 3+3−dim(F+G) ≥ 6−5 = 1</span>. □</p>
+  </div>
+
+  <div class="block warning">
+    <div class="block-label">Attention — Piège classique</div>
+    <p>L'union de deux sous-espaces <span class="math-inline">F ∪ G</span> n'est en général <em>pas</em> un sous-espace. C'est un sous-espace si et seulement si <span class="math-inline">F ⊆ G</span> ou <span class="math-inline">G ⊆ F</span>.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CHAPITRE 2 -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <span class="chapter-num">II</span>
+    <div>
+      <div class="chapter-title">Applications linéaires</div>
+      <div class="chapter-subtitle">Noyau, image, théorème du rang</div>
+    </div>
+  </div>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Application linéaire</div>
+    <p><span class="math-inline">f : V → W</span> est <em>linéaire</em> si <span class="math-inline">f(λu + μv) = λf(u) + μf(v)</span> pour tous <span class="math-inline">u,v ∈ V</span> et <span class="math-inline">λ,μ ∈ 𝕂</span>.</p>
+  </div>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Noyau et Image</div>
+    <div class="math-display">Ker f = f⁻¹({0}) = {v ∈ V : f(v) = 0}   (sous-espace de V)
+Im f  = f(V)  = {f(v) : v ∈ V}           (sous-espace de W)</div>
+    <ul>
+      <li><strong>Injectivité</strong> ⟺ <span class="math-inline">Ker f = {0}</span></li>
+      <li><strong>Surjectivité</strong> ⟺ <span class="math-inline">Im f = W</span></li>
+    </ul>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Théorème du rang (dimension)</div>
+    <p>Si <span class="math-inline">V</span> est de dimension finie :</p>
+    <div class="math-display">dim(Ker f) + dim(Im f) = dim V
+       (nullité)  +    (rang)    = dim V</div>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Corollaire — Carré d'endomorphismes</div>
+    <p>Pour un endomorphisme <span class="math-inline">f : V → V</span> avec <span class="math-inline">dim V = n</span> :</p>
+    <ul>
+      <li><span class="math-inline">f</span> injective ⟺ <span class="math-inline">f</span> surjective ⟺ <span class="math-inline">f</span> bijective (isomorphisme)</li>
+      <li>Équivalent à : <span class="math-inline">rang(f) = n</span> ⟺ <span class="math-inline">det(f) ≠ 0</span></li>
+    </ul>
+  </div>
+
+  <h3>Matrices et changements de base</h3>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Matrice d'une application linéaire</div>
+    <p>La matrice de <span class="math-inline">f</span> dans les bases <span class="math-inline">ℬ</span> et <span class="math-inline">ℬ'</span> est la matrice <span class="math-inline">A = [f]_{ℬ,ℬ'}</span> dont la <span class="math-inline">j</span>-ème colonne est le vecteur de coordonnées de <span class="math-inline">f(eⱼ)</span> dans <span class="math-inline">ℬ'</span>.</p>
+  </div>
+
+  <div class="block theorem">
+    <div class="block-label">Formule de changement de base</div>
+    <p>Si <span class="math-inline">P</span> est la matrice de passage de <span class="math-inline">ℬ</span> vers <span class="math-inline">ℬ'</span> :</p>
+    <div class="math-display">A' = P⁻¹ A P</div>
+    <p>Deux matrices <em>semblables</em> représentent le même endomorphisme dans des bases différentes.</p>
+  </div>
+
+  <div class="key-result">
+    <strong>Invariants de similitude :</strong> Le rang, la trace, le déterminant, le polynôme caractéristique et le polynôme minimal sont invariants par similitude. C'est fondamental en IMC.
+  </div>
+
+  <div class="block example">
+    <div class="block-label">Problème — Rang d'une puissance</div>
+    <p>Soit <span class="math-inline">A ∈ M_n(ℝ)</span> telle que <span class="math-inline">A² = A</span> (projecteur). Montrer que <span class="math-inline">rang(A) = tr(A)</span>.</p>
+    <div class="block proof" style="margin-top:1rem;">
+      <div class="block-label">Preuve</div>
+      <p>Les valeurs propres de <span class="math-inline">A</span> sont dans <span class="math-inline">{0,1}</span> (car <span class="math-inline">λ²=λ</span>). <span class="math-inline">A</span> est diagonalisable. Si <span class="math-inline">r = rang(A)</span>, alors <span class="math-inline">A</span> a <span class="math-inline">r</span> valeurs propres égales à 1 et <span class="math-inline">n−r</span> égales à 0. Donc <span class="math-inline">tr(A) = r·1 + (n−r)·0 = r = rang(A)</span>.</p>
+      <div class="qed">∎</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CHAPITRE 3 -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <span class="chapter-num">III</span>
+    <div>
+      <div class="chapter-title">Déterminants</div>
+      <div class="chapter-subtitle">Calcul, propriétés, applications géométriques</div>
+    </div>
+  </div>
+
+  <div class="block definition">
+    <div class="block-label">Définition — Déterminant</div>
+    <p>Le déterminant est l'unique forme <span class="math-inline">n</span>-linéaire alternée normalisée :</p>
+    <div class="math-display">det(A) = Σ_{σ ∈ Sₙ} ε(σ) · a_{1,σ(1)} · a_{2,σ(2)} · … · a_{n,σ(n)}</div>
+    <p>où <span class="math-inline">ε(σ) ∈ {±1}</span> est la signature de la permutation <span class="math-inline">σ</span>.</p>
+  </div>
+
+  <h3>Propriétés essentielles</h3>
+
+  <div class="formula-grid">
+    <div class="formula-card">
+      <div class="formula-name">Multiplicativité</div>
+      <div class="formula-eq">det(AB) = det(A)·det(B)</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Transposée</div>
+      <div class="formula-eq">det(Aᵀ) = det(A)</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Inverse</div>
+      <div class="formula-eq">det(A⁻¹) = 1/det(A)</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Scalaire</div>
+      <div class="formula-eq">det(λA) = λⁿ det(A)</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Bloc triangulaire</div>
+      <div class="formula-eq">det([[A,B],[0,D]]) = det(A)det(D)</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-name">Matrices semblables</div>
+      <div class="formula-eq">det(P⁻¹AP) = det(A)</div>
+    </div>
+  </div>
+
+  <h3>Développement de Laplace</h3>
+
+  <div class="block theorem">
+    <div class="bl
