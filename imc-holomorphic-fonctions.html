@@ -666,3 +666,50 @@
       <span class="box-label">Théorème</span>
       <span class="box-title">Formule de Cauchy</span>
       <p style="margin-top:0.7rem">Si $f$ est holomorphe dans un voisinage du disque fermé $\overline{D(a,r)}$, alors pour tout $z \in D(a,r)$ :</p>
+<div class="math-block">$$f(z) = \frac{1}{2\pi i} \oint_{|w-a|=r} \frac{f(w)}{w - z}\,dw$$</div>
+      <p><strong>Formule pour les dérivées :</strong></p>
+      <div class="math-block">$$f^{(n)}(z) = \frac{n!}{2\pi i} \oint_{|w-a|=r} \frac{f(w)}{(w-z)^{n+1}}\,dw$$</div>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">🌟</span>
+      <div class="insight-text"><strong>Conséquence extraordinaire :</strong> Toute fonction holomorphe est automatiquement $C^\infty$ (infiniment dérivable) et même analytique (développable en série entière). En analyse réelle, $C^1 \not\Rightarrow C^2$ !</div>
+    </div>
+
+    <h3>2.4 Inégalités de Cauchy</h3>
+
+    <div class="proposition">
+      <span class="box-label">Proposition</span>
+      <p>Si $f$ est holomorphe sur $D(a,r)$ et $|f| \le M$ sur $|z-a|=r$, alors :</p>
+      <div class="math-block">$$|f^{(n)}(a)| \le \frac{n!\, M}{r^n}$$</div>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Preuve</span>
+      <p>Direct par ML sur la formule de Cauchy : $|f^{(n)}(a)| \le \dfrac{n!}{2\pi} \cdot \dfrac{M}{r^{n+1}} \cdot 2\pi r = \dfrac{n!\, M}{r^n}$.</p>
+    </div>
+
+    <h3>2.5 Théorème de Liouville</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Liouville</span>
+      <p style="margin-top:0.7rem">Toute fonction holomorphe et bornée sur $\mathbb{C}$ entier est constante.</p>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Preuve élégante</span>
+      <p>Si $|f| \le M$ partout, les inégalités de Cauchy avec rayon $r \to \infty$ donnent $|f'(a)| \le M/r \to 0$ pour tout $a$. Donc $f' \equiv 0$, donc $f$ est constante.</p>
+    </div>
+
+    <div class="corollary">
+      <span class="box-label">Corollaire Célèbre</span>
+      <span class="box-title">Théorème fondamental de l'algèbre</span>
+      <p style="margin-top:0.7rem">Tout polynôme non constant $P \in \mathbb{C}[z]$ admet au moins une racine dans $\mathbb{C}$.</p>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Preuve</span>
+      <p>Si $P(z) \ne 0$ pour tout $z$, alors $1/P$ est entière. Comme $|P(z)| \to \infty$ quand $|z| \to \infty$, on a $|1/P(z)| \to 0$, donc $1/P$ est bornée. Par Liouville : $1/P$ constante. Contradiction.</p>
+    </div>
+  </div>
