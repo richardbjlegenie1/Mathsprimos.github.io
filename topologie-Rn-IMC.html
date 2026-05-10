@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topologie de ℝⁿ — Préparation IMC</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1208;
+    --parchment: #faf6ef;
+    --cream: #f2ead8;
+    --gold: #c8962a;
+    --gold-light: #e8b84b;
+    --rust: #8b3a1a;
+    --teal: #1a5c5a;
+    --teal-light: #2a8a87;
+    --margin: #e8dfc8;
+    --rule: #c4b898;
+    --shadow: rgba(26,18,8,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--parchment);
+    text-align: center;
+    padding: 3.5rem 2rem 2.5rem;
+    position: relative;
+    border-bottom: 4px solid var(--gold);
+  }
+
+  header::before, header::after {
+    content: '◆ ◇ ◆';
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.5rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  header::after { margin-bottom: 0; margin-top: 1rem; }
+
+  .imc-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15rem;
+    padding: 0.25rem 1rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: var(--gold-light);
+    font-size: 1.1rem;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--parchment);
+    border-bottom: 2px solid var(--rule);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    border-right: 1px solid var(--rule);
+    padding: 0.9rem 1.2rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.02rem;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--ink);
+    color: var(--gold-light);
+  }
+
+  .nav-btn .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-right: 0.4rem;
+  }
+  .nav-btn.active .num { color: var(--gold-light); }
+
+  /* MAIN LAYOUT */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SIDEBAR */
+  aside {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--rule);
+    position: sticky;
+    top: 53px;
+    height: calc(100vh - 53px);
+    overflow-y: auto;
+  }
+
+  .toc-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .toc-item {
+    display: block;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.92rem;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s;
+    line-height: 1.4;
+  }
+
+  .toc-item:hover { background: var(--margin); }
+  .toc-item.active { background: var(--ink); color: var(--gold-light); }
+  .toc-item .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-right: 0.4rem;
+  }
+  .toc-item.active .toc-num { color: var(--gold-light); }
+
+  /* CONTENT AREA */
+  main {
+    padding: 2.5rem 3rem;
+  }
+
+  .section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .section.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--rule);
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--teal);
+    margin: 2rem 0 0.8rem;
+    padding-left: 0.8rem;
+    border-left: 3px solid var(--teal-light);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  /* BOXES */
+  .box {
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    padding: 1.2rem 1.5rem;
+    position: relative;
+  }
+
+  .box-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .box.definition {
+    background: #eef6f5;
+    border-left: 4px solid var(--teal);
+  }
+  .box.definition .box-title { color: var(--teal); }
+
+  .box.theorem {
+    background: #fdf6e8;
+    border-left: 4px solid var(--gold);
+    border-top: 1px solid #e8d8a0;
+  }
+  .box.theorem .box-title { color: #8a6400; }
+
+  .box.proof {
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--rust);
+  }
+  .box.proof .box-title { color: var(--rust); }
+
+  .box.example {
+    background: #f4f0f8;
+    border-left: 4px solid #7a4fa0;
+  }
+  .box.example .box-title { color: #5a2f80; }
+
+  .box.warning {
+    background: #fef0f0;
+    border-left: 4px solid #c0392b;
+  }
+  .box.warning .box-title { color: #c0392b; }
+
+  .box.imc {
+    background: #fffbf0;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(200,150,42,0.15);
+  }
+  .box.imc .box-title { color: var(--gold); }
+
+  .box.remark {
+    background: var(--margin);
+    border-left: 4px solid #888;
+  }
+  .box.remark .box-title { color: #555; }
+
+  /* QED */
+  .qed {
+    text-align: right;
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
+  }
+
+  /* CODE / MATH DISPLAY */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: var(--margin);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  /* LISTS */
+  ul, ol {
+    margin: 0.5rem 0 1rem 1.5rem;
+  }
+  li { margin-bottom: 0.3rem; }
+
+  /* EXERCISE */
+  .exercise-set {
+    margin-top: 2rem;
+    border-top: 1px dashed var(--rule);
+    padding-top: 1.5rem;
+  }
+  .exercise-set-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .exercise {
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .exercise-q {
+    padding: 0.9rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .exercise-q:hover { background: var(--margin); }
+  .exercise-q .ex-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-top: 0.15rem;
+  }
+  .exercise-q .arrow {
+    color: var(--gold);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .exercise-q.open .arrow { transform: rotate(180deg); }
+  .exercise-hint {
+    display: none;
+    padding: 0.8rem 1.2rem 1rem;
+    border-top: 1px dashed var(--rule);
+    font-style: italic;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  .exercise-hint.visible { display: block; }
+
+  /* NAVIGATION BUTTONS */
+  .section-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .btn {
+    background: var(--ink);
+    color: var(--gold-light);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.03rem;
+  }
+  .btn:hover { background: var(--teal); transform: translateY(-1px); }
+  .btn:disabled { background: var(--rule); color: var(--parchment); cursor: default; transform: none; }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 3px;
+    background: var(--rule);
+    position: sticky;
+    top: 53px;
+    z-index: 99;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--teal), var(--gold));
+    transition: width 0.3s ease;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { display: none; }
+    main { padding: 1.5rem; }
+  }
+
+  /* Math display overrides */
+  .MathJax { font-size: 1.05em !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="imc-badge">International Mathematical Competition · Préparation</div>
+  <h1>Topologie de ℝⁿ</h1>
+  <p class="subtitle">Cours complet étape par étape — Du fondamental au niveau IMC</p>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+
+<nav>
+  <div class="nav-inner" id="navInner"></div>
+</nav>
+
+<div class="layout">
+  <aside>
+    <div class="toc-title">Sommaire</div>
+    <div id="tocList"></div>
+  </aside>
+
+  <main id="mainContent">
+
+    <!-- ==================== SECTION 0: INTRO ==================== -->
+    <div class="section visible" data-section="0">
+      <div class="section-header">
+        <div class="section-tag">Introduction</div>
+        <h2>Pourquoi la topologie à l'IMC ?</h2>
+      </div>
+
+      <p>La topologie de \(\mathbb{R}^n\) constitue la <strong>colonne vertébrale</strong> de l'analyse moderne. À l'IMC, elle apparaît — souvent implicitement — dans presque tous les problèmes : compacité pour obtenir un extremum, connexité pour les arguments de chemin, complétude pour les suites de Cauchy.</p>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Thèmes IMC fréquents liés à la topologie</div>
+        <ul>
+          <li>Démontrer qu'une fonction continue sur un compact est bornée et atteint ses bornes</li>
+          <li>Utiliser la connexité pour montrer qu'une fonction est constante</li>
+          <li>Théorème du point fixe de Brouwer (en dimension 1 : cas intermédiaire)</li>
+          <li>Suites et compacité séquentielle (Bolzano–Weierstrass)</li>
+          <li>Ouverts, fermés et leurs propriétés dans des arguments d'analyse</li>
+        </ul>
+      </div>
+
+      <h3>Structure du cours</h3>
+      <p>Ce cours est divisé en <strong>7 étapes progressives</strong>, chacune construisant sur la précédente :</p>
+
+      <ol>
+        <li><strong>La distance dans ℝⁿ</strong> — normes et espaces métriques</li>
+        <li><strong>Ouverts et fermés</strong> — la topologie standard</li>
+        <li><strong>Suites et limites</strong> — convergence et complétude</li>
+        <li><strong>Compacité</strong> — théorème de Heine–Borel</li>
+        <li><strong>Connexité</strong> — ensembles connexes et par arcs</li>
+        <li><strong>Continuité et topologie</strong> — caractérisations équivalentes</li>
+        <li><strong>Théorèmes majeurs IMC</strong> — applications directes</li>
+      </ol>
+
+      <div class="box remark">
+        <div class="box-title">Convention</div>
+        On travaille dans \(\mathbb{R}^n\) muni de la norme euclidienne \(\|x\| = \sqrt{x_1^2 + \cdots + x_n^2}\), sauf mention contraire. Toutes les normes sur \(\mathbb{R}^n\) étant équivalentes, les notions topologiques ne dépendent pas du choix de la norme.
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" disabled>← Précédent</button>
+        <button class="btn" onclick="goTo(1)">Étape 1 : Distance →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 1: DISTANCE ==================== -->
+    <div class="section" data-section="1">
+      <div class="section-header">
+        <div class="section-tag">Étape 1 / 7</div>
+        <h2>La Distance dans ℝⁿ</h2>
+      </div>
+
+      <h3>1.1 Normes sur ℝⁿ</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Norme</div>
+        Une <strong>norme</strong> sur \(\mathbb{R}^n\) est une application \(\|\cdot\| : \mathbb{R}^n \to \mathbb{R}_+\) vérifiant :
+        <ol style="margin-top:0.5rem">
+          <li><strong>Séparation :</strong> \(\|x\| = 0 \Leftrightarrow x = 0\)</li>
+          <li><strong>Homogénéité :</strong> \(\|\lambda x\| = |\lambda|\,\|x\|\) pour tout \(\lambda \in \mathbb{R}\)</li>
+          <li><strong>Inégalité triangulaire :</strong> \(\|x + y\| \leq \|x\| + \|y\|\)</li>
+        </ol>
+      </div>
+
+      <div class="box example">
+        <div class="box-title">Exemples fondamentaux</div>
+        Pour \(x = (x_1, \ldots, x_n) \in \mathbb{R}^n\) :
+        <ul style="margin-top:0.5rem">
+          <li>\(\|x\|_1 = \sum_{i=1}^n |x_i|\) &nbsp;&nbsp;(norme \(L^1\))</li>
+          <li>\(\|x\|_2 = \left(\sum_{i=1}^n x_i^2\right)^{1/2}\) &nbsp;&nbsp;(norme euclidienne)</li>
+          <li>\(\|x\|_\infty = \max_{1 \leq i \leq n} |x_i|\) &nbsp;&nbsp;(norme du sup)</li>
+        </ul>
+        <p style="margin-top:0.5rem">Relation : \(\|x\|_\infty \leq \|x\|_2 \leq \|x\|_1 \leq \sqrt{n}\,\|x\|_2 \leq n\,\|x\|_\infty\).</p>
+      </div>
+
+      <h3>1.2 Distance et boules</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Distance et boules</div>
+        La <strong>distance</strong> entre \(x, y \in \mathbb{R}^n\) est \(d(x,y) = \|x - y\|\). On définit :
+        <ul style="margin-top:0.5rem">
+          <li><strong>Boule ouverte :</strong> \(B(a,r) = \{x \in \mathbb{R}^n : \|x-a\| < r\}\)</li>
+          <li><strong>Boule fermée :</strong> \(\bar{B}(a,r) = \{x \in \mathbb{R}^n : \|x-a\| \leq r\}\)</li>
+          <li><strong>Sphère :</strong> \(S(a,r) = \{x \in \mathbb{R}^n : \|x-a\| = r\}\)</li>
+        </ul>
+      </div>
+
+      <h3>1.3 Équivalence des normes</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème fondamental — Équivalence des normes</div>
+        <p>Sur \(\mathbb{R}^n\), <strong>toutes les normes sont équivalentes</strong> : pour deux normes \(\|\cdot\|_\alpha\) et \(\|\cdot\|_\beta\), il existe \(c, C > 0\) tels que pour tout \(x \in \mathbb{R}^n\) :</p>
+        \[ c\,\|x\|_\alpha \leq \|x\|_\beta \leq C\,\|x\|_\alpha \]
+      </div>
+
+      <div class="box proof">
+        <div class="box-title">Idée de preuve</div>
+        <p>Il suffit de montrer que toute norme \(\|\cdot\|\) est équivalente à \(\|\cdot\|_1\). Soit \((e_i)\) la base canonique. Par homogénéité et triangulaire : \(\|x\| \leq M\|x\|_1\) avec \(M = \max_i \|e_i\|\). Pour la minoration, on utilise la compacité de la sphère unité \(\{x : \|x\|_1 = 1\}\) et la continuité de \(\|\cdot\|\) (qui est lipschitzienne pour \(\|\cdot\|_1\)), donc \(\|\cdot\|\) atteint son minimum \(m > 0\).</p>
+        <div class="qed">□</div>
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Conséquence IMC cruciale</div>
+        <p>Puisque les normes sont équivalentes, les notions de <em>suite convergente</em>, <em>ensemble ouvert/fermé</em>, <em>compact</em>, <em>connexe</em> et <em>fonction continue</em> sont les mêmes pour toutes les normes. On peut donc choisir la norme la plus commode pour chaque problème !</p>
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 1.1</span> Montrer que \(\|x\|_\infty \leq \|x\|_2 \leq \sqrt{n}\,\|x\|_\infty\) pour tout \(x \in \mathbb{R}^n\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Pour la première inégalité, remarquer que \(\max|x_i|^2 \leq \sum x_i^2\). Pour la seconde, \(\sum x_i^2 \leq n \max x_i^2\).
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 1.2</span> Décrire géométriquement les boules unités \(B(0,1)\) pour \(\|\cdot\|_1\), \(\|\cdot\|_2\), \(\|\cdot\|_\infty\) dans \(\mathbb{R}^2\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> \(\|\cdot\|_1\) donne un carré tourné à 45°, \(\|\cdot\|_2\) un disque, \(\|\cdot\|_\infty\) un carré aligné aux axes.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(0)">← Introduction</button>
+        <button class="btn" onclick="goTo(2)">Étape 2 : Ouverts/Fermés →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 2: OUVERTS/FERMES ==================== -->
+    <div class="section" data-section="2">
+      <div class="section-header">
+        <div class="section-tag">Étape 2 / 7</div>
+        <h2>Ouverts et Fermés</h2>
+      </div>
+
+      <h3>2.1 Définitions fondamentales</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Ensemble ouvert</div>
+        \(U \subseteq \mathbb{R}^n\) est <strong>ouvert</strong> si pour tout \(x \in U\), il existe \(r > 0\) tel que \(B(x, r) \subseteq U\).
+        <p style="margin-top:0.5rem">Intuition : tout point de \(U\) admet un "voisinage" entièrement dans \(U\).</p>
+      </div>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Ensemble fermé</div>
+        \(F \subseteq \mathbb{R}^n\) est <strong>fermé</strong> si son complémentaire \(\mathbb{R}^n \setminus F\) est ouvert.
+        <p style="margin-top:0.5rem"><em>Équivalent :</em> \(F\) contient toutes ses valeurs d'adhérence, i.e., si \((x_k) \subseteq F\) et \(x_k \to x\), alors \(x \in F\).</p>
+      </div>
+
+      <div class="box warning">
+        <div class="box-title">⚠ Piège classique à l'IMC</div>
+        Un ensemble peut être ni ouvert ni fermé (ex : \([0,1[\)), ou les deux à la fois (<strong>clopen</strong> : \(\emptyset\) et \(\mathbb{R}^n\)). "Non fermé" ne signifie pas "ouvert" !
+      </div>
+
+      <h3>2.2 Propriétés des ouverts et fermés</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Stabilité par unions et intersections</div>
+        <ul>
+          <li>Union <em>quelconque</em> d'ouverts est ouverte.</li>
+          <li>Intersection <em>finie</em> d'ouverts est ouverte.</li>
+          <li>Intersection <em>quelconque</em> de fermés est fermée.</li>
+          <li>Union <em>finie</em> de fermés est fermée.</li>
+        </ul>
+        <p style="margin-top:0.5rem;font-style:italic">Contre-exemple : \(\bigcap_{n=1}^\infty \left(-\frac{1}{n}, \frac{1}{n}\right) = \{0\}\) fermé, intersection d'ouverts.</p>
+      </div>
+
+      <h3>2.3 Intérieur, adhérence, frontière</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Intérieur, adhérence, frontière</div>
+        Pour \(A \subseteq \mathbb{R}^n\) :
+        <ul style="margin-top:0.5rem">
+          <li>\(\mathring{A} = \text{int}(A)\) : le plus grand ouvert contenu dans \(A\) (union de tous les ouverts \(\subseteq A\))</li>
+          <li>\(\bar{A} = \text{adh}(A)\) : le plus petit fermé contenant \(A\) (intersection de tous les fermés \(\supseteq A\))</li>
+          <li>\(\partial A = \bar{A} \setminus \mathring{A}\) : la <strong>frontière</strong> de \(A\)</li>
+        </ul>
+        <p style="margin-top:0.5rem">Caractérisation : \(x \in \bar{A} \Leftrightarrow \forall r > 0,\; B(x,r) \cap A \neq \emptyset\).</p>
+      </div>
+
+      <div class="box example">
+        <div class="box-title">Exemple — Calculons pour \(A = B(0,1)\) dans \(\mathbb{R}^2\)</div>
+        <ul>
+          <li>\(\mathring{A} = B(0,1)\) (déjà ouvert)</li>
+          <li>\(\bar{A} = \bar{B}(0,1)\) (disque fermé)</li>
+          <li>\(\partial A = S(0,1)\) (cercle unité)</li>
+        </ul>
+        <p style="margin-top:0.5rem">Pour \(A = \mathbb{Q}^n\) : \(\mathring{A} = \emptyset\), \(\bar{A} = \mathbb{R}^n\), \(\partial A = \mathbb{R}^n\).</p>
+      </div>
+
+      <h3>2.4 Points d'accumulation et ensemble dérivé</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Point d'accumulation</div>
+        \(x\) est un <strong>point d'accumulation</strong> (ou point limite) de \(A\) si toute boule \(B(x,r)\) contient un point de \(A\) <em>distinct de \(x\)</em>. L'ensemble des points d'accumulation est noté \(A'\).
+        <p style="margin-top:0.5rem">On a : \(\bar{A} = A \cup A'\).</p>
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Technique IMC — Montrer qu'un ensemble est fermé</div>
+        <p>La méthode la plus efficace : prendre une suite \((x_k)\) dans l'ensemble qui converge, et montrer que sa limite est encore dans l'ensemble. C'est la caractérisation séquentielle des fermés.</p>
+        <p style="margin-top:0.5rem"><em>Exemple type :</em> \(F = \{(x,y) \in \mathbb{R}^2 : xy \geq 1\}\) est fermé car \(f(x,y) = xy\) est continue et \(F = f^{-1}([1,+\infty))\).</p>
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 2.1</span> Montrer que \(\text{GL}_n(\mathbb{R})\) (matrices inversibles) est ouvert dans \(\mathcal{M}_n(\mathbb{R}) \cong \mathbb{R}^{n^2}\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> \(\text{GL}_n(\mathbb{R}) = \{M : \det(M) \neq 0\} = (\det)^{-1}(\mathbb{R}^*)\). Le déterminant est un polynôme, donc continu. L'image réciproque d'un ouvert par une application continue est ouverte. (Ce problème apparaît régulièrement à l'IMC !)
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 2.2 ★ (style IMC)</span> Soit \(A \subseteq \mathbb{R}^n\). Montrer que \(\partial(\partial A) \subseteq \partial A\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> \(\partial A\) est toujours un fermé (car \(\partial A = \bar{A} \cap \overline{\mathbb{R}^n \setminus A}\), intersection de deux fermés). Pour un fermé \(F\), on a \(\partial F \subseteq F\) (car \(\partial F \subseteq \bar{F} = F\)).
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(1)">← Étape 1</button>
+        <button class="btn" onclick="goTo(3)">Étape 3 : Suites →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 3: SUITES ==================== -->
+    <div class="section" data-section="3">
+      <div class="section-header">
+        <div class="section-tag">Étape 3 / 7</div>
+        <h2>Suites, Limites et Complétude</h2>
+      </div>
+
+      <h3>3.1 Convergence dans ℝⁿ</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Suite convergente</div>
+        Une suite \((x_k)_{k \geq 1}\) dans \(\mathbb{R}^n\) converge vers \(\ell \in \mathbb{R}^n\) si :
+        \[\forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall k \geq N : \|x_k - \ell\| < \varepsilon\]
+        On note \(x_k \to \ell\) ou \(\lim_{k\to\infty} x_k = \ell\).
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Convergence coordonnée par coordonnée</div>
+        \(x_k = (x_k^{(1)}, \ldots, x_k^{(n)}) \to \ell = (\ell^{(1)}, \ldots, \ell^{(n)})\) si et seulement si pour chaque \(i\) : \(x_k^{(i)} \to \ell^{(i)}\) dans \(\mathbb{R}\).
+      </div>
+
+      <h3>3.2 Suites de Cauchy et complétude</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Suite de Cauchy</div>
+        \((x_k)\) est une <strong>suite de Cauchy</strong> si :
+        \[\forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall p, q \geq N : \|x_p - x_q\| < \varepsilon\]
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Complétude de ℝⁿ</div>
+        \(\mathbb{R}^n\) est <strong>complet</strong> : toute suite de Cauchy dans \(\mathbb{R}^n\) est convergente.
+      </div>
+
+      <div class="box proof">
+        <div class="box-title">Preuve</div>
+        <p>Si \((x_k)\) est de Cauchy dans \(\mathbb{R}^n\), alors pour chaque coordonnée \(i\), la suite \((x_k^{(i)})\) est de Cauchy dans \(\mathbb{R}\) (car \(|x_p^{(i)} - x_q^{(i)}| \leq \|x_p - x_q\|_\infty \leq \|x_p - x_q\|\)). Par complétude de \(\mathbb{R}\), \(x_k^{(i)} \to \ell^{(i)}\). Donc \(x_k \to \ell = (\ell^{(1)},\ldots,\ell^{(n)})\).</p>
+        <div class="qed">□</div>
+      </div>
+
+      <h3>3.3 Bolzano–Weierstrass</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème de Bolzano–Weierstrass</div>
+        Toute suite <strong>bornée</strong> dans \(\mathbb{R}^n\) admet une <strong>sous-suite convergente</strong>.
+      </div>
+
+      <div class="box proof">
+        <div class="box-title">Preuve (extraction diagonale)</div>
+        <p>Si \((x_k)\) est bornée dans \(\mathbb{R}^n\), la première composante \((x_k^{(1)})\) est bornée dans \(\mathbb{R}\), donc admet une sous-suite \((x_{\phi_1(k)})\) dont la première composante converge. De cette sous-suite, on extrait une sous-suite dont la deuxième composante converge. Après \(n\) étapes, la sous-suite \((x_{\phi_n(k)})\) converge en toutes les composantes.</p>
+        <div class="qed">□</div>
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Application IMC directe</div>
+        <p>Si \(f : K \to \mathbb{R}^m\) est continue et \(K\) est compact, et si \((y_k) = f(x_k)\) est une suite dans l'image, extraire une sous-suite de \((x_k)\) par B-W, puis utiliser la continuité.</p>
+        <p style="margin-top:0.5rem"><em>Problème type :</em> Montrer que l'image d'un compact par une application continue est compacte (et donc fermée et bornée).</p>
+      </div>
+
+      <h3>3.4 Suites dans les fermés</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Caractérisation séquentielle des fermés</div>
+        \(F \subseteq \mathbb{R}^n\) est fermé \(\Longleftrightarrow\) pour toute suite \((x_k) \subseteq F\) avec \(x_k \to x\), on a \(x \in F\).
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 3.1</span> Montrer que si \((x_k)\) est bornée et que toutes ses sous-suites convergentes ont la même limite \(\ell\), alors \(x_k \to \ell\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Raisonner par l'absurde : si \(x_k \not\to \ell\), il existe \(\varepsilon > 0\) et une sous-suite \((x_{k_j})\) avec \(\|x_{k_j} - \ell\| \geq \varepsilon\). Par B-W, extraire une sous-suite convergente de \((x_{k_j})\)... sa limite devrait être \(\ell\), contradiction.
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 3.2 ★★ (IMC 2019 style)</span> Soit \(f : \mathbb{R}^n \to \mathbb{R}^n\) avec \(\|f(x) - f(y)\| \geq c\|x-y\|\) pour un \(c > 0\). Montrer que \(f\) est bijective.</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Injectivité est immédiate. Pour la surjectivité : montrer que l'image est ouverte (par le théorème de la fonction inverse) et fermée (si \(f(x_k) \to y\), la suite \((x_k)\) est de Cauchy car \(\|x_k - x_j\| \leq \frac{1}{c}\|f(x_k) - f(x_j)\|\)). Utiliser la connexité de \(\mathbb{R}^n\).
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(2)">← Étape 2</button>
+        <button class="btn" onclick="goTo(4)">Étape 4 : Compacité →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 4: COMPACITE ==================== -->
+    <div class="section" data-section="4">
+      <div class="section-header">
+        <div class="section-tag">Étape 4 / 7</div>
+        <h2>Compacité</h2>
+      </div>
+
+      <h3>4.1 Définition par recouvrements</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Ensemble compact</div>
+        \(K \subseteq \mathbb{R}^n\) est <strong>compact</strong> si de tout recouvrement ouvert de \(K\), on peut extraire un sous-recouvrement <em>fini</em> :
+        \[ \text{Si } K \subseteq \bigcup_{i \in I} U_i \text{ (ouverts)},\quad \exists \text{ fini } J \subseteq I : K \subseteq \bigcup_{i \in J} U_i \]
+      </div>
+
+      <h3>4.2 Le théorème de Heine–Borel</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème de Heine–Borel (caractérisation dans ℝⁿ)</div>
+        Pour \(K \subseteq \mathbb{R}^n\), les assertions suivantes sont équivalentes :
+        <ol style="margin-top:0.5rem">
+          <li>\(K\) est compact</li>
+          <li>\(K\) est <strong>fermé et borné</strong></li>
+          <li>\(K\) est <strong>séquentiellement compact</strong> : toute suite dans \(K\) admet une sous-suite convergente dans \(K\)</li>
+        </ol>
+      </div>
+
+      <div class="box proof">
+        <div class="box-title">Preuve des implications clés</div>
+        <p><strong>(2) ⟹ (3) :</strong> Soit \((x_k) \subseteq K\). \(K\) borné ⟹ \((x_k)\) bornée ⟹ par B-W, sous-suite convergente \(x_{k_j} \to x\). \(K\) fermé ⟹ \(x \in K\). ✓</p>
+        <p><strong>(3) ⟹ (2) :</strong> Si \(K\) n'est pas borné, on construit \((x_k)\) avec \(\|x_k\| \geq k\), pas de sous-suite convergente. Si \(K\) n'est pas fermé, il existe \(x_k \in K\) avec \(x_k \to x \notin K\), toute sous-suite converge vers \(x \notin K\).</p>
+        <p><strong>(3) ⟹ (1) :</strong> Supposer (1) faux : il existe un recouvrement ouvert sans sous-recouvrement fini. On construit une suite sans sous-suite convergente dans \(K\) — contradiction.</p>
+        <div class="qed">□</div>
+      </div>
+
+      <h3>4.3 Propriétés des compacts</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Propriétés fondamentales</div>
+        <ul>
+          <li>Tout fermé inclus dans un compact est compact.</li>
+          <li>Toute intersection de compacts (non vide) est compacte.</li>
+          <li>Toute union <em>finie</em> de compacts est compacte.</li>
+          <li>L'image d'un compact par une application continue est compacte.</li>
+          <li>Si \(K\) est compact et \(f : K \to \mathbb{R}\) continue, alors \(f\) est <strong>bornée et atteint ses bornes</strong> (théorème des bornes atteintes).</li>
+        </ul>
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Technique IMC — Compacité pour les extrema</div>
+        <p>Pour montrer qu'une fonction continue atteint son maximum sur un ensemble \(E\), montrer que \(E\) est compact (fermé et borné). Cette technique résout une grande variété de problèmes d'optimisation.</p>
+        <p style="margin-top:0.5rem"><em>Exemple :</em> "Trouver le point de \(E = \{(x,y) : x^2+y^2 \leq 1\}\) maximisant \(f(x,y) = 2x+3y\)." \(E\) est compact, \(f\) continue, donc le max existe — ici sur le bord, à trouver par Lagrange.</p>
+      </div>
+
+      <h3>4.4 Compacité et suites de Cauchy</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème</div>
+        Tout compact est <strong>complet</strong> (toute suite de Cauchy dans \(K\) converge dans \(K\)).
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Continuité uniforme sur les compacts (Heine)</div>
+        Toute fonction continue sur un compact \(K\) est <strong>uniformément continue</strong>.
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 4.1</span> Soit \(f : K \to K\) continue avec \(K\) compact non vide. Montrer que \(f\) a un point fixe si \(f\) est une contraction (i.e., \(d(f(x),f(y)) < d(x,y)\) pour \(x \neq y\)).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Considérer \(g(x) = d(x, f(x))\), continue sur le compact \(K\). Elle atteint son minimum en un point \(x^*\). Montrer que \(f(x^*) = x^*\) : sinon, \(g(f(x^*)) = d(f(x^*), f(f(x^*))) < d(x^*, f(x^*)) = g(x^*)\), contredisant la minimalité.
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 4.2 ★★ (IMC)</span> Montrer que si \(A, B \subseteq \mathbb{R}^n\) sont fermés et disjoints, avec \(A\) compact, alors \(d(A,B) = \inf_{a \in A, b \in B} \|a-b\| > 0\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> La fonction \(f(a) = d(a, B) = \inf_{b \in B} \|a-b\|\) est continue sur \(A\). Par compacité de \(A\), elle atteint son minimum en \(a^*\). Si \(d(A,B) = 0\), alors \(d(a^*, B) = 0\), donc \(a^* \in \bar{B} = B\). Contradiction avec \(A \cap B = \emptyset\).
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(3)">← Étape 3</button>
+        <button class="btn" onclick="goTo(5)">Étape 5 : Connexité →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 5: CONNEXITE ==================== -->
+    <div class="section" data-section="5">
+      <div class="section-header">
+        <div class="section-tag">Étape 5 / 7</div>
+        <h2>Connexité</h2>
+      </div>
+
+      <h3>5.1 Connexité</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Ensemble connexe</div>
+        \(E \subseteq \mathbb{R}^n\) est <strong>connexe</strong> s'il n'existe pas de partition \(E = U \cup V\) avec \(U, V\) ouverts dans \(E\), non vides et disjoints.
+        <p style="margin-top:0.5rem"><em>Équivalent :</em> \(E\) est connexe si et seulement si les seuls sous-ensembles de \(E\) qui sont à la fois ouverts et fermés dans \(E\) sont \(\emptyset\) et \(E\) lui-même.</p>
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème fondamental</div>
+        \(E \subseteq \mathbb{R}\) est connexe \(\Longleftrightarrow\) \(E\) est un intervalle.
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème des valeurs intermédiaires (version topologique)</div>
+        Si \(f : E \to \mathbb{R}\) est continue et \(E\) est connexe, alors \(f(E)\) est connexe (donc un intervalle). En particulier, si \(f(a) < k < f(b)\), il existe \(c\) tel que \(f(c) = k\).
+      </div>
+
+      <h3>5.2 Connexité par arcs</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Connexité par arcs</div>
+        \(E \subseteq \mathbb{R}^n\) est <strong>connexe par arcs</strong> si pour tout \(x, y \in E\), il existe un chemin continu \(\gamma : [0,1] \to E\) avec \(\gamma(0) = x\) et \(\gamma(1) = y\).
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Relation entre les deux notions</div>
+        <ul>
+          <li>Connexe par arcs \(\Rightarrow\) connexe.</li>
+          <li>La réciproque est <em>fausse</em> en général.</li>
+          <li>Si \(E\) est <strong>ouvert</strong> dans \(\mathbb{R}^n\), alors : connexe \(\Leftrightarrow\) connexe par arcs.</li>
+        </ul>
+      </div>
+
+      <div class="box example">
+        <div class="box-title">Exemple — Le peigne topologique (connexe mais pas par arcs)</div>
+        \(E = \{0\} \times [0,1] \cup \bigcup_{n=1}^\infty \left\{\frac{1}{n}\right\} \times [0,1]\) dans \(\mathbb{R}^2\) est connexe mais n'est pas connexe par arcs.
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Techniques IMC avec la connexité</div>
+        <p><strong>Technique 1 — Image constante :</strong> Si \(f : E \to \mathbb{Z}\) est continue et \(E\) est connexe, alors \(f\) est constante (car \(\mathbb{Z}\) est discret).</p>
+        <p style="margin-top:0.7rem"><strong>Technique 2 — Dichotomie ouvert/fermé :</strong> Pour montrer \(E = A\), montrer que \(A\) est non vide, ouvert et fermé dans \(E\) connexe.</p>
+        <p style="margin-top:0.7rem"><strong>Technique 3 — Chemin :</strong> Pour montrer qu'un ouvert de \(\mathbb{R}^n\) est connexe, relier deux points par un chemin polygonal.</p>
+      </div>
+
+      <h3>5.3 Composantes connexes</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Composantes connexes</div>
+        Une <strong>composante connexe</strong> de \(E\) est un sous-ensemble connexe maximal de \(E\). Les composantes connexes forment une partition de \(E\) en fermés de \(E\).
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 5.1 ★★ (style IMC)</span> Soit \(f : \mathbb{R}^n \to \mathbb{R}^n\) continue avec \(f \circ f = \text{id}\). Montrer que l'ensemble des points fixes de \(f\) est non vide. (Prendre \(n=1\) pour commencer.)</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Pour \(n=1\) : poser \(g(x) = f(x) - x\). Soit \(a\) quelconque. Alors \(g(a) = f(a) - a\) et \(g(f(a)) = f(f(a)) - f(a) = a - f(a) = -g(a)\). Donc \(g(a)\) et \(g(f(a))\) sont de signes opposés, par TVI il existe \(c\) entre \(a\) et \(f(a)\) avec \(g(c) = 0\).
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 5.2 ★</span> Montrer que \(\text{GL}_n(\mathbb{R})\) est connexe par arcs si \(n\) est impair, mais a deux composantes connexes pour tout \(n\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Les deux composantes sont \(\{M : \det M > 0\}\) et \(\{M : \det M < 0\}\) (le déterminant est continu, donc chaque composante est ouverte et fermée dans \(\text{GL}_n(\mathbb{R})\)). Pour la connexité par arcs de chaque composante, utiliser la décomposition \(A = QR\) (QR decomposition) et les homotopies entre matrices.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(4)">← Étape 4</button>
+        <button class="btn" onclick="goTo(6)">Étape 6 : Continuité →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 6: CONTINUITE ==================== -->
+    <div class="section" data-section="6">
+      <div class="section-header">
+        <div class="section-tag">Étape 6 / 7</div>
+        <h2>Continuité et Topologie</h2>
+      </div>
+
+      <h3>6.1 Caractérisations équivalentes de la continuité</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème — Équivalences fondamentales</div>
+        Pour \(f : \mathbb{R}^n \to \mathbb{R}^m\), les assertions suivantes sont équivalentes :
+        <ol style="margin-top:0.5rem">
+          <li>\(f\) est continue en tout point de \(\mathbb{R}^n\) (définition \(\varepsilon\)-\(\delta\))</li>
+          <li>Pour tout ouvert \(V \subseteq \mathbb{R}^m\), l'image réciproque \(f^{-1}(V)\) est ouverte dans \(\mathbb{R}^n\)</li>
+          <li>Pour tout fermé \(F \subseteq \mathbb{R}^m\), l'image réciproque \(f^{-1}(F)\) est fermée dans \(\mathbb{R}^n\)</li>
+          <li>Pour toute suite \(x_k \to x\), on a \(f(x_k) \to f(x)\)</li>
+        </ol>
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Pourquoi (2) est la définition la plus puissante à l'IMC</div>
+        <p>La caractérisation (2) permet de montrer qu'un ensemble est ouvert ou fermé <em>sans calcul</em>, juste par une équation. Exemples :</p>
+        <ul style="margin-top:0.5rem">
+          <li>\(\{x : f(x) > 0\} = f^{-1}(]0,+\infty[)\) est ouvert si \(f\) est continue</li>
+          <li>\(\{x : f(x) = 0\}\) est fermé si \(f\) est continue</li>
+          <li>\(\{A \in \mathcal{M}_n : \text{tr}(A) = 0\}\) est fermé (trace = application linéaire, donc continue)</li>
+        </ul>
+      </div>
+
+      <h3>6.2 Continuité uniforme</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Continuité uniforme</div>
+        \(f : E \to \mathbb{R}^m\) est <strong>uniformément continue</strong> si :
+        \[\forall \varepsilon > 0,\; \exists \delta > 0,\; \forall x, y \in E : \|x-y\| < \delta \Rightarrow \|f(x)-f(y)\| < \varepsilon\]
+        (Le \(\delta\) ne dépend pas du point \(x\).)
+      </div>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème de Heine — Continuité uniforme sur les compacts</div>
+        Si \(f : K \to \mathbb{R}^m\) est continue et \(K\) est compact, alors \(f\) est uniformément continue.
+      </div>
+
+      <div class="box proof">
+        <div class="box-title">Preuve par Bolzano–Weierstrass</div>
+        <p>Supposons que \(f\) ne soit pas uniformément continue : il existe \(\varepsilon_0 > 0\) et des suites \((x_k), (y_k) \subseteq K\) avec \(\|x_k - y_k\| < \frac{1}{k}\) mais \(\|f(x_k) - f(y_k)\| \geq \varepsilon_0\). Par B-W, extraire \(x_{k_j} \to x \in K\). Alors aussi \(y_{k_j} \to x\). Par continuité : \(f(x_{k_j}) \to f(x)\) et \(f(y_{k_j}) \to f(x)\). Donc \(\|f(x_{k_j}) - f(y_{k_j})\| \to 0\), contradiction.</p>
+        <div class="qed">□</div>
+      </div>
+
+      <h3>6.3 Homéomorphismes</h3>
+
+      <div class="box definition">
+        <div class="box-title">Définition — Homéomorphisme</div>
+        \(f : E \to F\) est un <strong>homéomorphisme</strong> si \(f\) est bijective, continue, et \(f^{-1}\) est continue. \(E\) et \(F\) sont alors <strong>homéomorphes</strong> et ont les mêmes propriétés topologiques.
+      </div>
+
+      <div class="box example">
+        <div class="box-title">Exemples</div>
+        <ul>
+          <li>\(]0,1[\) et \(\mathbb{R}\) sont homéomorphes via \(x \mapsto \tan(\pi x - \pi/2)\).</li>
+          <li>\(\mathbb{R}^n\) et la boule ouverte \(B(0,1)\) sont homéomorphes via \(x \mapsto \frac{x}{1+\|x\|}\).</li>
+          <li>Le cercle \(S^1\) et l'intervalle \([0,1]\) ne sont <em>pas</em> homéomorphes (l'un est connexe par arcs, l'autre l'est aussi, mais l'un est simplement connexe et pas l'autre — différence en topologie algébrique).</li>
+        </ul>
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Exercices</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 6.1</span> Montrer que \(f : [0,1] \to [0,1]\) continue implique l'existence d'un point fixe \(f(x_0) = x_0\).</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Appliquer le TVI à \(g(x) = f(x) - x\). On a \(g(0) = f(0) - 0 \geq 0\) et \(g(1) = f(1) - 1 \leq 0\). Donc \(g\) s'annule. C'est le théorème du point fixe de Brouwer en dimension 1 !
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">Ex 6.2 ★★</span> Soit \(K\) compact et \(f : K \to K\) une isométrie (i.e., \(d(f(x),f(y)) = d(x,y)\)). Montrer que \(f\) est surjective.</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Supposer \(f(K) \subsetneq K\) : il existe \(x_0 \in K \setminus f(K)\). Construire la suite \(x_0, x_1 = f(x_0), x_2 = f(x_1), \ldots\). Pour \(i > j \geq 1\), \(d(x_i, x_j) = d(f^{i-1}(x_1), f^{j-1}(x_1))\). En fait, montrer que \(d(x_k, x_j) \geq d(x_0, f(K)) > 0\) pour \(k \neq j\), contradiction avec B-W.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(5)">← Étape 5</button>
+        <button class="btn" onclick="goTo(7)">Étape 7 : Théorèmes IMC →</button>
+      </div>
+    </div>
+
+    <!-- ==================== SECTION 7: THEOREMES IMC ==================== -->
+    <div class="section" data-section="7">
+      <div class="section-header">
+        <div class="section-tag">Étape 7 / 7 — Synthèse</div>
+        <h2>Grands Théorèmes pour l'IMC</h2>
+      </div>
+
+      <p>Cette étape regroupe les résultats les plus souvent invoqués dans les solutions de l'IMC, avec les stratégies pour les appliquer efficacement.</p>
+
+      <h3>7.1 Théorème du point fixe de Brouwer</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème de Brouwer</div>
+        Toute application continue \(f : \bar{B}^n \to \bar{B}^n\) (de la boule fermée dans elle-même) possède un <strong>point fixe</strong> : il existe \(x^* \in \bar{B}^n\) tel que \(f(x^*) = x^*\).
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Cas \(n=1\) et preuve IMC-level</div>
+        <p>Pour \(n=1\) : \(f : [-1,1] \to [-1,1]\) continue. Poser \(g(x) = f(x) - x\). Alors \(g(-1) = f(-1)+1 \geq 0\) et \(g(1) = f(1)-1 \leq 0\). Par TVI, \(g(c)=0\) i.e. \(f(c) = c\). ✓</p>
+        <p style="margin-top:0.5rem">Pour \(n \geq 2\) : la preuve utilise soit l'homologie soit un argument de rétraction. À l'IMC, on demande souvent des cas particuliers réductibles à \(n=1\).</p>
+      </div>
+
+      <h3>7.2 Théorème des applications ouvertes et fermées</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème</div>
+        Soit \(f : K \to \mathbb{R}^m\) continue avec \(K\) compact. Alors :
+        <ul style="margin-top:0.5rem">
+          <li>\(f\) est une <strong>application fermée</strong> : l'image de tout fermé de \(K\) est fermée.</li>
+          <li>En particulier, \(f(K)\) est compact (fermé et borné).</li>
+          <li>Si de plus \(f\) est bijective, alors \(f^{-1}\) est continue (i.e., \(f\) est un homéomorphisme).</li>
+        </ul>
+      </div>
+
+      <h3>7.3 Théorème de Baire</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème de Baire (version ℝⁿ)</div>
+        \(\mathbb{R}^n\) est un <strong>espace de Baire</strong> : toute intersection dénombrable d'ouverts denses est dense. Équivalemment, \(\mathbb{R}^n\) ne peut pas s'écrire comme une union dénombrable d'ensembles d'intérieur vide (nulle part denses).
+      </div>
+
+      <div class="box imc">
+        <div class="box-title">⭐ Application IMC de Baire</div>
+        <p><strong>Problème type :</strong> Montrer que si \(f : \mathbb{R} \to \mathbb{R}\) est continue et pour tout \(x\), il existe \(n \in \mathbb{N}\) avec \(f^{(n)}(x) = 0\) (la dérivée \(n\)-ième s'annule en \(x\)), alors \(f\) est un polynôme.</p>
+        <p style="margin-top:0.5rem"><strong>Idée :</strong> Poser \(F_n = \{x : f^{(n)}(x) = 0\}\) fermé. Par hypothèse, \(\mathbb{R} = \bigcup_n F_n\). Par Baire, un \(F_N\) a un intérieur non vide, donc \(f^{(N)} = 0\) sur un intervalle, donc \(f\) est un polynôme de degré \(< N\).</p>
+      </div>
+
+      <h3>7.4 Compacité et équicontinuité — Arzelà–Ascoli</h3>
+
+      <div class="box theorem">
+        <div class="box-title">Théorème d'Arzelà–Ascoli</div>
+        Soit \((f_k)\) une suite de fonctions continues sur un compact \(K \subseteq \mathbb{R}^n\). Si \((f_k)\) est :
+        <ul style="margin-top:0.5rem">
+          <li><strong>Uniformément bornée :</strong> \(\exists M, \forall k, \forall x : |f_k(x)| \leq M\)</li>
+          <li><strong>Équicontinue :</strong> \(\forall \varepsilon > 0, \exists \delta > 0, \forall k, \forall x,y : \|x-y\| < \delta \Rightarrow |f_k(x)-f_k(y)| < \varepsilon\)</li>
+        </ul>
+        alors \((f_k)\) admet une sous-suite uniformément convergente sur \(K\).
+      </div>
+
+      <h3>7.5 Récapitulatif des implications</h3>
+
+      <div class="box definition" style="font-size:0.95rem;">
+        <div class="box-title">Carte mentale IMC</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:2;">
+          Compact ──→ Fermé + Borné (Heine-Borel)<br>
+          Compact ──→ Séquentiellement compact<br>
+          Compact + f continue ──→ f(K) compact<br>
+          Compact + f continue ──→ f bornée et atteint ses bornes<br>
+          Compact + f continue ──→ f unif. continue (Heine)<br>
+          Connexe par arcs ──→ Connexe<br>
+          Ouvert connexe ──→ Connexe par arcs<br>
+          f continue + E connexe ──→ f(E) connexe (intervalle si ℝ)<br>
+          Suite de Cauchy dans ℝⁿ ──→ convergente (complétude)<br>
+        </div>
+      </div>
+
+      <div class="exercise-set">
+        <div class="exercise-set-title">Problèmes IMC niveau concours</div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">★★★ Prob. 1</span> Soit \(f : \mathbb{R}^n \to \mathbb{R}^n\) continue et propre (\(f^{-1}(K)\) compact pour tout compact \(K\)). Montrer que \(f\) est une application fermée.</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> Soit \(F \subseteq \mathbb{R}^n\) fermé, et \((y_k) \subseteq f(F)\) avec \(y_k \to y\). On a \(y_k \in f(F)\), donc \(\exists x_k \in F\) avec \(f(x_k) = y_k\). L'ensemble \(\{y_k : k \geq 1\} \cup \{y\}\) est compact, donc par propreté, \(f^{-1}(\{y_k\} \cup \{y\})\) est borné. Les \(x_k\) sont dans un compact, extraire une sous-suite \(x_{k_j} \to x \in F\) (F fermé), d'où \(y = f(x) \in f(F)\).
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">★★★ Prob. 2</span> Soit \(f : [0,1] \to [0,1]\) continue avec \(f(0) = 0\) et \(f(1) = 1\). Montrer que pour tout \(n \geq 1\), il existe \(x_0\) avec \(f(x_0) - x_0 = \frac{1}{n}\) ou montrer que c'est faux.</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> C'est vrai ! Poser \(g(x) = f(x) - x - \frac{1}{n}\). Alors \(g(0) = -\frac{1}{n} < 0\) et \(g(1) = \frac{n-1}{n} > 0\) (pour \(n \geq 2\)). Par TVI, \(g\) s'annule. Pour \(n=1\) : \(g(0) = -1 < 0\) et \(g(1) = 0\) — TVI donne le point en \(x=1\) ou chercher autrement. L'énoncé complet dit : pour tout entier \(n \geq 1\), il existe \(x\) avec \(f(x) = x + \frac{1}{n}\).
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-q" onclick="toggleExercise(this)">
+            <span><span class="ex-num">★★★ Prob. 3</span> Soit \(A \in \mathcal{M}_n(\mathbb{R})\) une matrice symétrique définie positive. Montrer que \(\{x \in \mathbb{R}^n : x^T A x \leq 1\}\) est compact.</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="exercise-hint">
+            <strong>Indice :</strong> L'ensemble est fermé (image réciproque de \(]-\infty, 1]\) par la fonction continue \(x \mapsto x^T A x\)). Pour la bornitude : \(A\) symétrique définie positive ⟹ toutes ses valeurs propres \(\lambda_i > 0\) ⟹ \(x^T A x \geq \lambda_{\min} \|x\|^2\). Donc si \(x^T A x \leq 1\), alors \(\|x\|^2 \leq \frac{1}{\lambda_{\min}}\).
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" onclick="goTo(6)">← Étape 6</button>
+        <button class="btn" onclick="goTo(0)">↺ Recommencer</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const sections = [
+    { title: "Introduction", short: "Intro" },
+    { title: "Distance & Normes", short: "Distance" },
+    { title: "Ouverts & Fermés", short: "Ouverts" },
+    { title: "Suites & Complétude", short: "Suites" },
+    { title: "Compacité", short: "Compact" },
+    { title: "Connexité", short: "Connexité" },
+    { title: "Continuité & Topologie", short: "Continuité" },
+    { title: "Théorèmes IMC", short: "IMC" },
+  ];
+
+  let current = 0;
+
+  function buildNav() {
+    const nav = document.getElementById('navInner');
+    const toc = document.getElementById('tocList');
+    sections.forEach((s, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'nav-btn' + (i === 0 ? ' active' : '');
+      btn.innerHTML = `<span class="num">${String(i).padStart(2,'0')}</span>${s.short}`;
+      btn.onclick = () => goTo(i);
+      btn.id = `nav-${i}`;
+      nav.appendChild(btn);
+
+      const titem = document.createElement('button');
+      titem.className = 'toc-item' + (i === 0 ? ' active' : '');
+      titem.innerHTML = `<span class="toc-num">${String(i).padStart(2,'0')}</span>${s.title}`;
+      titem.onclick = () => goTo(i);
+      titem.id = `toc-${i}`;
+      toc.appendChild(titem);
+    });
+  }
+
+  function goTo(n) {
+    // Hide current
+    document.querySelector(`.section[data-section="${current}"]`).classList.remove('visible');
+    document.getElementById(`nav-${current}`).classList.remove('active');
+    document.getElementById(`toc-${current}`).classList.remove('active');
+
+    current = n;
+
+    // Show new
+    document.querySelector(`.section[data-section="${current}"]`).classList.add('visible');
+    document.getElementById(`nav-${current}`).classList.add('active');
+    document.getElementById(`toc-${current}`).classList.add('active');
+
+    // Progress
+    document.getElementById('progressFill').style.width = `${Math.round((current+1)/sections.length*100)}%`;
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Trigger MathJax re-render
+    if (window.MathJax) {
+      MathJax.typesetPromise();
+    }
+  }
+
+  function toggleExercise(el) {
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('visible');
+  }
+
+  buildNav();
+</script>
+</body>
+</html>
