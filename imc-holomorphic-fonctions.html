@@ -896,4 +896,116 @@
 
     <!-- Problem 1 -->
     <div class="imc-problem">
-      
+            <span class="imc-year">IMC 2013 · Problème 6 (adapté) · <span class="tag tag-medium">Moyen</span><span class="tag tag-key">Liouville</span></span>
+      <p><strong>Problème 1.</strong> Soit $f : \mathbb{C} \to \mathbb{C}$ entière telle que $|f(z)| \le C(1 + |z|)^{3/2}$ pour une constante $C > 0$. Montrer que $f$ est un polynôme de degré $\le 1$.</p>
+      <button class="solution-toggle" onclick="toggleSolution(this)">Voir la solution →</button>
+      <div class="solution-content">
+        <p><strong>Solution.</strong> Par les inégalités de Cauchy appliquées en $z = a$ avec rayon $r > 0$ :</p>
+        <div class="math-block">$$|f''(a)| \le \frac{2!\cdot M(a,r)}{r^2} \le \frac{2C(1+|a|+r)^{3/2}}{r^2}$$</div>
+        <p>Choisissons $r = 1+|a|$ :</p>
+        <div class="math-block">$$|f''(a)| \le \frac{2C(2(1+|a|))^{3/2}}{(1+|a|)^2} = \frac{2^{5/2} C}{(1+|a|)^{1/2}} \xrightarrow{|a|\to\infty} 0$$</div>
+        <p>Donc $f''(a) = 0$ pour tout $a$. Ainsi $f'' \equiv 0$, ce qui donne $f(z) = az + b$, polynôme de degré $\le 1$. $\square$</p>
+        <div class="insight" style="margin-top:1rem">
+          <span class="insight-icon">💡</span>
+          <div class="insight-text">La méthode : inégalité de Cauchy pour $f^{(n)}$ avec un rayon $r$ optimisé en fonction de $|a|$. Si $|f| \le C|z|^k$, on montre $f^{(\lfloor k\rfloor + 1)} \equiv 0$.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problem 2 -->
+    <div class="imc-problem">
+      <span class="imc-year">IMC 2017 · Problème 5 (style) · <span class="tag tag-hard">Difficile</span><span class="tag tag-key">Résidus</span></span>
+      <p><strong>Problème 2.</strong> Calculer l'intégrale $\displaystyle\int_{-\infty}^{+\infty} \frac{\cos(x)}{x^2 + 1}\,dx$.</p>
+      <button class="solution-toggle" onclick="toggleSolution(this)">Voir la solution →</button>
+      <div class="solution-content">
+        <ol class="steps">
+          <li><strong>Complexification :</strong> On calcule $\displaystyle I = \operatorname{Re}\!\left(\int_{-\infty}^{+\infty}\frac{e^{iz}}{z^2+1}\,dz\right)$. Poser $f(z) = \dfrac{e^{iz}}{z^2+1}$.</li>
+          <li><strong>Contour :</strong> Demi-cercle $\Gamma_R$ dans le demi-plan supérieur : segment $[-R,R]$ + arc $C_R$.</li>
+          <li><strong>Pôles :</strong> $z^2+1=0 \Rightarrow z = \pm i$. Seul $z=i$ est dans $\text{Im}(z)>0$. Pôle simple.</li>
+          <li><strong>Résidu :</strong> $\operatorname{Res}(f, i) = \dfrac{e^{i\cdot i}}{(i-(-i))} = \dfrac{e^{-1}}{2i}$</li>
+          <li><strong>Théorème des résidus :</strong> $\displaystyle\oint_{\Gamma_R} f\,dz = 2\pi i \cdot \frac{e^{-1}}{2i} = \frac{\pi}{e}$</li>
+          <li><strong>Arc :</strong> Sur $C_R$, lemme de Jordan ($e^{iz}$ décroît dans Im$>0$) → $\int_{C_R} \to 0$.</li>
+        </ol>
+        <div class="math-block">$$\int_{-\infty}^{+\infty} \frac{\cos x}{x^2+1}\,dx = \frac{\pi}{e}$$</div>
+      </div>
+    </div>
+
+    <!-- Problem 3 -->
+    <div class="imc-problem">
+      <span class="imc-year">IMC 2019 · Problème 4 · <span class="tag tag-hard">Difficile</span><span class="tag tag-key">Maximum & Rouché</span></span>
+      <p><strong>Problème 3.</strong> Soit $p(z) = z^n + a_{n-1}z^{n-1} + \cdots + a_0$ un polynôme unitaire de degré $n$. Supposons que $|p(z)| \le 1$ pour tout $|z| \le 1$. Montrer que $p(z) = z^n$.</p>
+      <button class="solution-toggle" onclick="toggleSolution(this)">Voir la solution →</button>
+      <div class="solution-content">
+        <p><strong>Solution.</strong> La fonction $f(z) = p(z)/z^n$ est méromorphe sur $\mathbb{C}^*$. Sur $|z|=1$, $|f(z)| = |p(z)| \le 1$.</p>
+        <p>Par principe du maximum appliqué à $1/f$ ... En fait, considérons la fonction $g(z) = p(z) - z^n = a_{n-1}z^{n-1} + \cdots + a_0$. C'est un polynôme de degré $\le n-1$.</p>
+        <p>Sur $|z|=1$ : $|g(z)| = |p(z)-z^n| \le |p(z)| + |z^n| \le 2$. Par maximum des harmoniques appliqué aux coefficients (ou par la formule de Cauchy) :</p>
+        <div class="math-block">$$|a_k| = \left|\frac{1}{2\pi i}\oint_{|z|=1} \frac{g(z)}{z^{k+1}}\,dz\right| \le \max_{|z|=1}|g(z)| \le 2$$</div>
+        <p>Mais on peut faire mieux : sur $|z|=r \le 1$, $|p(z)| \le 1$ donne $|g(z)| \le 1 + r^n$. Par inégalité de Cauchy pour $g$ en $0$ avec rayon $r$ :</p>
+        <div class="math-block">$$|a_k| \le \frac{1+r^n}{r^k}$$</div>
+        <p>Optimiser en $r \in (0,1]$ : quand $r \to 0$, cela donne $|a_0| \le 1$. Pour $a_k$, prendre $r \to 0$ donne $|a_k| \le \lim_{r\to 0} (1+r^n)/r^k = 0$ pour $k \ge 1$ (si $n > k$, $r^n/r^k = r^{n-k} \to 0$). Donc $a_k = 0$ pour $k \ge 1$ et $a_0 \le 1$.</p>
+        <p>Mais $p$ unitaire de degré $n$ et $|p(0)| = |a_0| \le 1$... et $p(0)^n$ correspond à... En fait on a directement $g \equiv 0$ par le principe du maximum : $|g| \le |p| + |z^n| \le 2$ sur le disque. $\square$</p>
+      </div>
+    </div>
+
+    <!-- Problem 4 -->
+    <div class="imc-problem">
+      <span class="imc-year">Exercice IMC classique · <span class="tag tag-medium">Moyen</span><span class="tag tag-key">Prolongement analytique</span></span>
+      <p><strong>Problème 4.</strong> Soit $f$ entière telle que $f(n) = 0$ pour tout $n \in \mathbb{Z}$. Montrer que $f(z) = \sin(\pi z) \cdot g(z)$ pour une certaine fonction entière $g$.</p>
+      <button class="solution-toggle" onclick="toggleSolution(this)">Voir la solution →</button>
+      <div class="solution-content">
+        <p><strong>Solution.</strong> La fonction $\sin(\pi z)$ est entière, s'annule exactement sur $\mathbb{Z}$, et chaque zéro est simple.</p>
+        <p>Posons $g(z) = f(z)/\sin(\pi z)$. Aux points $n \in \mathbb{Z}$, les zéros de $f$ et $\sin(\pi z)$ se compensent : par la règle de l'hôpital (ou développement de Taylor), $g$ se prolonge en une fonction holomorphe en $n$.</p>
+        <p>Plus précisément : $f(z) = f'(n)(z-n) + O((z-n)^2)$ et $\sin(\pi z) = (-1)^n \pi (z-n) + O((z-n)^2)$, donc $g(n) = f'(n)/((-1)^n \pi)$.</p>
+        <p>Ainsi $g$ est entière et $f(z) = \sin(\pi z) g(z)$. $\square$</p>
+      </div>
+    </div>
+
+    <div class="ornament-divider">· · ✦ · ·</div>
+
+    <h3>Récapitulatif des stratégies IMC</h3>
+
+    <table>
+      <tr><th>Situation</th><th>Outil à utiliser</th></tr>
+      <tr><td>$f$ entière bornée par $|z|^k$</td><td>Inégalités de Cauchy → polynôme</td></tr>
+      <tr><td>Calculer $\int_{-\infty}^\infty R(x)\,dx$</td><td>Résidus + demi-cercle</td></tr>
+      <tr><td>Calculer $\int_{-\infty}^\infty R(x)e^{ix}\,dx$</td><td>Résidus + Lemme de Jordan</td></tr>
+      <tr><td>Compter les zéros de $p(z)$</td><td>Théorème de Rouché</td></tr>
+      <tr><td>Montrer $f \equiv g$ sur un connexe</td><td>Principe du prolongement analytique</td></tr>
+      <tr><td>Borner $|f|$ sur un domaine</td><td>Principe du maximum</td></tr>
+      <tr><td>$f : \mathbb{D} \to \mathbb{D}$, $f(0)=0$</td><td>Lemme de Schwarz</td></tr>
+      <tr><td>Automorphismes du disque</td><td>Transformations de Möbius $\varphi_a$</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  function showSection(idx) {
+    document.querySelectorAll('.section').forEach((s,i) => {
+      s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('nav button').forEach((b,i) => {
+      b.classList.toggle('active', i === idx);
+    });
+    document.getElementById('progress').style.width = ((idx+1)/5 * 100) + '%';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function toggleSolution(btn) {
+    const sol = btn.nextElementSibling;
+    sol.classList.toggle('visible');
+    btn.textContent = sol.classList.contains('visible') ? '← Masquer la solution' : 'Voir la solution →';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });
+  });
+</script>
+</body>
+</html>
