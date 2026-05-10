@@ -811,3 +811,89 @@
       <p>où $\Gamma_R$ est le demi-cercle supérieur de rayon $R$.</p>
     </div>
   </div>
+
+<!-- ===== SECTION 4 ===== -->
+  <div class="section" id="s3">
+    <span class="chapter-number">Chapitre IV · Théorèmes Avancés</span>
+    <h2>Principe du Maximum & Théorèmes de Structure</h2>
+    <p class="chapter-intro">Ces théorèmes, souvent utilisés pour des arguments de contradiction ou pour identifier des fonctions, sont incontournables à l'IMC.</p>
+
+    <h3>4.1 Principe du maximum</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Principe du Maximum</span>
+      <p style="margin-top:0.7rem">Si $f$ est holomorphe et non constante sur un ouvert connexe $\Omega$, alors $|f|$ n'atteint pas son maximum en un point intérieur de $\Omega$.</p>
+      <p>En conséquence : si $f$ est continue sur $\bar{\Omega}$ et holomorphe sur $\Omega$, alors :</p>
+      <div class="math-block">$$\max_{\bar{\Omega}} |f| = \max_{\partial \Omega} |f|$$</div>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">🎯</span>
+      <div class="insight-text"><strong>Usage IMC :</strong> Pour montrer $f \equiv 0$, il suffit de montrer que $|f| \le 0$ quelque part sur $\partial\Omega$. Pour montrer que deux fonctions coïncident, montrer que leur différence a un module maximal nul sur le bord.</div>
+    </div>
+
+    <h3>4.2 Théorème de Schwarz-Pick</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Lemme de Schwarz</span>
+      <p style="margin-top:0.7rem">Soit $f : \mathbb{D} \to \mathbb{D}$ holomorphe avec $f(0) = 0$ (où $\mathbb{D} = D(0,1)$). Alors :</p>
+      <div class="math-block">$$|f(z)| \le |z| \quad \forall z \in \mathbb{D} \qquad \text{et} \qquad |f'(0)| \le 1$$</div>
+      <p>Si $|f(z_0)| = |z_0|$ pour un $z_0 \ne 0$ ou $|f'(0)| = 1$ : $f(z) = e^{i\theta} z$ (rotation).</p>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Preuve</span>
+      <p>Poser $g(z) = f(z)/z$ pour $z \ne 0$, $g(0) = f'(0)$. Alors $g$ est holomorphe sur $\mathbb{D}$. Sur $|z| = r < 1$ : $|g| \le 1/r$. Par principe du maximum : $|g(z)| \le 1/r$ sur $D(0,r)$. Faire $r \to 1$ : $|g| \le 1$, soit $|f(z)| \le |z|$.</p>
+    </div>
+
+    <h3>4.3 Théorème de Rouché</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Rouché</span>
+      <p style="margin-top:0.7rem">Soient $f, g$ holomorphes sur $\bar{D}$, avec $|g(z)| < |f(z)|$ sur $\partial D$. Alors $f$ et $f+g$ ont le même nombre de zéros dans $D$ (comptés avec multiplicité).</p>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">🎯</span>
+      <div class="insight-text"><strong>Usage :</strong> Pour localiser les zéros. On choisit $f$ = terme dominant (dont on connaît les zéros) et $g$ = reste. Si $|g| < |f|$ sur le contour, $f+g$ a les mêmes zéros.</div>
+    </div>
+
+    <h4>Exemple : zéros de $z^5 + 3z + 1$</h4>
+    <p>Sur $|z|=2$ : $|3z+1| \le 7 < 32 = |z^5|$. Rouché → $z^5 + 3z + 1$ a $5$ zéros dans $|z|<2$.</p>
+    <p>Sur $|z|=1$ : $|z^5+1| \le 2 < 3 = |3z|$. Rouché → $1$ zéro dans $|z|<1$.</p>
+
+    <h3>4.4 Théorème d'inversion locale & principe des zéros isolés</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Zéros isolés</span>
+      <p style="margin-top:0.7rem">Si $f$ est holomorphe et non identiquement nulle sur un connexe $\Omega$, alors ses zéros sont isolés.</p>
+      <p><strong>Corollaire (principe du prolongement analytique) :</strong> Si $f = g$ sur une suite ayant un point d'accumulation dans $\Omega$, alors $f \equiv g$ sur $\Omega$.</p>
+    </div>
+
+    <h3>4.5 Théorème de la représentation conforme</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Riemann</span>
+      <p style="margin-top:0.7rem">Tout ouvert simplement connexe $\Omega \subsetneq \mathbb{C}$ est conformément équivalent au disque unité $\mathbb{D}$ : il existe $f : \Omega \xrightarrow{\sim} \mathbb{D}$ holomorphe bijective.</p>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">💡</span>
+      <div class="insight-text"><strong>Transformations de Möbius :</strong> $\varphi(z) = e^{i\theta}\dfrac{z-a}{1-\bar{a}z}$ avec $|a|<1$ sont les automorphismes du disque. Ils sont souvent utilisés pour se ramener à $f(0)=0$ et appliquer Schwarz.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5 ===== -->
+  <div class="section" id="s4">
+    <span class="chapter-number">Chapitre V · Olympiade</span>
+    <h2>Problèmes Typiques IMC</h2>
+    <p class="chapter-intro">Ces problèmes sont représentatifs du style IMC. Tentez-les avant de regarder la solution !</p>
+
+    <!-- Problem 1 -->
+    <div class="imc-problem">
+      
