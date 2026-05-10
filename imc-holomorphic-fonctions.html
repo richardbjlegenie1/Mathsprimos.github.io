@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fonctions Holomorphes — Préparation IMC</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1409;
+    --paper: #f5f0e8;
+    --aged: #e8dfc8;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --rust: #8b3a0f;
+    --sepia: #6b5a3e;
+    --marginal: #9b8b6e;
+    --accent: #2c4a6e;
+    --accent-light: #4a7099;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* Header */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(184,134,11,0.04) 40px,
+        rgba(184,134,11,0.04) 41px
+      );
+  }
+
+  .header-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-ornament::before,
+  .header-ornament::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  header h1 em {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    color: rgba(245,240,232,0.65);
+    font-size: 1.1rem;
+    margin-top: 0.75rem;
+  }
+
+  /* Navigation */
+  nav {
+    background: var(--aged);
+    border-bottom: 2px solid var(--gold);
+    padding: 0 4rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(26,20,9,0.15);
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  nav button {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    background: none;
+    color: var(--sepia);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    top: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  nav button:hover { color: var(--ink); }
+  nav button.active {
+    color: var(--rust);
+    border-bottom-color: var(--rust);
+    font-weight: 600;
+  }
+
+  /* Main layout */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* Section */
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Chapter headings */
+  .chapter-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(44,74,110,0.2);
+  }
+
+  h4 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--rust);
+    margin: 1.8rem 0 0.6rem;
+    font-style: italic;
+  }
+
+  .chapter-intro {
+    font-size: 1.1rem;
+    color: var(--sepia);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+    border-left: 3px solid var(--gold);
+  }
+
+  p { margin-bottom: 1.2rem; }
+
+  /* Theorem boxes */
+  .theorem, .definition, .proposition, .corollary, .lemma {
+    position: relative;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+    border-radius: 2px;
+  }
+
+  .theorem {
+    background: rgba(44,74,110,0.06);
+    border-left: 4px solid var(--accent);
+  }
+
+  .definition {
+    background: rgba(184,134,11,0.07);
+    border-left: 4px solid var(--gold);
+  }
+
+  .proposition {
+    background: rgba(139,58,15,0.06);
+    border-left: 4px solid var(--rust);
+  }
+
+  .corollary, .lemma {
+    background: rgba(107,90,62,0.07);
+    border-left: 4px solid var(--sepia);
+  }
+
+  .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    display: block;
+  }
+
+  .theorem .box-label { color: var(--accent); }
+  .definition .box-label { color: var(--gold); }
+  .proposition .box-label { color: var(--rust); }
+  .corollary .box-label, .lemma .box-label { color: var(--sepia); }
+
+  .box-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: inline;
+  }
+
+  /* Math display */
+  .math-block {
+    background: var(--aged);
+    border: 1px solid rgba(184,134,11,0.25);
+    border-radius: 3px;
+    padding: 1.2rem 1.8rem;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+    font-size: 1.05em;
+    text-align: center;
+  }
+
+  /* Proof */
+  .proof {
+    margin: 1.2rem 0 1.8rem;
+    padding: 1.2rem 1.5rem;
+    background: rgba(107,90,62,0.04);
+    border: 1px dashed rgba(107,90,62,0.3);
+    border-radius: 2px;
+    font-size: 0.97em;
+  }
+
+  .proof-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--marginal);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .proof::after {
+    content: '∎';
+    display: block;
+    text-align: right;
+    color: var(--sepia);
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+
+  /* IMC Problems */
+  .imc-problem {
+    background: linear-gradient(135deg, rgba(26,20,9,0.04), rgba(26,20,9,0.02));
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    padding: 1.5rem 1.8rem;
+    margin: 2.5rem 0;
+    position: relative;
+  }
+
+  .imc-problem::before {
+    content: 'IMC';
+    position: absolute;
+    top: -0.65rem;
+    left: 1.5rem;
+    background: var(--ink);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 0.15rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  .imc-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--marginal);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  /* Solution toggle */
+  .solution-toggle {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--sepia);
+    color: var(--sepia);
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    font-style: italic;
+  }
+
+  .solution-toggle:hover {
+    background: var(--sepia);
+    color: var(--paper);
+  }
+
+  .solution-content {
+    display: none;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(107,90,62,0.3);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .solution-content.visible { display: block; }
+
+  /* Key insight box */
+  .insight {
+    background: rgba(184,134,11,0.12);
+    border-radius: 3px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .insight-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .insight-text {
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+
+  /* Warning */
+  .warning {
+    background: rgba(139,58,15,0.08);
+    border-radius: 3px;
+    padding: 1rem 1.4rem;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  /* Step-by-step */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 1.2rem 0 1.8rem;
+  }
+
+  .steps li {
+    counter-increment: step;
+    padding: 0.8rem 0 0.8rem 3.5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(107,90,62,0.12);
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    background: var(--ink);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  /* Progress */
+  .progress-bar {
+    height: 3px;
+    background: rgba(184,134,11,0.2);
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .tag-hard { background: rgba(139,58,15,0.15); color: var(--rust); }
+  .tag-medium { background: rgba(44,74,110,0.12); color: var(--accent); }
+  .tag-key { background: rgba(184,134,11,0.15); color: var(--gold); }
+
+  /* Divider */
+  .ornament-divider {
+    text-align: center;
+    margin: 2.5rem 0;
+    color: var(--gold);
+    font-size: 1.3rem;
+    letter-spacing: 0.5em;
+    opacity: 0.6;
+  }
+
+  /* Summary table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  th {
+    background: var(--ink);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+  }
+
+  td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(107,90,62,0.15);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: rgba(107,90,62,0.04); }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    header { padding: 2rem 1.5rem; }
+    nav { padding: 0 0.5rem; }
+    .container { padding: 2rem 1rem 4rem; }
+    h2 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-ornament">Préparation Olympique</div>
+  <h1>Fonctions <em>Holomorphes</em></h1>
+  <p class="subtitle">Cours complet étape par étape · International Mathematical Competition</p>
+</header>
+
+<nav id="nav">
+  <button class="active" onclick="showSection(0)">I. Fondements</button>
+  <button onclick="showSection(1)">II. Cauchy & Intégration</button>
+  <button onclick="showSection(2)">III. Séries & Singularités</button>
+  <button onclick="showSection(3)">IV. Théorèmes Clés</button>
+  <button onclick="showSection(4)">V. Problèmes IMC</button>
+</nav>
+
+<div class="container">
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:20%"></div></div>
+
+  <!-- ===== SECTION 1 ===== -->
+  <div class="section active" id="s0">
+    <span class="chapter-number">Chapitre I · Bases</span>
+    <h2>Holomorphie & Équations de Cauchy-Riemann</h2>
+    <p class="chapter-intro">L'analyse complexe est l'une des branches les plus puissantes des mathématiques. Une fonction dérivable au sens complexe acquiert des propriétés d'une rigidité extraordinaire.</p>
+
+    <h3>1.1 Le corps ℂ et la dérivée complexe</h3>
+
+    <div class="definition">
+      <span class="box-label">Définition</span>
+      <p>Soit $\Omega \subset \mathbb{C}$ un ouvert. Une fonction $f : \Omega \to \mathbb{C}$ est <strong>holomorphe en $z_0 \in \Omega$</strong> si la limite</p>
+      <div class="math-block">$$f'(z_0) = \lim_{h \to 0} \frac{f(z_0 + h) - f(z_0)}{h}$$</div>
+      <p>existe dans $\mathbb{C}$ (c'est-à-dire est indépendante de la direction de $h \to 0$).<br>
+      $f$ est <strong>holomorphe sur $\Omega$</strong> si elle l'est en tout point de $\Omega$.</p>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">⚡</span>
+      <div class="insight-text"><strong>Pourquoi c'est plus fort que la dérivabilité réelle :</strong> La limite doit être la même que $h$ s'approche de $0$ depuis n'importe quelle direction dans $\mathbb{C}$. Cette condition en apparence légère force $f$ à être $C^\infty$ et même analytique !</div>
+    </div>
+
+    <h3>1.2 Équations de Cauchy-Riemann</h3>
+
+    <p>Écrivons $f(x+iy) = u(x,y) + iv(x,y)$ avec $u,v : \mathbb{R}^2 \to \mathbb{R}$.</p>
+
+    <div class="theorem">
+      <span class="box-label">Théorème Fondamental</span>
+      <span class="box-title">Cauchy-Riemann</span>
+      <p style="margin-top:0.7rem">$f$ est holomorphe en $z_0 = x_0 + iy_0$ si et seulement si $u$ et $v$ sont différentiables en $(x_0, y_0)$ et satisfont :</p>
+      <div class="math-block">$$\frac{\partial u}{\partial x} = \frac{\partial v}{\partial y} \qquad \text{et} \qquad \frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}$$</div>
+      <p>Dans ce cas : $f'(z_0) = \dfrac{\partial u}{\partial x} + i\dfrac{\partial v}{\partial x} = \dfrac{\partial v}{\partial y} - i\dfrac{\partial u}{\partial y}$</p>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Preuve (idée)</span>
+      <p><strong>Direction $h$ réel :</strong> $h = \Delta x \to 0$ donne $f'(z_0) = u_x + iv_x$.</p>
+      <p><strong>Direction $h$ imaginaire pur :</strong> $h = i\Delta y \to 0$ donne $f'(z_0) = \dfrac{1}{i}(u_y + iv_y) = v_y - iu_y$.</p>
+      <p>Égaliser parties réelles et imaginaires donne les équations C-R.</p>
+    </div>
+
+    <h4>Formulation en notation de Wirtinger</h4>
+    <p>On définit les opérateurs différentiels :</p>
+    <div class="math-block">$$\frac{\partial}{\partial z} = \frac{1}{2}\!\left(\frac{\partial}{\partial x} - i\frac{\partial}{\partial y}\right), \qquad \frac{\partial}{\partial \bar{z}} = \frac{1}{2}\!\left(\frac{\partial}{\partial x} + i\frac{\partial}{\partial y}\right)$$</div>
+
+    <div class="proposition">
+      <span class="box-label">Proposition</span>
+      <p>$f$ est holomorphe $\iff \dfrac{\partial f}{\partial \bar{z}} = 0$ (et dans ce cas $f'(z) = \dfrac{\partial f}{\partial z}$)</p>
+    </div>
+
+    <h3>1.3 Fonctions harmoniques</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <p>Si $f = u + iv$ est holomorphe, alors $u$ et $v$ sont harmoniques :</p>
+      <div class="math-block">$$\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0 \qquad \Delta v = 0$$</div>
+      <p>On dit que $u$ et $v$ sont <em>conjuguées harmoniques</em> l'une de l'autre.</p>
+    </div>
+
+    <div class="insight">
+      <span class="insight-icon">🎯</span>
+      <div class="insight-text"><strong>À l'IMC :</strong> Pour montrer qu'une fonction est holomorphe, la stratégie standard est de vérifier les équations C-R. Pour construire une holomorphe à partir d'une harmonique $u$ donnée, on intègre C-R pour trouver $v$.</div>
+    </div>
+
+    <h3>1.4 Exemples fondamentaux</h3>
+
+    <table>
+      <tr><th>Fonction</th><th>Holomorphe ?</th><th>Dérivée</th></tr>
+      <tr><td>$z^n$</td><td>Oui, sur $\mathbb{C}$</td><td>$nz^{n-1}$</td></tr>
+      <tr><td>$e^z$</td><td>Oui, sur $\mathbb{C}$</td><td>$e^z$</td></tr>
+      <tr><td>$\sin z, \cos z$</td><td>Oui, sur $\mathbb{C}$</td><td>$\cos z, -\sin z$</td></tr>
+      <tr><td>$\log z$</td><td>Oui, sur $\mathbb{C} \setminus \mathbb{R}_-$</td><td>$1/z$</td></tr>
+      <tr><td>$|z|^2$</td><td>Non (sauf en $0$)</td><td>—</td></tr>
+      <tr><td>$\bar{z}$</td><td>Jamais</td><td>—</td></tr>
+      <tr><td>$\text{Re}(z)$</td><td>Jamais</td><td>—</td></tr>
+    </table>
+
+    <div class="warning">
+      <span>⚠️</span>
+      <div>$|z|^2 = x^2+y^2$ : on a $u_x = 2x$, $v_y = 0$. Les équations C-R donnent $2x = 0$, donc holomorphe seulement en $z=0$.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2 ===== -->
+  <div class="section" id="s1">
+    <span class="chapter-number">Chapitre II · Intégration</span>
+    <h2>Théorème de Cauchy & Formule Intégrale</h2>
+    <p class="chapter-intro">L'intégration complexe est le cœur de la théorie. Le théorème de Cauchy est l'un des résultats les plus puissants de toutes les mathématiques.</p>
+
+    <h3>2.1 Intégrale curviligne complexe</h3>
+
+    <div class="definition">
+      <span class="box-label">Définition</span>
+      <p>Pour $\gamma : [a,b] \to \mathbb{C}$ un chemin $C^1$ et $f$ continue sur $\gamma$,</p>
+      <div class="math-block">$$\int_\gamma f(z)\,dz = \int_a^b f(\gamma(t))\,\gamma'(t)\,dt$$</div>
+    </div>
+
+    <p><strong>Propriétés clés :</strong></p>
+    <ul style="margin: 0.5rem 0 1.2rem 2rem; line-height: 2;">
+      <li>Linéarité : $\int_\gamma (\alpha f + \beta g)\,dz = \alpha\int_\gamma f + \beta\int_\gamma g$</li>
+      <li>Inversion : $\int_{-\gamma} f\,dz = -\int_\gamma f\,dz$</li>
+      <li>Estimation (ML) : $\left|\int_\gamma f\,dz\right| \le M \cdot L(\gamma)$ si $|f| \le M$</li>
+    </ul>
+
+    <div class="insight">
+      <span class="insight-icon">📐</span>
+      <div class="insight-text"><strong>Inégalité ML</strong> — L'outil d'estimation le plus utilisé à l'IMC. Si $|f(z)| \le M$ sur $\gamma$ et $\ell = \text{longueur}(\gamma)$, alors $\left|\int_\gamma f(z)\,dz\right| \le M\ell$.</div>
+    </div>
+
+    <h3>2.2 Théorème de Cauchy</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème Central</span>
+      <span class="box-title">Cauchy-Goursat</span>
+      <p style="margin-top:0.7rem">Soit $\Omega$ un ouvert simplement connexe, $f$ holomorphe sur $\Omega$, et $\gamma$ un lacet dans $\Omega$. Alors :</p>
+      <div class="math-block">$$\oint_\gamma f(z)\,dz = 0$$</div>
+    </div>
+
+    <div class="proof">
+      <span class="proof-label">Idée de preuve (via Green)</span>
+      <p>Si $\Omega$ est simplement connexe et $\gamma$ borde une région $D$, le théorème de Green donne :</p>
+      <div class="math-block" style="font-size:0.95em">$$\oint_\gamma (u\,dx - v\,dy) = -\iint_D \!\left(\frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}\right)dA = 0$$</div>
+      <p>par les équations C-R ($v_x = -u_y$). Idem pour la partie imaginaire.</p>
+    </div>
+
+    <h3>2.3 Formule intégrale de Cauchy</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Formule de Cauchy</span>
+      <p style="margin-top:0.7rem">Si $f$ est holomorphe dans un voisinage du disque fermé $\overline{D(a,r)}$, alors pour tout $z \in D(a,r)$ :</p>
