@@ -713,3 +713,101 @@
       <p>Si $P(z) \ne 0$ pour tout $z$, alors $1/P$ est entière. Comme $|P(z)| \to \infty$ quand $|z| \to \infty$, on a $|1/P(z)| \to 0$, donc $1/P$ est bornée. Par Liouville : $1/P$ constante. Contradiction.</p>
     </div>
   </div>
+
+  <!-- ===== SECTION 3 ===== -->
+  <div class="section" id="s2">
+    <span class="chapter-number">Chapitre III · Développements</span>
+    <h2>Séries de Laurent & Singularités</h2>
+    <p class="chapter-intro">La classification des singularités et le résidu sont les outils de calcul d'intégrales les plus redoutables de l'analyse.</p>
+
+    <h3>3.1 Séries de Taylor holomorphes</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <p>Si $f$ est holomorphe sur $D(a,R)$, alors pour tout $z \in D(a,R)$ :</p>
+      <div class="math-block">$$f(z) = \sum_{n=0}^{\infty} c_n (z-a)^n, \qquad c_n = \frac{f^{(n)}(a)}{n!} = \frac{1}{2\pi i}\oint \frac{f(w)}{(w-a)^{n+1}}\,dw$$</div>
+      <p>La série converge absolument et uniformément sur tout compact de $D(a,R)$.</p>
+    </div>
+
+    <h3>3.2 Séries de Laurent</h3>
+
+    <div class="definition">
+      <span class="box-label">Définition</span>
+      <p>Sur une couronne $A(a;r,R) = \{z : r < |z-a| < R\}$, toute fonction holomorphe admet un développement de <strong>Laurent</strong> :</p>
+      <div class="math-block">$$f(z) = \sum_{n=-\infty}^{+\infty} c_n (z-a)^n, \qquad c_n = \frac{1}{2\pi i}\oint_{|\cdot - a|=\rho} \frac{f(w)}{(w-a)^{n+1}}\,dw$$</div>
+      <p>La <strong>partie principale</strong> est $\displaystyle\sum_{n=-\infty}^{-1} c_n(z-a)^n$.</p>
+    </div>
+
+    <h3>3.3 Classification des singularités isolées</h3>
+
+    <p>Soit $f$ holomorphe sur $D(a,r) \setminus \{a\}$. La nature de la singularité $a$ est :</p>
+
+    <table>
+      <tr><th>Type</th><th>Partie principale</th><th>Comportement $|f(z)| $ quand $z \to a$</th></tr>
+      <tr><td><strong>Effaçable</strong></td><td>Nulle ($c_n = 0$ pour $n < 0$)</td><td>Reste borné</td></tr>
+      <tr><td><strong>Pôle d'ordre $m$</strong></td><td>Finie : $c_{-m} \ne 0$, $c_n=0$ pour $n < -m$</td><td>$\to +\infty$</td></tr>
+      <tr><td><strong>Essentielle</strong></td><td>Infinie</td><td>Dense dans $\mathbb{C}$ (Casorati-W.)</td></tr>
+    </table>
+
+    <div class="theorem">
+      <span class="box-label">Théorème</span>
+      <span class="box-title">Casorati-Weierstrass</span>
+      <p style="margin-top:0.7rem">Au voisinage d'une singularité essentielle, l'image de tout voisinage pointé est dense dans $\mathbb{C}$. (Version forte : Picard — l'image est $\mathbb{C}$ entier sauf au plus un point.)</p>
+    </div>
+
+    <h3>3.4 Résidus</h3>
+
+    <div class="definition">
+      <span class="box-label">Définition</span>
+      <p>Le <strong>résidu</strong> de $f$ en $a$ est le coefficient $c_{-1}$ du développement de Laurent :</p>
+      <div class="math-block">$$\operatorname{Res}(f, a) = c_{-1} = \frac{1}{2\pi i}\oint_{|z-a|=\varepsilon} f(z)\,dz$$</div>
+    </div>
+
+    <h4>Formules de calcul</h4>
+
+    <div class="proposition">
+      <span class="box-label">Proposition — Pôle simple</span>
+      <div class="math-block">$$\operatorname{Res}(f, a) = \lim_{z \to a} (z-a)f(z)$$</div>
+    </div>
+
+    <div class="proposition">
+      <span class="box-label">Proposition — Pôle d'ordre $m$</span>
+      <div class="math-block">$$\operatorname{Res}(f, a) = \frac{1}{(m-1)!}\lim_{z \to a} \frac{d^{m-1}}{dz^{m-1}}\!\left[(z-a)^m f(z)\right]$$</div>
+    </div>
+
+    <div class="proposition">
+      <span class="box-label">Proposition — Forme $p/q$ avec $q(a)=0$, $q'(a)\ne 0$</span>
+      <div class="math-block">$$\operatorname{Res}\!\left(\frac{p}{q}, a\right) = \frac{p(a)}{q'(a)}$$</div>
+    </div>
+
+    <h3>3.5 Théorème des résidus</h3>
+
+    <div class="theorem">
+      <span class="box-label">Théorème Fondamental</span>
+      <span class="box-title">Des Résidus</span>
+      <p style="margin-top:0.7rem">Si $f$ est méromorphe dans un ouvert contenant le contour fermé simple $\gamma$ (positivement orienté), et $a_1, \ldots, a_k$ sont ses pôles à l'intérieur :</p>
+      <div class="math-block">$$\oint_\gamma f(z)\,dz = 2\pi i \sum_{j=1}^k \operatorname{Res}(f, a_j)$$</div>
+    </div>
+
+    <div class="ornament-divider">· · ✦ · ·</div>
+
+    <h3>3.6 Applications au calcul d'intégrales réelles</h3>
+
+    <p><strong>Schéma général :</strong></p>
+    <ol class="steps">
+      <li>Prolonger l'intégrande en une fonction de variable complexe $f(z)$</li>
+      <li>Choisir un contour d'intégration adapté (demi-cercle, rectangle, …)</li>
+      <li>Identifier les pôles à l'intérieur du contour</li>
+      <li>Calculer les résidus</li>
+      <li>Appliquer le théorème des résidus, puis faire tendre le rayon vers l'infini</li>
+      <li>Montrer que les arcs parasites contribuent $0$ (souvent par ML ou Lemme de Jordan)</li>
+    </ol>
+
+    <div class="definition">
+      <span class="box-label">Lemme</span>
+      <span class="box-title">Jordan</span>
+      <p style="margin-top:0.7rem">Si $f(z) \to 0$ uniformément quand $|z| \to \infty$ dans le demi-plan supérieur, alors pour $\lambda > 0$ :</p>
+      <div class="math-block">$$\lim_{R \to \infty} \int_{\Gamma_R} f(z)\,e^{i\lambda z}\,dz = 0$$</div>
+      <p>où $\Gamma_R$ est le demi-cercle supérieur de rayon $R$.</p>
+    </div>
+  </div>
