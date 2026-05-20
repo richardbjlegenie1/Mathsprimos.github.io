@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inégalités Analytiques — IMC Préparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #0e0c0a;
+    --parchment: #f7f3ec;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --gold-dim: #8a6f30;
+    --red-accent: #a63228;
+    --blue-deep: #1a3a5c;
+    --sage: #4a6741;
+    --margin-ink: #5a4a35;
+    --rule: #c9a84c44;
+    --shadow: #0e0c0a18;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, #e8d8b044 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, #d4c4a022 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23c9a84c' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    border-bottom: 2px solid var(--gold);
+    background: linear-gradient(180deg, #1a1208ee 0%, #0e0c0aee 100%);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      #c9a84c06 40px,
+      #c9a84c06 80px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    border: 1px solid var(--gold-dim);
+    padding: 0.3em 1em;
+    margin-bottom: 1.5rem;
+    animation: fadeSlide 0.6s ease both;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--parchment);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    animation: fadeSlide 0.8s 0.1s ease both;
+  }
+  .header-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: #c9a84c99;
+    margin-top: 0.75rem;
+    animation: fadeSlide 0.8s 0.2s ease both;
+  }
+  .header-ornament {
+    color: var(--gold);
+    font-size: 1.5rem;
+    margin: 1.5rem auto 0;
+    letter-spacing: 0.5em;
+    animation: fadeSlide 0.8s 0.3s ease both;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--ink);
+    border-bottom: 1px solid var(--gold-dim);
+    position: sticky; top: 0; z-index: 100;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 1rem;
+  }
+  .nav-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c9a84c88;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1100px; margin: auto; padding: 3rem 1.5rem 6rem; }
+
+  /* ── SECTION ── */
+  .section {
+    display: none;
+    animation: sectionIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes sectionIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--blue-deep);
+    margin: 2rem 0 0.75rem;
+  }
+  h4 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--red-accent);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin-bottom: 1rem; }
+
+  /* ── CARDS ── */
+  .card {
+    background: #fff;
+    border: 1px solid #e0d8cc;
+    border-radius: 2px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+    box-shadow: 4px 4px 0 #c9a84c18;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+  }
+  .card.theorem::before { background: var(--blue-deep); }
+  .card.proof::before { background: var(--sage); }
+  .card.example::before { background: var(--red-accent); }
+  .card.warning::before { background: #b8600a; }
+  .card.exercise::before { background: #6b3fa0; }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card.theorem .card-label { color: var(--blue-deep); }
+  .card.proof .card-label { color: var(--sage); }
+  .card.example .card-label { color: var(--red-accent); }
+  .card.warning .card-label { color: #b8600a; }
+  .card.exercise .card-label { color: #6b3fa0; }
+
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.25;
+  }
+
+  /* ── MATH DISPLAY ── */
+  .math-block {
+    background: #f0ece4;
+    border: 1px solid #ddd5c4;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.05rem;
+    border-radius: 1px;
+    overflow-x: auto;
+  }
+
+  /* ── COLLAPSIBLE PROOF ── */
+  .collapsible-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    user-select: none;
+    padding: 0.5rem 0;
+  }
+  .collapsible-header .toggle-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--sage);
+    transition: transform 0.3s;
+    display: inline-block;
+    width: 1.2em;
+  }
+  .collapsible-body {
+    display: none;
+    padding-top: 0.75rem;
+    border-top: 1px dashed #c9a84c55;
+    margin-top: 0.5rem;
+  }
+  .collapsible-body.open { display: block; animation: sectionIn 0.3s ease; }
+
+  /* ── STEP BOX ── */
+  .steps { counter-reset: step; margin: 1.25rem 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 1rem;
+    margin-bottom: 1.25rem;
+    counter-increment: step;
+  }
+  .step-num {
+    width: 2.5rem; height: 2.5rem;
+    background: var(--ink);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+  .step-body { padding-top: 0.3rem; }
+
+  /* ── INEQUALITIES TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.95rem;
+  }
+  thead tr {
+    background: var(--ink);
+    color: var(--gold);
+  }
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+  td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid #e0d8cc;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f7f3ec88; }
+
+  /* ── PROBLEM SET ── */
+  .problem {
+    background: #1a1208;
+    color: var(--parchment);
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+    border-radius: 2px;
+    border-left: 4px solid var(--gold);
+  }
+  .problem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .problem-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .difficulty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.2em 0.7em;
+    border-radius: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .diff-1 { background: #2d5a1b; color: #8fde6f; }
+  .diff-2 { background: #5a3d10; color: #f0b84a; }
+  .diff-3 { background: #5a1515; color: #f08a8a; }
+
+  .hint-toggle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+    background: none;
+    border: 1px solid var(--gold-dim);
+    padding: 0.3em 0.8em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+  .hint-toggle:hover { color: var(--gold); border-color: var(--gold); }
+  .hint-body {
+    display: none;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #c9a84c33;
+    font-style: italic;
+    color: #c9a84ccc;
+    font-size: 0.95rem;
+  }
+  .hint-body.open { display: block; animation: sectionIn 0.3s ease; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0.6rem; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--gold) 0%, #c9a84c33 100%);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 1.5rem 1.5rem;
+  }
+  .tl-dot {
+    position: absolute; left: -1.45rem; top: 0.35rem;
+    width: 0.9rem; height: 0.9rem;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 2px solid var(--parchment);
+  }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ── ORNAMENTAL ── */
+  .ornament-rule {
+    text-align: center;
+    color: var(--gold-dim);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin: 2.5rem 0;
+    opacity: 0.5;
+  }
+
+  /* ── OVERVIEW GRID ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .overview-card {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 1.25rem 1.5rem;
+    border-top: 3px solid var(--gold);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .overview-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px #0e0c0a44;
+  }
+  .ov-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .ov-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .ov-desc {
+    font-size: 0.85rem;
+    color: #c9a84c88;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .page { padding: 2rem 1rem 4rem; }
+    .math-block { font-size: 0.9rem; padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">IMC Preparation Series · Analyse</div>
+  <h1 class="header-title">Inégalités <em>Analytiques</em></h1>
+  <p class="header-sub">Un cours complet, étape par étape, pour l'IMC</p>
+  <div class="header-ornament">✦ ✦ ✦</div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-item active" onclick="showSection('overview')">Vue d'ensemble</div>
+    <div class="nav-item" onclick="showSection('fondements')">I. Fondements</div>
+    <div class="nav-item" onclick="showSection('classiques')">II. Inégalités Classiques</div>
+    <div class="nav-item" onclick="showSection('convexite')">III. Convexité</div>
+    <div class="nav-item" onclick="showSection('techniques')">IV. Techniques IMC</div>
+    <div class="nav-item" onclick="showSection('problemes')">V. Problèmes</div>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 0 : VUE D'ENSEMBLE
+══════════════════════════════════════════════════════ -->
+<div class="section active" id="overview">
+  <div class="section-eyebrow">Introduction</div>
+  <h2 class="section-title">Vue d'ensemble du cours</h2>
+
+  <p>Les <strong>inégalités analytiques</strong> constituent l'un des piliers de l'IMC. Elles apparaissent dans des problèmes d'analyse réelle, de théorie des séries, d'intégration et d'optimisation. Ce cours couvre les outils essentiels, de la base à la maîtrise avancée.</p>
+
+  <div class="overview-grid">
+    <div class="overview-card" onclick="showSection('fondements')">
+      <div class="ov-num">01</div>
+      <div class="ov-title">Fondements</div>
+      <div class="ov-desc">Ordre, valeur absolue, densité</div>
+    </div>
+    <div class="overview-card" onclick="showSection('classiques')">
+      <div class="ov-num">02</div>
+      <div class="ov-title">Inégalités Classiques</div>
+      <div class="ov-desc">AM-GM, Cauchy-Schwarz, Hölder, Minkowski</div>
+    </div>
+    <div class="overview-card" onclick="showSection('convexite')">
+      <div class="ov-num">03</div>
+      <div class="ov-title">Convexité & Jensen</div>
+      <div class="ov-desc">Fonctions convexes, inégalité de Jensen</div>
+    </div>
+    <div class="overview-card" onclick="showSection('techniques')">
+      <div class="ov-num">04</div>
+      <div class="ov-title">Techniques IMC</div>
+      <div class="ov-desc">SOS, tangent trick, substitutions, bornes intégrales</div>
+    </div>
+    <div class="overview-card" onclick="showSection('problemes')">
+      <div class="ov-num">05</div>
+      <div class="ov-title">Problèmes d'Entraînement</div>
+      <div class="ov-desc">Problèmes IMC annotés avec indices</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Feuille de route</div>
+    <p>Pour chaque inégalité, le cours suit le schéma : <strong>Énoncé → Preuve(s) → Cas d'égalité → Applications IMC</strong>. Les preuves effondrables permettent de tester votre compréhension avant de les lire.</p>
+  </div>
+
+  <h3>Historique rapide</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1821</div>
+      <p><strong>Cauchy</strong> publie le <em>Cours d'Analyse</em>, posant les bases rigoureuses de l'inégalité qui portera son nom.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1906</div>
+      <p><strong>Jensen</strong> généralise l'inégalité arithmético-géométrique via la notion de convexité.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1908</div>
+      <p><strong>Hölder</strong> et <strong>Minkowski</strong> établissent leurs inégalités intégrales, fondamentales pour les espaces \(L^p\).</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1934</div>
+      <p>Hardy, Littlewood et Pólya publient <em>Inequalities</em>, la référence canonique du domaine.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1991</div>
+      <p>Première édition de l'<strong>IMC</strong>. Les inégalités analytiques figurent dans chaque édition.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 1 : FONDEMENTS
+══════════════════════════════════════════════════════ -->
+<div class="section" id="fondements">
+  <div class="section-eyebrow">Chapitre I</div>
+  <h2 class="section-title">Fondements des Inégalités</h2>
+
+  <h3>1.1 — Propriétés de l'ordre sur ℝ</h3>
+  <p>Toute inégalité repose sur les propriétés fondamentales de l'ordre total sur \(\mathbb{R}\).</p>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème — Propriétés de base</div>
+    <p>Pour tous réels \(a, b, c\) :</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">T</div><div class="step-body"><strong>Transitivité :</strong> \(a \le b\) et \(b \le c \Rightarrow a \le c\).</div></div>
+      <div class="step"><div class="step-num">+</div><div class="step-body"><strong>Addition :</strong> \(a \le b \Rightarrow a + c \le b + c\).</div></div>
+      <div class="step"><div class="step-num">×</div><div class="step-body"><strong>Multiplication :</strong> si \(c > 0\), \(a \le b \Rightarrow ac \le bc\). Si \(c < 0\), l'inégalité <em>se renverse</em>.</div></div>
+    </div>
+    <div class="card warning" style="margin-top:1rem;padding:0.75rem 1rem;">
+      <div class="card-label">Attention</div>
+      <p>La multiplication par un négatif renverse le signe — erreur très fréquente en concours !</p>
+    </div>
+  </div>
+
+  <h3>1.2 — Valeur absolue et distance</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Inégalité triangulaire</div>
+    <div class="math-block">$$|a + b| \le |a| + |b|, \qquad \big||a| - |b|\big| \le |a - b|$$</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Preuve</strong>
+    </div>
+    <div class="collapsible-body">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">On a \(-|a| \le a \le |a|\) et \(-|b| \le b \le |b|\).</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">En additionnant : \(-(|a|+|b|) \le a+b \le |a|+|b|\).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Par définition de la valeur absolue : \(|a+b| \le |a|+|b|\). \(\quad\square\)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Application IMC</div>
+    <p>Montrer que pour tout polynôme \(P\) à coefficients réels et tout \(z \in \mathbb{C}\) avec \(|z| \le 1\) :</p>
+    <div class="math-block">$$|P(z)| \le \sum_{k=0}^{n} |a_k|$$</div>
+    <p><em>Solution :</em> par inégalité triangulaire itérée, \(|P(z)| = \left|\sum a_k z^k\right| \le \sum |a_k| |z|^k \le \sum |a_k|\). \(\square\)</p>
+  </div>
+
+  <h3>1.3 — Inégalité de Bernoulli</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème de Bernoulli</div>
+    <div class="math-block">$$(1+x)^n \ge 1 + nx \qquad \forall x \ge -1,\; n \in \mathbb{N}$$</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Preuve par récurrence</strong>
+    </div>
+    <div class="collapsible-body">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Base :</strong> \(n=1\) : \((1+x)^1 = 1+x \ge 1+x\). ✓</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Hérédité :</strong> supposer vrai au rang \(n\). Alors \((1+x)^{n+1} = (1+x)^n(1+x) \ge (1+nx)(1+x)\) (car \(1+x \ge 0\)).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Développer : \((1+nx)(1+x) = 1 + (n+1)x + nx^2 \ge 1+(n+1)x\). \(\square\)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament-rule">✦ ✦ ✦</div>
+
+  <h3>1.4 — Technique de la carrée positive</h3>
+  <p>Le carré d'un réel est toujours positif. Ce fait élémentaire est à la base de nombreuses preuves.</p>
+  <div class="card">
+    <div class="card-label">Lemme fondamental</div>
+    <div class="math-block">$$a^2 \ge 0 \quad \Longrightarrow \quad \frac{a+b}{2} \ge \sqrt{ab} \quad (a,b \ge 0)$$</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Preuve</strong>
+    </div>
+    <div class="collapsible-body">
+      <p>Équivalent à \((\sqrt{a}-\sqrt{b})^2 \ge 0\), qui est vrai, avec égalité ssi \(a=b\). \(\square\)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 2 : INÉGALITÉS CLASSIQUES
+══════════════════════════════════════════════════════ -->
+<div class="section" id="classiques">
+  <div class="section-eyebrow">Chapitre II</div>
+  <h2 class="section-title">Les Grandes Inégalités Classiques</h2>
+
+  <h3>2.1 — AM-GM (Arithmétique–Géométrique)</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème — Inégalité AM-GM</div>
+    <p>Pour \(a_1, \ldots, a_n \ge 0\) :</p>
+    <div class="math-block">$$\frac{a_1 + a_2 + \cdots + a_n}{n} \;\ge\; \sqrt[n]{a_1 a_2 \cdots a_n}$$</div>
+    <p>Égalité si et seulement si \(a_1 = a_2 = \cdots = a_n\).</p>
+  </div>
+
+  <div class="card proof">
+    <div class="card-label">Preuve — Méthode de Cauchy (avant-arrière)</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Dérouler la preuve complète</strong>
+    </div>
+    <div class="collapsible-body">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Base :</strong> \(n=2\) : \((\sqrt{a_1}-\sqrt{a_2})^2 \ge 0 \Rightarrow a_1+a_2 \ge 2\sqrt{a_1 a_2}\).</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Pas en avant :</strong> si vrai pour \(n\), prouver pour \(2n\) en groupant les termes par paires.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Pas en arrière :</strong> si vrai pour \(n\), vrai pour \(n-1\) en posant \(a_n = \frac{a_1+\cdots+a_{n-1}}{n-1}\).</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">Ces deux passes couvrent tout \(\mathbb{N}\). \(\square\)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Exemple IMC classique</div>
+    <p>Montrer que pour \(x > 0\) : \(\;x + \dfrac{1}{x} \ge 2\).</p>
+    <p><em>Par AM-GM :</em> \(\dfrac{x + 1/x}{2} \ge \sqrt{x \cdot \frac{1}{x}} = 1\). Égalité en \(x = 1\). \(\square\)</p>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>2.2 — Cauchy-Schwarz</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème — Cauchy-Schwarz (forme discrète)</div>
+    <div class="math-block">$$\left(\sum_{i=1}^n a_i b_i\right)^2 \;\le\; \left(\sum_{i=1}^n a_i^2\right)\left(\sum_{i=1}^n b_i^2\right)$$</div>
+    <p>Égalité ssi \((a_i)\) et \((b_i)\) sont proportionnels.</p>
+  </div>
+
+  <div class="card proof">
+    <div class="card-label">Preuve — Lagrange / discriminant</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Preuve par polynôme</strong>
+    </div>
+    <div class="collapsible-body">
+      <p>Considérer \(f(t) = \sum (a_i t + b_i)^2 \ge 0\). C'est un polynôme du second degré en \(t\) :</p>
+      <div class="math-block">$$f(t) = \underbrace{\left(\sum a_i^2\right)}_{A} t^2 + 2\underbrace{\left(\sum a_i b_i\right)}_{B} t + \underbrace{\left(\sum b_i^2\right)}_{C}$$</div>
+      <p>Comme \(f(t) \ge 0\) pour tout \(t\), le discriminant est négatif : \(4B^2 - 4AC \le 0\), soit \(B^2 \le AC\). \(\square\)</p>
+    </div>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Forme de Engel (ou Titu)</div>
+    <p>Une variante très utile en IMC :</p>
+    <div class="math-block">$$\frac{a_1^2}{b_1} + \frac{a_2^2}{b_2} + \cdots + \frac{a_n^2}{b_n} \;\ge\; \frac{(a_1 + \cdots + a_n)^2}{b_1 + \cdots + b_n}$$</div>
+    <p>pour \(b_i > 0\). S'obtient par Cauchy-Schwarz avec \(x_i = a_i/\sqrt{b_i}\) et \(y_i = \sqrt{b_i}\).</p>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>2.3 — Inégalités de Hölder et Minkowski</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Inégalité de Hölder</div>
+    <p>Pour \(p, q > 1\) avec \(\dfrac{1}{p} + \dfrac{1}{q} = 1\) :</p>
+    <div class="math-block">$$\sum_{i=1}^n |a_i b_i| \;\le\; \left(\sum_{i=1}^n |a_i|^p\right)^{1/p} \left(\sum_{i=1}^n |b_i|^q\right)^{1/q}$$</div>
+    <p>Cauchy-Schwarz est le cas \(p = q = 2\).</p>
+  </div>
+
+  <div class="card theorem">
+    <div class="card-label">Inégalité de Minkowski</div>
+    <p>Pour \(p \ge 1\) :</p>
+    <div class="math-block">$$\left(\sum_{i=1}^n |a_i + b_i|^p\right)^{1/p} \;\le\; \left(\sum_{i=1}^n |a_i|^p\right)^{1/p} + \left(\sum_{i=1}^n |b_i|^p\right)^{1/p}$$</div>
+    <p>C'est l'inégalité triangulaire dans \(\ell^p\).</p>
+  </div>
+
+  <div class="card warning">
+    <div class="card-label">Conjugués de Hölder — à mémoriser</div>
+    <table>
+      <thead><tr><th>\(p\)</th><th>\(q\) (conjugué)</th><th>Application typique</th></tr></thead>
+      <tbody>
+        <tr><td>\(2\)</td><td>\(2\)</td><td>Cauchy-Schwarz</td></tr>
+        <tr><td>\(3\)</td><td>\(3/2\)</td><td>Sommes cubiques</td></tr>
+        <tr><td>\(4\)</td><td>\(4/3\)</td><td>Puissances 4</td></tr>
+        <tr><td>\(\infty\)</td><td>\(1\)</td><td>\(\max \cdot \ell^1\)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>2.4 — Inégalité des moyennes de puissances (Power Mean)</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème</div>
+    <p>La <em>moyenne de puissance d'ordre \(r\)</em> est \(M_r = \left(\dfrac{\sum a_i^r}{n}\right)^{1/r}\). Alors pour \(s < r\) :</p>
+    <div class="math-block">$$M_s \;\le\; M_r$$</div>
+    <p>Cas particuliers : \(M_{-\infty} \le M_{-1} \le M_0 \le M_1 \le M_2 \le M_{+\infty}\), i.e. min ≤ harmonique ≤ géométrique ≤ arithmétique ≤ quadratique ≤ max.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 3 : CONVEXITÉ
+══════════════════════════════════════════════════════ -->
+<div class="section" id="convexite">
+  <div class="section-eyebrow">Chapitre III</div>
+  <h2 class="section-title">Convexité & Inégalité de Jensen</h2>
+
+  <h3>3.1 — Fonctions convexes</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Définition</div>
+    <p>Une fonction \(f : I \to \mathbb{R}\) est <strong>convexe</strong> si pour tout \(x, y \in I\) et \(\lambda \in [0,1]\) :</p>
+    <div class="math-block">$$f(\lambda x + (1-\lambda)y) \;\le\; \lambda f(x) + (1-\lambda)f(y)$$</div>
+    <p>Géométriquement : la corde entre deux points est <em>au-dessus</em> du graphe.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Critère de convexité</div>
+    <p>Si \(f\) est deux fois dérivable, alors :</p>
+    <div class="math-block">$$f \text{ convexe} \iff f''(x) \ge 0 \quad \forall x \in I$$</div>
+    <table>
+      <thead><tr><th>Fonction</th><th>\(f''(x)\)</th><th>Convexe sur</th></tr></thead>
+      <tbody>
+        <tr><td>\(e^x\)</td><td>\(e^x > 0\)</td><td>\(\mathbb{R}\)</td></tr>
+        <tr><td>\(x^2\)</td><td>\(2 > 0\)</td><td>\(\mathbb{R}\)</td></tr>
+        <tr><td>\(-\ln x\)</td><td>\(1/x^2 > 0\)</td><td>\((0,+\infty)\)</td></tr>
+        <tr><td>\(x^p\) (\(p \ge 1\))</td><td>\(p(p-1)x^{p-2} \ge 0\)</td><td>\([0,+\infty)\)</td></tr>
+        <tr><td>\(\ln x\) (concave)</td><td>\(-1/x^2 < 0\)</td><td>\((0,+\infty)\)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.2 — Inégalité de Jensen</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème de Jensen</div>
+    <p>Si \(f\) est convexe sur \(I\) et \(\lambda_1, \ldots, \lambda_n \ge 0\) avec \(\sum \lambda_i = 1\), alors :</p>
+    <div class="math-block">$$f\!\left(\sum_{i=1}^n \lambda_i x_i\right) \;\le\; \sum_{i=1}^n \lambda_i f(x_i)$$</div>
+    <p>Si \(f\) est <em>concave</em>, l'inégalité se renverse.</p>
+  </div>
+
+  <div class="card proof">
+    <div class="card-label">Preuve par récurrence</div>
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="toggle-icon">▶</span>
+      <strong>Dérouler</strong>
+    </div>
+    <div class="collapsible-body">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Base \(n=2\) :</strong> c'est la définition de la convexité.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Hérédité :</strong> Poser \(\Lambda = \sum_{i=1}^{n-1}\lambda_i = 1 - \lambda_n\). Écrire \(\sum_{i=1}^n \lambda_i x_i = \Lambda \cdot \bar{x} + \lambda_n x_n\) où \(\bar{x} = \sum_{i=1}^{n-1}\frac{\lambda_i}{\Lambda}x_i\).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Par convexité : \(f(\Lambda \bar{x} + \lambda_n x_n) \le \Lambda f(\bar{x}) + \lambda_n f(x_n)\). Puis appliquer l'hypothèse de récurrence à \(f(\bar{x})\). \(\square\)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Application — Preuve de AM-GM via Jensen</div>
+    <p>Appliquer Jensen à \(f = -\ln\) (convexe) avec \(\lambda_i = 1/n\) :</p>
+    <div class="math-block">$$-\ln\!\left(\frac{\sum a_i}{n}\right) \le -\frac{\sum \ln a_i}{n} = -\frac{\ln(\prod a_i)}{n}$$</div>
+    <p>D'où \(\dfrac{\sum a_i}{n} \ge \left(\prod a_i\right)^{1/n}\). \(\square\)</p>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>3.3 — Inégalité de Karamata (majoration)</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Théorème de Karamata</div>
+    <p>Si \(\mathbf{x} = (x_1, \ldots, x_n)\) <strong>majore</strong> \(\mathbf{y} = (y_1,\ldots, y_n)\) (noté \(\mathbf{x} \succ \mathbf{y}\)) et si \(f\) est convexe, alors :</p>
+    <div class="math-block">$$\sum_{i=1}^n f(x_i) \;\ge\; \sum_{i=1}^n f(y_i)$$</div>
+    <p>On dit \(\mathbf{x} \succ \mathbf{y}\) si les sommes partielles décroissantes de \(\mathbf{x}\) dominent celles de \(\mathbf{y}\) et \(\sum x_i = \sum y_i\).</p>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Exemple typique IMC</div>
+    <p>Pour \(a+b+c = \pi\) (triangle), montrer \(\sin a + \sin b + \sin c \le \dfrac{3\sqrt{3}}{2}\).</p>
+    <p><em>Solution :</em> \(\sin\) est concave sur \([0,\pi]\). Par Jensen avec \(\lambda_i=1/3\) :</p>
+    <div class="math-block">$$\frac{\sin a + \sin b + \sin c}{3} \le \sin\!\left(\frac{a+b+c}{3}\right) = \sin\frac{\pi}{3} = \frac{\sqrt{3}}{2}$$</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 4 : TECHNIQUES IMC
+══════════════════════════════════════════════════════ -->
+<div class="section" id="techniques">
+  <div class="section-eyebrow">Chapitre IV</div>
+  <h2 class="section-title">Techniques Avancées pour l'IMC</h2>
+
+  <h3>4.1 — Méthode SOS (Sum of Squares)</h3>
+  <p>Exprimer la différence LHS − RHS comme une somme de carrés (non-négatifs).</p>
+
+  <div class="card example">
+    <div class="card-label">Exemple</div>
+    <p>Prouver : \(a^2 + b^2 + c^2 \ge ab + bc + ca\).</p>
+    <div class="math-block">$$a^2+b^2+c^2 - ab - bc - ca = \tfrac{1}{2}\left[(a-b)^2 + (b-c)^2 + (c-a)^2\right] \ge 0. \quad\square$$</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Stratégie SOS en compétition</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Calculer \(D = \text{LHS} - \text{RHS}\).</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Chercher une décomposition \(D = \sum \alpha_{ij}(x_i - x_j)^2\) avec \(\alpha_{ij} \ge 0\).</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Identifier le cas d'égalité : il correspond aux \((x_i - x_j) = 0\) pour les \(\alpha_{ij} > 0\).</div></div>
+    </div>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>4.2 — Tangent Line Trick (Droite tangente)</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Principe</div>
+    <p>Si \(f\) est convexe, la tangente en tout point est sous la courbe :</p>
+    <div class="math-block">$$f(x) \;\ge\; f(a) + f'(a)(x-a) \qquad \forall x$$</div>
+    <p>On choisit \(a\) au point d'égalité pour obtenir une borne linéaire utile.</p>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Exemple — Inégalité exponentielle</div>
+    <p>Prouver : \(e^x \ge ex\) pour tout \(x \in \mathbb{R}\).</p>
+    <p>Tangente à \(f(x) = e^x\) en \(a = 1\) : \(f(x) \ge f(1) + f'(1)(x-1) = e + e(x-1) = ex\). \(\square\)</p>
+    <p><em>Plus généralement :</em> pour prouver \(\sum f(x_i) \ge C\), trouver \(m\) tel que \(f(x) \ge mx + b\) et la somme devienne triviale.</p>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>4.3 — Substitutions et normalisation</h3>
+
+  <div class="card">
+    <div class="card-label">Techniques de substitution courantes</div>
+    <table>
+      <thead><tr><th>Contrainte</th><th>Substitution</th><th>Effet</th></tr></thead>
+      <tbody>
+        <tr><td>\(a+b+c=1\)</td><td>Travailler directement</td><td>Normalise la somme</td></tr>
+        <tr><td>\(abc=1\)</td><td>\(a=x/y, b=y/z, c=z/x\)</td><td>Élimine la contrainte</td></tr>
+        <tr><td>\(a^2+b^2+c^2=1\)</td><td>\(a=\sin\theta\cos\phi\), etc.</td><td>Paramétrage sphérique</td></tr>
+        <tr><td>\(a,b,c > 0\)</td><td>\(a=e^x, b=e^y, c=e^z\)</td><td>Linéarise les log</td></tr>
+        <tr><td>Triangle \(a+b>c\)</td><td>\(a=y+z, b=z+x, c=x+y\)</td><td>Substitution de Ravi</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>4.4 — Inégalités intégrales</h3>
+
+  <div class="card theorem">
+    <div class="card-label">Jensen intégral</div>
+    <div class="math-block">$$f\!\left(\frac{1}{b-a}\int_a^b g(x)\,dx\right) \;\le\; \frac{1}{b-a}\int_a^b f(g(x))\,dx$$</div>
+    <p>pour \(f\) convexe et \(g\) intégrable.</p>
+  </div>
+
+  <div class="card theorem">
+    <div class="card-label">Cauchy-Schwarz intégral</div>
+    <div class="math-block">$$\left(\int_a^b f(x)g(x)\,dx\right)^2 \;\le\; \int_a^b f(x)^2\,dx \cdot \int_a^b g(x)^2\,dx$$</div>
+  </div>
+
+  <div class="card example">
+    <div class="card-label">Application — Borne sur une intégrale</div>
+    <p>Montrer que \(\displaystyle\int_0^1 e^{x^2}\,dx \le e\).</p>
+    <p>Par convexité de \(e^t\) et Jensen : \(e^{x^2} \le e^x\cdot 1 + e^0\cdot(1-1)\)… En fait on majore \(x^2 \le x\) sur \([0,1]\) donc \(e^{x^2} \le e^x\), et \(\int_0^1 e^x\,dx = e-1 < e\). \(\square\)</p>
+  </div>
+
+  <div class="ornament-rule">✦</div>
+
+  <h3>4.5 — Méthode de Lagrange et optimisation</h3>
+  <div class="card">
+    <div class="card-label">Principe en concours</div>
+    <p>Pour trouver le cas d'égalité (essentiel pour IMC), chercher le minimum de LHS−RHS sous la contrainte par Lagrange, vérifier que ce minimum est 0, identifier les valeurs correspondantes.</p>
+    <div class="math-block">$$\nabla f = \lambda \nabla g \quad \text{(extremum sous contrainte } g=0\text{)}$$</div>
+    <p>En pratique : poser les dérivées partielles égales, résoudre, vérifier que c'est bien un minimum global.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 5 : PROBLÈMES
+══════════════════════════════════════════════════════ -->
+<div class="section" id="problemes">
+  <div class="section-eyebrow">Chapitre V</div>
+  <h2 class="section-title">Problèmes d'Entraînement IMC</h2>
+
+  <p>Ces problèmes sont organisés par difficulté croissante. Essayez chaque problème avant d'ouvrir l'indice.</p>
+
+  <!-- P1 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 01</span>
+      <span class="difficulty diff-1">★ Niveau 1</span>
+    </div>
+    <p>Montrer que pour tous réels \(a, b, c > 0\) :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$\frac{a}{b} + \frac{b}{c} + \frac{c}{a} \;\ge\; 3$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">AM-GM directement sur les trois termes. Le cas d'égalité est \(a=b=c\).</div>
+  </div>
+
+  <!-- P2 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 02</span>
+      <span class="difficulty diff-1">★ Niveau 1</span>
+    </div>
+    <p>Pour \(x_1, \ldots, x_n > 0\) avec \(\sum x_i = 1\), montrer :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$\sum_{i=1}^n \frac{1}{x_i} \;\ge\; n^2$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Cauchy-Schwarz (forme Titu/Engel) : \(\sum \frac{1^2}{x_i} \ge \frac{(\sum 1)^2}{\sum x_i} = n^2\).</div>
+  </div>
+
+  <!-- P3 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 03</span>
+      <span class="difficulty diff-2">★★ Niveau 2</span>
+    </div>
+    <p>Soit \(a,b,c \ge 0\) avec \(a+b+c = 1\). Prouver :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$ab + bc + ca \;\le\; \frac{1}{3}$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Utiliser \((a+b+c)^2 = a^2+b^2+c^2+2(ab+bc+ca)\) et \(a^2+b^2+c^2 \ge \frac{(a+b+c)^2}{3}\) (Cauchy-Schwarz).</div>
+  </div>
+
+  <!-- P4 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 04</span>
+      <span class="difficulty diff-2">★★ Niveau 2</span>
+    </div>
+    <p>Montrer que pour \(n \ge 1\) et \(x_1, \ldots, x_n \in \mathbb{R}\) :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$\left(\sum_{i=1}^n x_i\right)^2 \;\le\; n \sum_{i=1}^n x_i^2$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Cauchy-Schwarz avec \(a_i = x_i\) et \(b_i = 1\). Ou bien : \(\sum x_i^2 - \frac{(\sum x_i)^2}{n} = \frac{1}{2n}\sum_{i,j}(x_i-x_j)^2 \ge 0\) (SOS).</div>
+  </div>
+
+  <!-- P5 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 05</span>
+      <span class="difficulty diff-2">★★ Niveau 2</span>
+    </div>
+    <p>Pour \(f\) convexe sur \([a,b]\), prouver l'<strong>inégalité de Hadamard</strong> :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$f\!\left(\frac{a+b}{2}\right) \;\le\; \frac{1}{b-a}\int_a^b f(x)\,dx \;\le\; \frac{f(a)+f(b)}{2}$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Pour la borne droite : \(f(x) \le f(a)\frac{b-x}{b-a} + f(b)\frac{x-a}{b-a}\) par convexité, puis intégrer. Pour la borne gauche : Jensen intégral.</div>
+  </div>
+
+  <!-- P6 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 06 — Style IMC</span>
+      <span class="difficulty diff-3">★★★ Niveau 3</span>
+    </div>
+    <p>Soient \(a_1 \ge a_2 \ge \cdots \ge a_n > 0\). Prouver que pour tout entier \(k \le n\) :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$\left(\sum_{i=1}^n a_i\right)\left(\sum_{i=1}^k \frac{1}{a_i}\right) \;\ge\; k^2$$</div>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Cauchy-Schwarz : \(\left(\sum_{i=1}^n a_i\right)\left(\sum_{i=1}^k \frac{1}{a_i}\right) \ge \left(\sum_{i=1}^k \sqrt{a_i \cdot \frac{1}{a_i}}\right)^2 = k^2\). Attention à l'asymétrie des sommes !</div>
+  </div>
+
+  <!-- P7 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 07 — Style IMC</span>
+      <span class="difficulty diff-3">★★★ Niveau 3</span>
+    </div>
+    <p>Soit \(f : [0,1] \to \mathbb{R}\) continue et positive. Montrer :</p>
+    <div class="math-block" style="background:#ffffff11;border-color:#c9a84c33;">$$\left(\int_0^1 f(x)\,dx\right)^2 \;\le\; \int_0^1 f(x)^2\,dx$$</div>
+    <p>et déterminer quand il y a égalité.</p>
+    <button class="hint-toggle" onclick="toggleHint(this)">▷ Indice</button>
+    <div class="hint-body">Cauchy-Schwarz intégral avec \(g \equiv 1\). Égalité ssi \(f\) est constante p.p.</div>
+  </div>
+
+  <div class="card" style="margin-top:2.5rem;">
+    <div class="card-label">Pour aller plus loin</div>
+    <p>Référence canonique : <em>Inequalities</em> de Hardy, Littlewood & Pólya. Pour l'IMC spécifiquement : archives IMC 1991–2024 disponibles sur <strong>imc-math.org.uk</strong>. Pratiquer 2–3 problèmes par jour en variant les techniques.</p>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const items = document.querySelectorAll('.nav-item');
+  const map = {overview:0,fondements:1,classiques:2,convexite:3,techniques:4,problemes:5};
+  items[map[id]]?.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+function toggleCollapse(header) {
+  const body = header.nextElementSibling;
+  const icon = header.querySelector('.toggle-icon');
+  const isOpen = body.classList.toggle('open');
+  icon.style.transform = isOpen ? 'rotate(90deg)' : '';
+  if (isOpen && window.MathJax) MathJax.typesetPromise([body]);
+}
+
+function toggleHint(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.textContent = isOpen ? '▽ Masquer' : '▷ Indice';
+  if (isOpen && window.MathJax) MathJax.typesetPromise([body]);
+}
+</script>
+</body>
+</html>
