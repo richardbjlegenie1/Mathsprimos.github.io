@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fonctions Spéciales — Préparation IMC</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #faf6ee;
+    --parchment: #f0e8d4;
+    --gold: #b8860b;
+    --gold-light: #d4a843;
+    --rust: #8b3a0f;
+    --slate: #3d4a5c;
+    --muted: #7a6e5c;
+    --border: #c8b89a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(184,134,11,0.05) 40px,
+      rgba(184,134,11,0.05) 41px
+    );
+  }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #c8b89a;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .badge {
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.35rem 0.9rem;
+    border-radius: 0;
+  }
+
+  /* NAV */
+  .toc-wrap {
+    background: var(--parchment);
+    border-bottom: 2px solid var(--border);
+    padding: 2rem;
+  }
+  .toc-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.4rem;
+  }
+  .toc-grid a {
+    color: var(--rust);
+    text-decoration: none;
+    font-size: 0.92rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px dashed transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .toc-grid a:hover { border-color: var(--rust); color: var(--ink); }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-right: 0.4rem;
+  }
+
+  /* LAYOUT */
+  .content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* CHAPTER */
+  .chapter {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 3px double var(--border);
+  }
+  .chapter-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .chapter-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .chapter-title-wrap {}
+  .chapter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .chapter h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  /* SECTION */
+  .section { margin-top: 3rem; }
+  .section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--rust);
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  p { margin-bottom: 1.1rem; }
+
+  /* BOXES */
+  .def, .thm, .prop, .exemple, .exercice, .warning, .key {
+    margin: 1.8rem 0;
+    padding: 1.2rem 1.5rem;
+    position: relative;
+  }
+  .def {
+    background: #f5efe0;
+    border-left: 4px solid var(--gold);
+  }
+  .thm {
+    background: #eef1f5;
+    border-left: 4px solid var(--slate);
+  }
+  .prop {
+    background: #f2ece0;
+    border-left: 4px solid var(--rust);
+  }
+  .exemple {
+    background: #f8f5ee;
+    border: 1px solid var(--border);
+    border-left: 4px solid #6b8e6b;
+  }
+  .exercice {
+    background: #fef9f0;
+    border: 1px solid #d4c090;
+    border-left: 4px solid var(--gold-light);
+  }
+  .warning {
+    background: #fdf0ec;
+    border-left: 4px solid #c0522a;
+  }
+  .key {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+  }
+
+  .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .def .box-label { color: var(--gold); }
+  .thm .box-label { color: var(--slate); }
+  .prop .box-label { color: var(--rust); }
+  .exemple .box-label { color: #4a7a4a; }
+  .exercice .box-label { color: #8a6a10; }
+  .warning .box-label { color: #c0522a; }
+  .key .box-label { color: var(--gold-light); }
+
+  .box-content { font-size: 0.97rem; }
+  .key .box-content { font-size: 0.95rem; color: #e8dfc8; }
+
+  /* MATH DISPLAY */
+  .math-block {
+    overflow-x: auto;
+    padding: 0.5rem 0;
+  }
+
+  /* FORMULA CARD */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .formula-card {
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    text-align: center;
+  }
+  .formula-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  /* STEP */
+  .steps { margin: 1.5rem 0; }
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .step-body { flex: 1; font-size: 0.97rem; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    text-align: left;
+  }
+  td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--parchment); }
+
+  /* DIVIDER */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin: 2rem 0;
+    letter-spacing: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: var(--muted);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+  footer span { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-tag">Préparation Concours · Niveau IMC</p>
+  <h1><em>Fonctions Spéciales</em><br>en Mathématiques</h1>
+  <p class="hero-sub">Un cours complet, étape par étape, pour maîtriser les outils analytiques fondamentaux des olympiades universitaires internationales.</p>
+  <div class="hero-badges">
+    <span class="badge">Fonction Gamma</span>
+    <span class="badge">Fonction Bêta</span>
+    <span class="badge">Zêta de Riemann</span>
+    <span class="badge">Séries entières</span>
+    <span class="badge">Techniques IMC</span>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <p class="toc-title">Table des matières</p>
+    <div class="toc-grid">
+      <a href="#chap1"><span class="toc-num">01</span>Fonction Gamma</a>
+      <a href="#chap2"><span class="toc-num">02</span>Fonction Bêta</a>
+      <a href="#chap3"><span class="toc-num">03</span>Digamma &amp; polygamma</a>
+      <a href="#chap4"><span class="toc-num">04</span>Fonction Zêta</a>
+      <a href="#chap5"><span class="toc-num">05</span>Séries entières &amp; spéciales</a>
+      <a href="#chap6"><span class="toc-num">06</span>Intégrales classiques IMC</a>
+      <a href="#chap7"><span class="toc-num">07</span>Problèmes d'entraînement</a>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===================== CHAPITRE 1 ===================== -->
+<div class="chapter" id="chap1">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre premier</span>
+      <h2>La Fonction Gamma \(\Gamma(s)\)</h2>
+    </div>
+  </div>
+
+  <p>La fonction Gamma est la <em>pierre angulaire</em> de l'analyse des fonctions spéciales. Elle généralise la factorielle aux nombres complexes et apparaît dans d'innombrables intégrales, séries et formules en théorie des nombres et en analyse.</p>
+
+  <div class="section">
+    <h3>1.1 Définition et premières propriétés</h3>
+
+    <div class="def">
+      <span class="box-label">Définition — Intégrale d'Euler de 2ᵉ espèce</span>
+      <div class="box-content">
+        <p>Pour \(\operatorname{Re}(s) > 0\), on définit :</p>
+        <div class="math-block">
+          \[\Gamma(s) = \int_0^{+\infty} t^{s-1} e^{-t}\, dt\]
+        </div>
+        <p>Cette intégrale est absolument convergente et définit une fonction holomorphe sur \(\{s \in \mathbb{C} : \operatorname{Re}(s)>0\}\).</p>
+      </div>
+    </div>
+
+    <div class="thm">
+      <span class="box-label">Théorème — Équation fonctionnelle</span>
+      <div class="box-content">
+        <p>Pour tout \(s\) avec \(\operatorname{Re}(s)>0\) :</p>
+        <div class="math-block">
+          \[\Gamma(s+1) = s\,\Gamma(s)\]
+        </div>
+        <p><strong>Preuve par intégration par parties :</strong></p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Écrire \(\Gamma(s+1) = \int_0^\infty t^s e^{-t}\,dt\).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">Intégrer par parties : \(u = t^s\), \(dv = e^{-t}dt\), donc \(du = st^{s-1}dt\), \(v=-e^{-t}\).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">Le terme \(\bigl[-t^s e^{-t}\bigr]_0^\infty = 0\) (car \(\operatorname{Re}(s)>0\)).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">Il reste \(s\int_0^\infty t^{s-1}e^{-t}\,dt = s\,\Gamma(s)\). \(\square\)</div></div>
+        </div>
+        <p><strong>Corollaire :</strong> Pour \(n \in \mathbb{N}\), \(\Gamma(n+1) = n!\) Ainsi \(\Gamma(1)=1,\ \Gamma(2)=1,\ \Gamma(3)=2,\ \Gamma(4)=6\).</p>
+      </div>
+    </div>
+
+    <div class="prop">
+      <span class="box-label">Valeurs remarquables</span>
+      <div class="box-content">
+        <div class="formula-grid">
+          <div class="formula-card">
+            <p class="formula-name">Valeur fondamentale</p>
+            \[\Gamma\!\left(\tfrac{1}{2}\right) = \sqrt{\pi}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Demi-entiers</p>
+            \[\Gamma\!\left(n+\tfrac{1}{2}\right) = \frac{(2n)!}{4^n\,n!}\sqrt{\pi}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Réflexion d'Euler</p>
+            \[\Gamma(s)\,\Gamma(1-s) = \frac{\pi}{\sin(\pi s)}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Duplication (Legendre)</p>
+            \[\Gamma(s)\,\Gamma\!\left(s+\tfrac{1}{2}\right) = \frac{\sqrt{\pi}}{2^{2s-1}}\Gamma(2s)\]
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>1.2 Preuve de \(\Gamma(1/2) = \sqrt{\pi}\)</h3>
+    <div class="exemple">
+      <span class="box-label">Calcul étape par étape</span>
+      <div class="box-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Poser \(t = u^2\) dans \(\Gamma(1/2) = \int_0^\infty t^{-1/2}e^{-t}\,dt\).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">On obtient \(\Gamma(1/2) = 2\int_0^\infty e^{-u^2}\,du = \int_{-\infty}^\infty e^{-u^2}\,du\).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">Par la méthode polaire : \(\left(\int_{-\infty}^\infty e^{-u^2}du\right)^2 = \iint_{\mathbb{R}^2} e^{-(x^2+y^2)}dx\,dy = 2\pi\int_0^\infty r e^{-r^2}dr = \pi\).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">Donc \(\Gamma(1/2) = \sqrt{\pi}\). \(\square\)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>1.3 Prolongement méromorphe et formule de réflexion</h3>
+    <p>L'équation fonctionnelle permet de prolonger \(\Gamma\) à \(\mathbb{C} \setminus \{0,-1,-2,\ldots\}\) avec des pôles simples en chaque entier négatif :</p>
+    <div class="math-block">
+      \[\operatorname{Res}_{s=-n}\Gamma(s) = \frac{(-1)^n}{n!}\]
+    </div>
+
+    <div class="thm">
+      <span class="box-label">Formule de réflexion d'Euler — Démonstration</span>
+      <div class="box-content">
+        <p>On veut montrer \(\Gamma(s)\Gamma(1-s) = \pi/\sin(\pi s)\).</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Écrire \(\Gamma(s)\Gamma(1-s) = \int_0^\infty \int_0^\infty t^{s-1}u^{-s}e^{-(t+u)}\,dt\,du\).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">Substituer \(t = vw\), \(u = v(1-w)\) — jacobien \(v\). Intégrer en \(v\) : \(\int_0^\infty v^0 e^{-v}\,dv = 1\) (?), précisément on sépare en \(\int_0^\infty e^{-v}dv = 1\) et \(B(s,1-s)\).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">Il reste \(B(s,1-s) = \int_0^1 w^{s-1}(1-w)^{-s}\,dw\).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">Substituer \(w = x/(1+x)\) : \(B(s,1-s) = \int_0^\infty \frac{x^{s-1}}{1+x}\,dx = \frac{\pi}{\sin(\pi s)}\) (par résidus ou formule classique). \(\square\)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key">
+      <span class="box-label">À retenir pour l'IMC</span>
+      <div class="box-content">
+        <p>La formule de réflexion est l'outil numéro 1 pour calculer \(\Gamma\) en des points de la forme \(p/q\). Elle relie directement \(\Gamma\) aux fonctions trigonométriques et simplifie de nombreux problèmes d'intégration.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 2 ===================== -->
+<div class="chapter" id="chap2">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre second</span>
+      <h2>La Fonction Bêta \(B(a,b)\)</h2>
+    </div>
+  </div>
+
+  <p>La fonction Bêta est indissociable de \(\Gamma\). Elle unifie le calcul de nombreuses intégrales définies et possède des liens profonds avec les probabilités (loi bêta) et la combinatoire.</p>
+
+  <div class="section">
+    <h3>2.1 Définition et lien avec Gamma</h3>
+
+    <div class="def">
+      <span class="box-label">Définition</span>
+      <div class="box-content">
+        <p>Pour \(a, b > 0\) :</p>
+        <div class="math-block">
+          \[B(a,b) = \int_0^1 t^{a-1}(1-t)^{b-1}\,dt\]
+        </div>
+      </div>
+    </div>
+
+    <div class="thm">
+      <span class="box-label">Théorème fondamental</span>
+      <div class="box-content">
+        <div class="math-block">
+          \[B(a,b) = \frac{\Gamma(a)\,\Gamma(b)}{\Gamma(a+b)}\]
+        </div>
+        <p><strong>Preuve :</strong> Calculer \(\Gamma(a)\Gamma(b)\) comme produit double, changer de variables \((t,u) \to (s=t+u, w=t/(t+u))\), séparer les intégrales.</p>
+      </div>
+    </div>
+
+    <div class="prop">
+      <span class="box-label">Formes équivalentes essentielles</span>
+      <div class="box-content">
+        <table>
+          <thead><tr><th>Forme</th><th>Expression</th><th>Substitution</th></tr></thead>
+          <tbody>
+            <tr><td>Trigonométrique</td><td>\(\displaystyle 2\int_0^{\pi/2}\sin^{2a-1}\theta\cos^{2b-1}\theta\,d\theta\)</td><td>\(t=\sin^2\theta\)</td></tr>
+            <tr><td>Fraction rationnelle</td><td>\(\displaystyle\int_0^\infty \frac{x^{a-1}}{(1+x)^{a+b}}\,dx\)</td><td>\(t=x/(1+x)\)</td></tr>
+            <tr><td>Symétrie</td><td>\(B(a,b)=B(b,a)\)</td><td>—</td></tr>
+            <tr><td>Récurrence</td><td>\(B(a,b)=\frac{a-1}{a+b-1}B(a-1,b)\)</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>2.2 Applications directes aux intégrales</h3>
+
+    <div class="exemple">
+      <span class="box-label">Exemple IMC-type — Intégrale de Wallis généralisée</span>
+      <div class="box-content">
+        <p>Calculer \(\displaystyle I = \int_0^{\pi/2}\sin^m\theta\cos^n\theta\,d\theta\) pour \(m,n>-1\).</p>
+        <p><strong>Solution :</strong> Par la forme trigonométrique de \(B\) :</p>
+        <div class="math-block">
+          \[I = \frac{1}{2}\,B\!\left(\frac{m+1}{2},\frac{n+1}{2}\right) = \frac{\Gamma\!\left(\frac{m+1}{2}\right)\Gamma\!\left(\frac{n+1}{2}\right)}{2\,\Gamma\!\left(\frac{m+n+2}{2}\right)}\]
+        </div>
+        <p><strong>Cas particulier \(m=n=2k\) :</strong></p>
+        <div class="math-block">
+          \[\int_0^{\pi/2}\sin^{2k}\theta\,d\theta = \frac{\pi}{2}\cdot\frac{(2k)!}{4^k(k!)^2} = \frac{\pi}{2}\binom{2k}{k}\frac{1}{4^k}\]
+        </div>
+      </div>
+    </div>
+
+    <div class="exemple">
+      <span class="box-label">Exemple — Intégrale de Dirichlet</span>
+      <div class="box-content">
+        <p>Montrer que \(\displaystyle\int_0^1 x^{p-1}(1-x^q)^{r-1}dx = \frac{1}{q}\,B(p/q,\,r)\).</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Substituer \(u = x^q\), donc \(x = u^{1/q}\), \(dx = \frac{1}{q}u^{1/q-1}du\).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">\(\int_0^1 u^{(p-1)/q}(1-u)^{r-1}\cdot\frac{1}{q}u^{1/q-1}du = \frac{1}{q}\int_0^1 u^{p/q-1}(1-u)^{r-1}du\).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">C'est exactement \(\frac{1}{q}B(p/q,\,r)\). \(\square\)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 3 ===================== -->
+<div class="chapter" id="chap3">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre troisième</span>
+      <h2>Fonctions Digamma \(\psi\) et Polygamma</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>3.1 La fonction digamma</h3>
+
+    <div class="def">
+      <span class="box-label">Définition</span>
+      <div class="box-content">
+        <div class="math-block">
+          \[\psi(s) = \frac{d}{ds}\ln\Gamma(s) = \frac{\Gamma'(s)}{\Gamma(s)}\]
+        </div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <span class="box-label">Propriétés fondamentales de ψ</span>
+      <div class="box-content">
+        <table>
+          <thead><tr><th>Propriété</th><th>Formule</th></tr></thead>
+          <tbody>
+            <tr><td>Récurrence</td><td>\(\psi(s+1) = \psi(s) + \frac{1}{s}\)</td></tr>
+            <tr><td>Valeur en 1</td><td>\(\psi(1) = -\gamma\) (constante d'Euler–Mascheroni)</td></tr>
+            <tr><td>Valeur en \(n\in\mathbb{N}^*\)</td><td>\(\psi(n) = -\gamma + H_{n-1} = -\gamma + \sum_{k=1}^{n-1}\frac{1}{k}\)</td></tr>
+            <tr><td>Réflexion</td><td>\(\psi(1-s)-\psi(s) = \pi\cot(\pi s)\)</td></tr>
+            <tr><td>Série intégrale</td><td>\(\psi(s) = \int_0^\infty\left(\frac{e^{-t}}{t}-\frac{e^{-st}}{1-e^{-t}}\right)dt\)</td></tr>
+            <tr><td>Développement asymptotique</td><td>\(\psi(s) \sim \ln s - \frac{1}{2s} - \sum_{n=1}^\infty \frac{B_{2n}}{2n\,s^{2n}}\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="key">
+      <span class="box-label">Constante d'Euler–Mascheroni \(\gamma\)</span>
+      <div class="box-content">
+        <div class="math-block" style="color:#e8dfc8;">
+          \[\gamma = \lim_{n\to\infty}\left(H_n - \ln n\right) = -\Gamma'(1) \approx 0{,}5772\ldots\]
+        </div>
+        <p>Cette constante apparaît systématiquement dans les développements de \(\Gamma\) et \(\psi\). La maîtriser est indispensable à l'IMC.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>3.2 Application : sommes de séries via digamma</h3>
+
+    <div class="exemple">
+      <span class="box-label">Exemple — Sommer \(\sum_{n=0}^\infty \frac{1}{(n+a)(n+b)}\)</span>
+      <div class="box-content">
+        <p>On utilise la représentation en série de \(\psi\) :</p>
+        <div class="math-block">
+          \[\psi(s) = -\gamma - \frac{1}{s} + \sum_{n=1}^\infty\left(\frac{1}{n}-\frac{1}{n+s}\right)\]
+        </div>
+        <p>Par décomposition en éléments simples et télescopage :</p>
+        <div class="math-block">
+          \[\sum_{n=0}^\infty \frac{1}{(n+a)(n+b)} = \frac{\psi(b)-\psi(a)}{b-a}\quad (a\neq b,\ a,b\notin\{0,-1,-2,\ldots\})\]
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 4 ===================== -->
+<div class="chapter" id="chap4">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre quatrième</span>
+      <h2>La Fonction Zêta de Riemann \(\zeta(s)\)</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>4.1 Définition et convergence</h3>
+
+    <div class="def">
+      <span class="box-label">Définition</span>
+      <div class="box-content">
+        <p>Pour \(\operatorname{Re}(s) > 1\) :</p>
+        <div class="math-block">
+          \[\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \prod_{p\text{ premier}} \frac{1}{1-p^{-s}}\]
+        </div>
+        <p>La seconde égalité est le <strong>produit eulérien</strong>, conséquence directe du théorème fondamental de l'arithmétique.</p>
+      </div>
+    </div>
+
+    <div class="prop">
+      <span class="box-label">Valeurs aux entiers pairs (Bâle et généralisations)</span>
+      <div class="box-content">
+        <div class="formula-grid">
+          <div class="formula-card">
+            <p class="formula-name">Problème de Bâle</p>
+            \[\zeta(2) = \frac{\pi^2}{6}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Zêta en 4</p>
+            \[\zeta(4) = \frac{\pi^4}{90}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Formule générale</p>
+            \[\zeta(2k) = \frac{(2\pi)^{2k}|B_{2k}|}{2\,(2k)!}\]
+          </div>
+          <div class="formula-card">
+            <p class="formula-name">Lien Gamma</p>
+            \[\zeta(s)\Gamma(s) = \int_0^\infty \frac{t^{s-1}}{e^t-1}\,dt\]
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>4.2 Preuve de \(\zeta(2) = \pi^2/6\) — méthode de Fourier</h3>
+
+    <div class="exemple">
+      <span class="box-label">Méthode par série de Fourier (Euler/Parseval)</span>
+      <div class="box-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Considérer \(f(x) = x\) sur \([-\pi,\pi]\), développement \(f(x) = 2\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}\sin(nx)\).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">Appliquer l'identité de Parseval : \(\frac{1}{\pi}\int_{-\pi}^\pi x^2\,dx = \sum_{n=1}^\infty \frac{4}{n^2}\cdot\frac{1}{2}+\frac{4}{n^2}\cdot\frac{1}{2}\)... précisément \(\frac{2\pi^2}{3} = 2\sum_{n=1}^\infty\frac{4}{2n^2}\)... </div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">L'identité de Parseval donne \(\frac{1}{\pi}\int_{-\pi}^\pi f^2\,dx = \frac{a_0^2}{2}+\sum_{n=1}^\infty (a_n^2+b_n^2)\). Ici \(\frac{2\pi^2}{3} = \sum_{n=1}^\infty \frac{4}{n^2}\).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">Donc \(\sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}\). \(\square\)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warning">
+      <span class="box-label">Attention — Valeurs aux entiers impairs</span>
+      <div class="box-content">
+        <p>Les valeurs \(\zeta(3), \zeta(5), \ldots\) aux entiers impairs \(\geq 3\) sont encore mystérieuses. \(\zeta(3) \approx 1{,}202\) est la <strong>constante d'Apéry</strong>, prouvée irrationnelle en 1978, mais sa nature arithmétique exacte (transcendance ?) reste inconnue. Ne jamais supposer une formule fermée simple pour les impairs !</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>4.3 Prolongement et équation fonctionnelle</h3>
+
+    <div class="thm">
+      <span class="box-label">Équation fonctionnelle de Riemann</span>
+      <div class="box-content">
+        <p>\(\zeta\) se prolonge en une fonction méromorphe sur \(\mathbb{C}\) avec un unique pôle simple en \(s=1\) de résidu 1, et satisfait :</p>
+        <div class="math-block">
+          \[\zeta(s) = 2^s\pi^{s-1}\sin\!\left(\frac{\pi s}{2}\right)\Gamma(1-s)\,\zeta(1-s)\]
+        </div>
+        <p><strong>Valeurs aux entiers négatifs :</strong> \(\zeta(-n) = -B_{n+1}/(n+1)\) où \(B_k\) est le \(k\)-ième nombre de Bernoulli. En particulier \(\zeta(0) = -1/2\), \(\zeta(-1) = -1/12\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 5 ===================== -->
+<div class="chapter" id="chap5">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre cinquième</span>
+      <h2>Séries Entières et Fonctions Génératrices</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>5.1 Séries hypergéométriques</h3>
+
+    <div class="def">
+      <span class="box-label">Symbole de Pochhammer (factorielle montante)</span>
+      <div class="box-content">
+        <div class="math-block">
+          \[(a)_n = a(a+1)(a+2)\cdots(a+n-1) = \frac{\Gamma(a+n)}{\Gamma(a)}\]
+        </div>
+        <p>Convention : \((a)_0 = 1\).</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <span class="box-label">Série hypergéométrique \({}_pF_q\)</span>
+      <div class="box-content">
+        <div class="math-block">
+          \[{}_pF_q\!\left(\begin{matrix}a_1,\ldots,a_p\\b_1,\ldots,b_q\end{matrix};z\right) = \sum_{n=0}^\infty \frac{(a_1)_n\cdots(a_p)_n}{(b_1)_n\cdots(b_q)_n}\frac{z^n}{n!}\]
+        </div>
+      </div>
+    </div>
+
+    <div class="prop">
+      <span class="box-label">Cas particuliers essentiels</span>
+      <div class="box-content">
+        <table>
+          <thead><tr><th>Fonction</th><th>Écriture \({}_pF_q\)</th></tr></thead>
+          <tbody>
+            <tr><td>\(e^z\)</td><td>\({}_0F_0(;;\,z)\)</td></tr>
+            <tr><td>\((1-z)^{-a}\)</td><td>\({}_1F_0(a;;\,z)\)</td></tr>
+            <tr><td>\(\ln(1+z)/z\)</td><td>\({}_2F_1(1,1;2;\,-z)\)</td></tr>
+            <tr><td>\(\arcsin(z)/z\)</td><td>\({}_2F_1(1/2,1/2;3/2;\,z^2)\)</td></tr>
+            <tr><td>Polynômes de Legendre</td><td>\(P_n(z) = {}_2F_1(-n,n+1;1;\frac{1-z}{2})\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>5.2 Identité de Gauss et sommation</h3>
+
+    <div class="thm">
+      <span class="box-label">Théorème de Gauss — Sommation de \({}_2F_1\) en \(z=1\)</span>
+      <div class="box-content">
+        <p>Si \(\operatorname{Re}(c-a-b)>0\) :</p>
+        <div class="math-block">
+          \[{}_2F_1(a,b;c;1) = \frac{\Gamma(c)\,\Gamma(c-a-b)}{\Gamma(c-a)\,\Gamma(c-b)}\]
+        </div>
+        <p><strong>Application directe :</strong> Pour \(a=b=1/2\), \(c=1\) : \(\sum_{n=0}^\infty\binom{2n}{n}^2\frac{1}{4^{2n}} = \frac{4}{\pi}\). (!)  </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 6 ===================== -->
+<div class="chapter" id="chap6">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre sixième</span>
+      <h2>Intégrales Classiques de l'IMC</h2>
+    </div>
+  </div>
+
+  <p>Cette section recense les intégrales les plus fréquemment demandées aux concours de type IMC, avec leurs méthodes de calcul.</p>
+
+  <div class="section">
+    <h3>6.1 Intégrales de Gaussian et liées</h3>
+
+    <div class="prop">
+      <span class="box-label">Table des intégrales gaussiennes fondamentales</span>
+      <div class="box-content">
+        <table>
+          <thead><tr><th>Intégrale</th><th>Valeur</th><th>Méthode</th></tr></thead>
+          <tbody>
+            <tr><td>\(\int_0^\infty e^{-x^2}dx\)</td><td>\(\dfrac{\sqrt{\pi}}{2}\)</td><td>Polaire</td></tr>
+            <tr><td>\(\int_0^\infty x^{2n}e^{-x^2}dx\)</td><td>\(\dfrac{(2n)!\sqrt{\pi}}{4^n\,n!\,2}\)</td><td>\(\Gamma(n+\frac{1}{2})\)</td></tr>
+            <tr><td>\(\int_0^\infty e^{-ax^2}dx\)</td><td>\(\dfrac{1}{2}\sqrt{\pi/a}\)</td><td>Mise à l'échelle</td></tr>
+            <tr><td>\(\int_{-\infty}^\infty e^{-ax^2+bx}dx\)</td><td>\(\sqrt{\pi/a}\,e^{b^2/(4a)}\)</td><td>Complétion du carré</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>6.2 Intégrales de Frullani</h3>
+
+    <div class="thm">
+      <span class="box-label">Intégrale de Frullani</span>
+      <div class="box-content">
+        <p>Pour \(f\) continue, \(f(\infty)\) existant et \(a,b>0\) :</p>
+        <div class="math-block">
+          \[\int_0^\infty \frac{f(ax)-f(bx)}{x}\,dx = (f(0)-f(\infty))\ln\frac{b}{a}\]
+        </div>
+        <p><strong>Exemple :</strong> \(\int_0^\infty \frac{e^{-ax}-e^{-bx}}{x}dx = \ln(b/a)\) pour \(a,b>0\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>6.3 Intégrales de Mellin</h3>
+
+    <div class="def">
+      <span class="box-label">Transformée de Mellin</span>
+      <div class="box-content">
+        <div class="math-block">
+          \[\mathcal{M}\{f\}(s) = \int_0^\infty x^{s-1}f(x)\,dx\]
+        </div>
+        <p>Exemples fondamentaux :</p>
+        <div class="math-block">
+          \[\mathcal{M}\{e^{-x}\}(s) = \Gamma(s),\qquad \mathcal{M}\!\left\{\frac{1}{1+x}\right\}(s) = \frac{\pi}{\sin(\pi s)}\quad (0<\operatorname{Re}(s)<1)\]
+        </div>
+      </div>
+    </div>
+
+    <div class="exemple">
+      <span class="box-label">Exemple IMC — Calcul de \(\int_0^\infty \frac{\ln x}{1+x^2}dx\)</span>
+      <div class="box-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body">Considérer \(I(s) = \int_0^\infty \frac{x^{s-1}}{1+x^2}dx = \frac{\pi}{2}\cdot\frac{1}{\cos(\pi(s-1)/2)} = \frac{\pi}{2\sin(\pi s/2)}\) (pour \(0<\operatorname{Re}(s)<2\)).</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body">Dériver en \(s\) : \(\frac{d}{ds}\bigg|_{s=1}\int_0^\infty \frac{x^{s-1}\ln x}{1+x^2}dx = I'(1)\).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body">\(I(s)=\frac{\pi}{2\sin(\pi s/2)}\), donc \(I'(s) = -\frac{\pi^2\cos(\pi s/2)}{4\sin^2(\pi s/2)}\).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body">\(I'(1) = -\frac{\pi^2\cos(\pi/2)}{4\sin^2(\pi/2)} = -\frac{\pi^2\cdot 0}{4\cdot 1} = 0\). Donc \(\int_0^\infty\frac{\ln x}{1+x^2}dx = 0\). \(\square\)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAPITRE 7 ===================== -->
+<div class="chapter" id="chap7">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-title-wrap">
+      <span class="chapter-label">Chapitre final</span>
+      <h2>Problèmes d'Entraînement niveau IMC</h2>
+    </div>
+  </div>
+
+  <div class="exercice">
+    <span class="box-label">Problème 1 — Intégrale classique</span>
+    <div class="box-content">
+      <p>Calculer \(\displaystyle\int_0^1 x^a(1-x)^b\,dx\) pour \(a,b>-1\) et en déduire la valeur de \(\displaystyle\int_0^1 \sqrt{x(1-x)}\,dx\).</p>
+      <p><em>Indication :</em> Reconnaître la fonction Bêta et utiliser la formule de duplication.</p>
+    </div>
+  </div>
+
+  <div class="exercice">
+    <span class="box-label">Problème 2 — Série et Gamma</span>
+    <div class="box-content">
+      <p>Montrer que \(\displaystyle\sum_{n=0}^\infty \frac{(-1)^n}{2n+1} = \frac{\pi}{4}\) en utilisant la formule de réflexion de la fonction Gamma ou la valeur de \(\psi\).</p>
+    </div>
+  </div>
+
+  <div class="exercice">
+    <span class="box-label">Problème 3 — IMC 2019 style</span>
+    <div class="box-content">
+      <p>Évaluer \(\displaystyle\int_0^\infty \frac{t^{s-1}}{e^t+1}\,dt\) en fonction de \(\Gamma(s)\) et \(\zeta(s)\).</p>
+      <p><em>Indication :</em> Développer \(\frac{1}{e^t+1} = \sum_{n=1}^\infty (-1)^{n-1}e^{-nt}\) et intégrer terme à terme.</p>
+    </div>
+  </div>
+
+  <div class="exercice">
+    <span class="box-label">Problème 4 — Digamma et séries harmoniques</span>
+    <div class="box-content">
+      <p>Calculer \(\displaystyle\sum_{n=1}^\infty \frac{(-1)^{n-1}}{n}\psi(n)\) et exprimer le résultat en termes de \(\gamma\) et de \(\zeta(2)\).</p>
+    </div>
+  </div>
+
+  <div class="exercice">
+    <span class="box-label">Problème 5 — Produit infini</span>
+    <div class="box-content">
+      <p>En utilisant la formule de Weierstrass pour \(\Gamma\), montrer que :</p>
+      <div class="math-block">
+        \[\prod_{n=1}^\infty \left(1+\frac{1}{n}\right)^{(-1)^n} = \frac{\Gamma(1/2)^2}{2} = \frac{\pi}{2}\]
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ ✦ ✦</div>
+
+  <div class="key">
+    <span class="box-label">Stratégie IMC — Récapitulatif des réflexes</span>
+    <div class="box-content">
+      <p><strong>1. Reconnaître \(\Gamma\) :</strong> toute intégrale \(\int_0^\infty t^\alpha e^{-\beta t^k}dt\) se ramène à \(\Gamma\) par substitution.</p>
+      <p style="margin-top:0.7rem;"><strong>2. Reconnaître \(B\) :</strong> intégrales sur \([0,1]\) avec puissances et \((1-t)\), ou intégrales trigonométriques \(\int_0^{\pi/2}\sin^p\cos^q\).</p>
+      <p style="margin-top:0.7rem;"><strong>3. Formule de réflexion :</strong> pour tout résultat faisant apparaître un sinus ou cosinus au dénominateur après calcul de \(\Gamma\).</p>
+      <p style="margin-top:0.7rem;"><strong>4. Différentiation sous le signe intégrale (Feynman) :</strong> introduire un paramètre \(\lambda\) et dériver pour transformer des intégrales difficiles.</p>
+      <p style="margin-top:0.7rem;"><strong>5. Mellin + résidus :</strong> pour \(\int_0^\infty x^{s-1}f(x)dx\) avec \(f\) rationnelle, utiliser les résidus ou les tables de Mellin.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p><span>FONCTIONS SPÉCIALES</span> · Préparation IMC · Cours complet étape par étape</p>
+  <p style="margin-top:0.4rem;">Chapitres : Gamma · Bêta · Digamma · Zêta · Hypergéométrique · Techniques d'intégration</p>
+</footer>
+
+</body>
+</html>

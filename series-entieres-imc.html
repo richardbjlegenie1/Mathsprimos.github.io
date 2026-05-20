@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séries Entières — Préparation IMC</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #0f0e0b;
+    --parchment: #faf7f0;
+    --cream: #f5f0e8;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --gold-pale: #f0e6c8;
+    --red: #8b1a1a;
+    --blue: #1a3a5c;
+    --sage: #5a6b4a;
+    --border: #c8b89a;
+    --shadow: rgba(15,14,11,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(184,134,11,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(26,58,92,0.06) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b8860b' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Header */
+  .masthead {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+  }
+
+  .masthead::before {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 2rem;
+  }
+
+  .competition-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.4em 1.2em;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    background: rgba(184,134,11,0.05);
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: #6b5f4a;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+  }
+
+  .ornament {
+    display: block;
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), var(--gold), var(--border), transparent);
+    margin: 0 auto;
+  }
+
+  /* Navigation */
+  .toc-wrapper {
+    max-width: 900px;
+    margin: 2.5rem auto;
+    padding: 0 2rem;
+  }
+
+  .toc {
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 2rem 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+
+  .toc-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    columns: 2;
+    column-gap: 2rem;
+  }
+
+  .toc-list li {
+    margin-bottom: 0.4rem;
+    break-inside: avoid;
+  }
+
+  .toc-list a {
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px dotted var(--border);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .toc-list a:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-right: 0.5em;
+  }
+
+  /* Main content */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* Section headers */
+  .section {
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  .section:nth-child(5) { animation-delay: 0.5s; }
+  .section:nth-child(6) { animation-delay: 0.6s; }
+  .section:nth-child(7) { animation-delay: 0.7s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .section-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    padding-top: 0.2em;
+  }
+
+  .section h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .section h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 1.8rem 0 0.8rem;
+    font-style: italic;
+  }
+
+  p { margin-bottom: 1rem; }
+
+  /* Boxes */
+  .box {
+    margin: 1.5rem 0;
+    padding: 1.4rem 1.8rem;
+    position: relative;
+    font-size: 0.97rem;
+  }
+
+  .box-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: absolute;
+    top: -0.6em;
+    left: 1.2rem;
+    padding: 0 0.5em;
+    background: var(--cream);
+  }
+
+  .definition {
+    background: #eef3f8;
+    border: 1px solid #b0c4de;
+    border-left: 4px solid var(--blue);
+  }
+  .definition .box-label { color: var(--blue); }
+
+  .theorem {
+    background: #fdf6e3;
+    border: 1px solid #d4b896;
+    border-left: 4px solid var(--gold);
+  }
+  .theorem .box-label { color: var(--gold); }
+
+  .proof {
+    background: #f8f8f6;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--sage);
+    font-size: 0.95rem;
+  }
+  .proof .box-label { color: var(--sage); }
+
+  .example {
+    background: #f7f0f0;
+    border: 1px solid #dbb0b0;
+    border-left: 4px solid var(--red);
+  }
+  .example .box-label { color: var(--red); }
+
+  .warning {
+    background: #fff8e8;
+    border: 1px solid #e8c870;
+    border-left: 4px solid #c8960a;
+  }
+  .warning .box-label { color: #c8960a; }
+
+  .imc-tip {
+    background: linear-gradient(135deg, #f0ede5 0%, #e8e0d0 100%);
+    border: 1px solid var(--gold);
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 2px 12px rgba(184,134,11,0.12);
+  }
+  .imc-tip .box-label { color: var(--gold); font-weight: 700; }
+
+  /* Math display */
+  .math-block {
+    overflow-x: auto;
+    padding: 0.5rem 0;
+  }
+
+  /* Collapsible proof */
+  details {
+    margin: 1rem 0;
+  }
+
+  summary {
+    cursor: pointer;
+    font-style: italic;
+    color: var(--sage);
+    font-size: 0.95rem;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::before {
+    content: '▶';
+    font-size: 0.6em;
+    transition: transform 0.2s;
+    color: var(--sage);
+  }
+
+  details[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  /* Step list */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 1rem 0;
+  }
+
+  .steps li {
+    counter-increment: step;
+    margin-bottom: 1rem;
+    padding-left: 3rem;
+    position: relative;
+  }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    width: 2rem;
+    height: 2rem;
+    background: var(--gold);
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin: 1.2rem 0;
+  }
+
+  th {
+    background: var(--blue);
+    color: white;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+
+  td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: rgba(250,247,240,0.7); }
+
+  /* Code / formula inline */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: rgba(26,58,92,0.07);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--blue);
+  }
+
+  /* Horizontal rule */
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+    color: #9a8a6a;
+    border-top: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .toc-list { columns: 1; }
+    h1 { font-size: 2rem; }
+    .box { padding: 1rem 1.2rem; }
+  }
+
+  /* MathJax override */
+  .MJX-TEX { font-size: 1.05em !important; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <span class="competition-badge">IMC — International Mathematical Competition</span>
+  <h1>Séries Entières</h1>
+  <p class="subtitle">Cours complet · Étape par étape · Niveau concours international</p>
+  <span class="ornament"></span>
+</div>
+
+<div class="toc-wrapper">
+  <nav class="toc">
+    <div class="toc-title">Table des Matières</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">I.</span> Définitions fondamentales</a></li>
+      <li><a href="#s2"><span class="toc-num">II.</span> Rayon de convergence</a></li>
+      <li><a href="#s3"><span class="toc-num">III.</span> Propriétés analytiques</a></li>
+      <li><a href="#s4"><span class="toc-num">IV.</span> Opérations sur les séries</a></li>
+      <li><a href="#s5"><span class="toc-num">V.</span> Développements classiques</a></li>
+      <li><a href="#s6"><span class="toc-num">VI.</span> Techniques IMC avancées</a></li>
+      <li><a href="#s7"><span class="toc-num">VII.</span> Problèmes d'entraînement</a></li>
+    </ul>
+  </nav>
+</div>
+
+<div class="content">
+
+  <!-- SECTION I -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">§ I</span>
+      <h2>Définitions Fondamentales</h2>
+    </div>
+
+    <p>Une <em>série entière</em> est une série de fonctions de la forme particulièrement simple : chaque terme est un monôme. C'est l'objet central de l'analyse complexe et réelle au niveau IMC.</p>
+
+    <div class="box definition">
+      <span class="box-label">Définition</span>
+      <strong>Série entière.</strong> On appelle série entière (centrée en 0) toute série de la forme
+      <div class="math-block">$$\sum_{n=0}^{+\infty} a_n z^n = a_0 + a_1 z + a_2 z^2 + \cdots$$</div>
+      où \((a_n)_{n \geq 0}\) est une suite de nombres réels ou complexes (les <em>coefficients</em>), et \(z \in \mathbb{C}\) (ou \(\mathbb{R}\)).
+    </div>
+
+    <p>Plus généralement, une série entière centrée en \(z_0\) est \(\sum a_n(z-z_0)^n\). Par translation on se ramène toujours au cas \(z_0 = 0\).</p>
+
+    <div class="box example">
+      <span class="box-label">Exemples fondamentaux</span>
+      <ul style="list-style:none; padding:0; line-height:2.2;">
+        <li>• Exponentielle : \(\displaystyle e^z = \sum_{n=0}^{\infty} \frac{z^n}{n!}\), \(\quad a_n = \frac{1}{n!}\)</li>
+        <li>• Série géométrique : \(\displaystyle \frac{1}{1-z} = \sum_{n=0}^{\infty} z^n\), \(\quad a_n = 1\), \(|z|<1\)</li>
+        <li>• Sinus : \(\displaystyle \sin z = \sum_{n=0}^{\infty} \frac{(-1)^n z^{2n+1}}{(2n+1)!}\)</li>
+        <li>• Logarithme : \(\displaystyle \ln(1+z) = \sum_{n=1}^{\infty} \frac{(-1)^{n-1}z^n}{n}\), \(\quad |z| \leq 1, z\neq -1\)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION II -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">§ II</span>
+      <h2>Rayon de Convergence</h2>
+    </div>
+
+    <p>Le concept-clé qui structure toute la théorie est le <em>rayon de convergence</em>. C'est la notion à maîtriser absolument pour l'IMC.</p>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème — Cauchy-Hadamard</span>
+      <p>À toute série entière \(\sum a_n z^n\) est associé un unique \(R \in [0, +\infty]\), appelé <strong>rayon de convergence</strong>, tel que :</p>
+      <div class="math-block">$$R = \frac{1}{\displaystyle\limsup_{n\to\infty} |a_n|^{1/n}}$$</div>
+      <p style="margin-top:0.8rem">avec les conventions \(1/0 = +\infty\) et \(1/+\infty = 0\).</p>
+      <ul style="margin-top:0.8rem; padding-left:1.5rem;">
+        <li>Si \(|z| < R\) : convergence absolue.</li>
+        <li>Si \(|z| > R\) : divergence.</li>
+        <li>Si \(|z| = R\) : cas à examiner séparément (cercle critique).</li>
+      </ul>
+    </div>
+
+    <h3>Formules pratiques de calcul du rayon</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Méthode</th>
+          <th>Formule</th>
+          <th>Condition d'application</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cauchy-Hadamard</strong></td>
+          <td>\(R = 1/\limsup |a_n|^{1/n}\)</td>
+          <td>Toujours valable</td>
+        </tr>
+        <tr>
+          <td><strong>Règle de D'Alembert</strong></td>
+          <td>\(R = \lim |a_n/a_{n+1}|\)</td>
+          <td>Si la limite existe et \(a_n \neq 0\)</td>
+        </tr>
+        <tr>
+          <td><strong>Comparaison</strong></td>
+          <td>\(a_n \sim c \cdot b_n \Rightarrow R_a = R_b\)</td>
+          <td>Équivalents asymptotiques</td>
+        </tr>
+        <tr>
+          <td><strong>Intégration / dérivation</strong></td>
+          <td>Même rayon que la série initiale</td>
+          <td>Terme à terme</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box example">
+      <span class="box-label">Exemple — Calcul par D'Alembert</span>
+      <p>Calculons \(R\) pour \(\displaystyle f(z) = \sum_{n=1}^{\infty} \frac{n^2}{3^n} z^n\).</p>
+      <div class="math-block">$$\frac{|a_{n+1}|}{|a_n|} = \frac{(n+1)^2}{3^{n+1}} \cdot \frac{3^n}{n^2} = \frac{1}{3}\left(1+\frac{1}{n}\right)^2 \xrightarrow[n\to\infty]{} \frac{1}{3}$$</div>
+      <p>Donc \(R = 1/(1/3) = \mathbf{3}\).</p>
+    </div>
+
+    <div class="box warning">
+      <span class="box-label">Attention — Cercle de convergence</span>
+      <p>Sur le cercle \(|z| = R\), tout peut arriver : convergence, convergence conditionnelle, divergence. Il n'existe <strong>pas de théorème général</strong> — chaque point doit être étudié individuellement. À l'IMC, si on vous demande le <em>domaine de convergence</em>, n'oubliez pas le cercle !</p>
+    </div>
+
+    <div class="box imc-tip">
+      <span class="box-label">⋆ Stratégie IMC</span>
+      <p>En compétition, le rayon de convergence se calcule presque toujours par D'Alembert (quotients consécutifs) ou par identification à une série connue. Cauchy-Hadamard intervient quand les coefficients ont des comportements irréguliers (ex. : \(a_n = 0\) pour \(n\) impair).</p>
+    </div>
+  </div>
+
+  <!-- SECTION III -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">§ III</span>
+      <h2>Propriétés Analytiques</h2>
+    </div>
+
+    <p>Les séries entières sont les fonctions analytiques par excellence. Leurs propriétés de régularité sont remarquables.</p>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème — Régularité</span>
+      <p>Soit \(f(z) = \sum_{n=0}^{\infty} a_n z^n\) de rayon \(R > 0\). Alors :</p>
+      <ol style="padding-left:1.5rem; line-height:2;">
+        <li>\(f\) est <strong>continue</strong> sur le disque ouvert \(|z| < R\).</li>
+        <li>\(f\) est <strong>indéfiniment dérivable</strong> (analytique) sur \(|z| < R\).</li>
+        <li>La dérivée se calcule <strong>terme à terme</strong> :
+          <div class="math-block">$$f'(z) = \sum_{n=1}^{\infty} n\,a_n\,z^{n-1} = \sum_{n=0}^{\infty}(n+1)a_{n+1}z^n$$</div>
+        </li>
+        <li>L'intégrale se calcule <strong>terme à terme</strong> :
+          <div class="math-block">$$\int_0^z f(t)\,dt = \sum_{n=0}^{\infty} \frac{a_n}{n+1}\,z^{n+1}$$</div>
+        </li>
+        <li>La dérivation et l'intégration <strong>conservent le rayon</strong> \(R\).</li>
+      </ol>
+    </div>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème — Unicité des coefficients</span>
+      <p>Si \(\sum a_n z^n = \sum b_n z^n\) sur un voisinage de 0, alors \(a_n = b_n\) pour tout \(n \geq 0\). En particulier :</p>
+      <div class="math-block">$$a_n = \frac{f^{(n)}(0)}{n!}$$</div>
+      <p>C'est la <strong>formule de Taylor</strong>. Elle permet d'identifier les coefficients.</p>
+    </div>
+
+    <details>
+      <summary>Démonstration de la dérivation terme à terme</summary>
+      <div class="box proof" style="margin-top:0.8rem">
+        <span class="box-label">Preuve</span>
+        <p>On pose \(g(z) = \sum_{n=1}^{\infty} na_nz^{n-1}\). Cette série a même rayon \(R\) que \(\sum a_nz^n\) (car \(n^{1/n}\to 1\)). Pour \(|z|<R\), fixons \(r\) tel que \(|z|<r<R\). Alors :</p>
+        <div class="math-block">$$\left|\frac{f(z+h)-f(z)}{h} - g(z)\right| \leq \sum_{n=2}^{\infty} |a_n| \cdot n(n-1)\frac{|h|}{2} \cdot r^{n-2}$$</div>
+        <p>La série majorante \(\sum n(n-1)|a_n|r^{n-2}\) converge pour \(r < R\). En faisant \(h\to 0\), le membre gauche tend vers 0. Donc \(f'(z) = g(z)\). \(\square\)</p>
+      </div>
+    </details>
+
+    <div class="box example">
+      <span class="box-label">Exemple — Dériver pour trouver une série</span>
+      <p>On sait que \(\dfrac{1}{1-z} = \sum_{n=0}^{\infty} z^n\). En dérivant :</p>
+      <div class="math-block">$$\frac{1}{(1-z)^2} = \sum_{n=1}^{\infty} n\,z^{n-1} = \sum_{n=0}^{\infty}(n+1)z^n$$</div>
+      <p>En dérivant à nouveau :</p>
+      <div class="math-block">$$\frac{2}{(1-z)^3} = \sum_{n=2}^{\infty}n(n-1)z^{n-2}$$</div>
+      <p>Ces identités sont utilisées fréquemment dans les problèmes IMC de calcul de sommes.</p>
+    </div>
+  </div>
+
+  <!-- SECTION IV -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">§ IV</span>
+      <h2>Opérations sur les Séries Entières</h2>
+    </div>
+
+    <h3>Produit de Cauchy</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème — Produit de Cauchy</span>
+      <p>Si \(\sum a_nz^n\) et \(\sum b_nz^n\) ont des rayons \(R_1, R_2 > 0\), alors pour \(|z| < \min(R_1, R_2)\) :</p>
+      <div class="math-block">$$\left(\sum_{n=0}^{\infty} a_n z^n\right)\!\!\left(\sum_{n=0}^{\infty} b_n z^n\right) = \sum_{n=0}^{\infty} c_n z^n, \quad c_n = \sum_{k=0}^{n} a_k b_{n-k}$$</div>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Exemple — Produit de deux exponentielles</span>
+      <p>On vérifie \(e^z \cdot e^w = e^{z+w}\) via le produit de Cauchy :</p>
+      <div class="math-block">$$c_n = \sum_{k=0}^{n}\frac{1}{k!}\cdot\frac{1}{(n-k)!} = \frac{1}{n!}\sum_{k=0}^{n}\binom{n}{k} = \frac{2^n}{n!}$$</div>
+      <p>Donc le produit donne \(\sum \frac{(2z)^n}{n!}... \)</p>
+      <p><em>On fixe \(w = z\) : </em> \(e^z \cdot e^z = \sum c_n z^n\) avec \(c_n = \frac{1}{n!}\sum_k\binom{n}{k} = \frac{2^n}{n!}\), ce qui donne bien \(e^{2z}\).</p>
+    </div>
+
+    <h3>Composition</h3>
+
+    <p>Si \(f(z) = \sum a_n z^n\) et \(g(z) = \sum_{n=1}^{\infty} b_n z^n\) (avec \(b_0 = 0\)), alors \(f \circ g\) est une série entière. On calcule les coefficients en substituant et en regroupant par puissance.</p>
+
+    <div class="box example">
+      <span class="box-label">Exemple — Composition</span>
+      <div class="math-block">$$e^{\sin z} = 1 + \sin z + \frac{\sin^2 z}{2!} + \cdots = 1 + z + \frac{z^2}{2} - \frac{z^4}{8} - \frac{z^5}{15} + O(z^6)$$</div>
+      <p>On substitue \(\sin z = z - z^3/6 + z^5/120 - \cdots\) dans l'exponentielle et on développe systématiquement.</p>
+    </div>
+  </div>
+
+  <!-- SECTION V -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">§ V</span>
+      <h2>Développements Classiques à Mémoriser</h2>
+    </div>
+
+    <p>À l'IMC, ces développements doivent être au bout des doigts — ils apparaissent comme outils intermédiaires dans presque tous les problèmes d'analyse.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fonction</th>
+          <th>Développement en série entière</th>
+          <th>Rayon \(R\)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>\(e^z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{z^n}{n!}\)</td>
+          <td>\(+\infty\)</td>
+        </tr>
+        <tr>
+          <td>\(\cos z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n z^{2n}}{(2n)!}\)</td>
+          <td>\(+\infty\)</td>
+        </tr>
+        <tr>
+          <td>\(\sin z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n z^{2n+1}}{(2n+1)!}\)</td>
+          <td>\(+\infty\)</td>
+        </tr>
+        <tr>
+          <td>\(\dfrac{1}{1-z}\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty} z^n\)</td>
+          <td>\(1\)</td>
+        </tr>
+        <tr>
+          <td>\(\ln(1+z)\)</td>
+          <td>\(\displaystyle\sum_{n=1}^{\infty}\dfrac{(-1)^{n-1}z^n}{n}\)</td>
+          <td>\(1\)</td>
+        </tr>
+        <tr>
+          <td>\(\arctan z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n z^{2n+1}}{2n+1}\)</td>
+          <td>\(1\)</td>
+        </tr>
+        <tr>
+          <td>\((1+z)^\alpha\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\binom{\alpha}{n}z^n\)</td>
+          <td>\(1\)</td>
+        </tr>
+        <tr>
+          <td>\(\cosh z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{z^{2n}}{(2n)!}\)</td>
+          <td>\(+\infty\)</td>
+        </tr>
+        <tr>
+          <td>\(\sinh z\)</td>
+          <td>\(\displaystyle\sum_{n=0}^{\infty}\dfrac{z^{2n+1}}{(2n+1)!}\)</td>
+          <td>\(+\infty\)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>où \(\binom{\alpha}{n} = \dfrac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}\) est le coefficient binomial généralisé.</p>
+  </div>
+
+  <!-- SECTION VI -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">§ VI</span>
+      <h2>Techniques Avancées pour l'IMC</h2>
+    </div>
+
+    <h3>1. Identification par l'unicité</h3>
+    <p>Si une fonction vérifie une équation différentielle et des conditions initiales, on cherche sa série entière en écrivant \(f(z) = \sum a_n z^n\) et en identifiant les coefficients.</p>
+
+    <div class="box example">
+      <span class="box-label">Technique — EDO → série</span>
+      <p>Trouver la série entière de \(f\) vérifiant \(f' = f\), \(f(0)=1\).</p>
+      <ul class="steps">
+        <li>Écrire \(f(z) = \sum_{n=0}^{\infty} a_n z^n\), donc \(f'(z) = \sum_{n=1}^{\infty} na_n z^{n-1} = \sum_{n=0}^{\infty}(n+1)a_{n+1}z^n\).</li>
+        <li>L'équation \(f'=f\) donne : \((n+1)a_{n+1} = a_n\) pour tout \(n \geq 0\).</li>
+        <li>Condition initiale : \(a_0 = f(0) = 1\).</li>
+        <li>Récurrence : \(a_n = \dfrac{a_0}{n!} = \dfrac{1}{n!}\).</li>
+        <li>Conclusion : \(f(z) = \displaystyle\sum_{n=0}^{\infty}\dfrac{z^n}{n!} = e^z\). \(\square\)</li>
+      </ul>
+    </div>
+
+    <h3>2. Séries génératrices</h3>
+
+    <div class="box imc-tip">
+      <span class="box-label">⋆ Technique IMC — Séries génératrices</span>
+      <p>Associer à une suite \((a_n)\) sa <strong>série génératrice ordinaire</strong> \(F(z) = \sum a_n z^n\) ou <strong>exponentielle</strong> \(G(z) = \sum a_n z^n/n!\) permet de transformer des récurrences en équations fonctionnelles, souvent résolubles par des méthodes analytiques.</p>
+      <div class="math-block">$$F_{\text{Fibonacci}}(z) = \frac{z}{1-z-z^2} \implies F_n = \frac{\phi^n - \psi^n}{\sqrt{5}}$$</div>
+      <p>où \(\phi = (1+\sqrt5)/2\) est le nombre d'or.</p>
+    </div>
+
+    <h3>3. Calcul de sommes par les séries</h3>
+
+    <div class="box example">
+      <span class="box-label">Exemple IMC — Calcul de \(\sum_{n=0}^{\infty} \frac{(-1)^n}{2n+1}\)</span>
+      <p>On reconnaît la série \(\arctan(z) = \sum_{n=0}^{\infty}\dfrac{(-1)^n z^{2n+1}}{2n+1}\). En \(z=1\) (convergence vérifiée par Leibniz) :</p>
+      <div class="math-block">$$\sum_{n=0}^{\infty}\frac{(-1)^n}{2n+1} = \arctan(1) = \frac{\pi}{4}$$</div>
+    </div>
+
+    <h3>4. Développements asymptotiques et estimations</h3>
+
+    <p>En IMC, on utilise souvent les premiers termes d'un développement pour <em>encadrer</em> ou <em>estimer</em> une quantité. Le fait que les séries entières convergent absolument permet des estimations précises via les restes.</p>
+
+    <div class="box theorem">
+      <span class="box-label">Lemme — Estimation du reste</span>
+      <p>Si \(\sum a_n z^n\) converge absolument pour \(|z| \leq r < R\), et \(M = \sup_n |a_n|r^n < \infty\), alors :</p>
+      <div class="math-block">$$\left|f(z) - \sum_{n=0}^{N} a_n z^n\right| \leq M \cdot \frac{(|z|/r)^{N+1}}{1 - |z|/r}$$</div>
+    </div>
+
+    <h3>5. Singularités et analytic continuation</h3>
+
+    <div class="box imc-tip">
+      <span class="box-label">⋆ Technique IMC — Prolongement analytique</span>
+      <p>Deux fonctions analytiques qui coïncident sur un ensemble ayant un point d'accumulation sont identiques sur tout domaine connexe. Ceci permet de <strong>prouver des identités</strong> en les vérifiant sur les entiers, puis de les prolonger à \(\mathbb{C}\) tout entier.</p>
+      <p>Exemple : pour montrer \(e^{iz} = \cos z + i\sin z\) pour tout \(z\in\mathbb{C}\), il suffit de le vérifier terme à terme dans les séries.</p>
+    </div>
+
+    <h3>6. Zéros isolés et multiplicité</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème — Zéros isolés</span>
+      <p>Si \(f\) est analytique non identiquement nulle, ses zéros sont <strong>isolés</strong>. Si \(f(z_0) = 0\), il existe un unique entier \(m \geq 1\) (la <em>multiplicité</em>) et \(g\) analytique avec \(g(z_0)\neq 0\) tels que :</p>
+      <div class="math-block">$$f(z) = (z-z_0)^m \cdot g(z)$$</div>
+    </div>
+  </div>
+
+  <!-- SECTION VII -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">§ VII</span>
+      <h2>Problèmes d'Entraînement IMC</h2>
+    </div>
+
+    <p>Les problèmes suivants sont de niveau IMC ou pré-IMC. Pour chacun, une indication est fournie.</p>
+
+    <div class="box example">
+      <span class="box-label">Problème 1 — Série et convergence (★★☆)</span>
+      <p>Déterminer le domaine de convergence (y compris le cercle) de :</p>
+      <div class="math-block">$$\sum_{n=1}^{\infty} \frac{n!}{n^n} z^n$$</div>
+      <details>
+        <summary>Indication</summary>
+        <p style="margin-top:0.5rem">Utiliser la formule de Stirling : \(n! \sim \sqrt{2\pi n}\,(n/e)^n\). Calculer \(|a_n|^{1/n}\) pour trouver \(R = e\). Étudier la convergence sur \(|z|=e\) via la croissance des termes généraux.</p>
+      </details>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Problème 2 — Identité par unicité (★★☆)</span>
+      <p>Prouver que pour tout \(z \in \mathbb{C}\) :</p>
+      <div class="math-block">$$\sum_{k=0}^{n}\binom{n}{k}\frac{(-1)^k}{k+z+1} = \frac{n!\,(z)_1}{(z+1)(z+2)\cdots(z+n+1)}$$</div>
+      <details>
+        <summary>Indication</summary>
+        <p style="margin-top:0.5rem">Reconnaître l'intégrale de Beta : \(\int_0^1 t^z(1-t)^n\,dt\). Développer \((1-t)^n\) par le binôme et intégrer terme à terme.</p>
+      </details>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Problème 3 — EDO et série entière (★★★)</span>
+      <p>Trouver toutes les fonctions analytiques \(f : \mathbb{C} \to \mathbb{C}\) vérifiant :</p>
+      <div class="math-block">$$f''(z) + z\,f'(z) + f(z) = 0, \qquad f(0)=1,\; f'(0)=0$$</div>
+      <details>
+        <summary>Indication</summary>
+        <p style="margin-top:0.5rem">Poser \(f = \sum a_n z^n\). L'équation donne la récurrence \((n+2)(n+1)a_{n+2} + (n+1)a_n = 0\), soit \(a_{n+2} = -a_n/(n+2)\). Avec \(a_0=1\), \(a_1=0\), on obtient \(a_{2k+1}=0\) et \(a_{2k} = \dfrac{(-1)^k}{2^k k!}\). La fonction est \(f(z) = e^{-z^2/2}\).</p>
+      </details>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Problème 4 — Calcul de somme (★★☆)</span>
+      <p>Calculer la valeur exacte de :</p>
+      <div class="math-block">$$S = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)\,3^n}$$</div>
+      <details>
+        <summary>Indication</summary>
+        <p style="margin-top:0.5rem">Écrire \(S = \dfrac{1}{\sqrt{3}}\arctan\!\left(\dfrac{1}{\sqrt{3}}\right) = \dfrac{1}{\sqrt{3}}\cdot\dfrac{\pi}{6} = \dfrac{\pi}{6\sqrt{3}}\).</p>
+      </details>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Problème 5 — IMC 2019 style (★★★)</span>
+      <p>Soit \(f(z) = \sum_{n=0}^{\infty} a_n z^n\) entière (rayon infini) avec \(a_n \geq 0\). Montrer que si \(f(x) \leq Ce^{\alpha x}\) pour tout \(x > 0\), alors \(f\) est un polynôme ou \(a_n = O(\alpha^n/n!)\).</p>
+      <details>
+        <summary>Indication</summary>
+        <p style="margin-top:0.5rem">Utiliser la formule de Cauchy : \(a_n = f^{(n)}(0)/n!\). Estimer \(|f^{(n)}(x)|\) par les inégalités de Cauchy sur un cercle de rayon \(r\) centré en \(x > 0\), optimiser en \(r\).</p>
+      </details>
+    </div>
+
+    <div class="box imc-tip">
+      <span class="box-label">⋆ Checklist IMC — Séries entières</span>
+      <ol style="padding-left:1.5rem; line-height:2.2;">
+        <li>Calculer le rayon \(R\) (D'Alembert ou Cauchy-Hadamard).</li>
+        <li>Étudier le cercle \(|z|=R\) si demandé.</li>
+        <li>Exploiter la dérivation/intégration terme à terme.</li>
+        <li>Identifier à une série connue par unicité des coefficients.</li>
+        <li>Pour les EDO : chercher \(f = \sum a_n z^n\) et identifier la récurrence.</li>
+        <li>Pour les sommes : reconnaître une série connue évaluée en un point.</li>
+        <li>Ne jamais oublier la convergence avant de permuter \(\sum\) et \(\int\).</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Cours de préparation IMC · Séries Entières · Niveau avancé<br>
+  <em>« La beauté des mathématiques réside dans la précision de ses arguments. »</em>
+</footer>
+
+<script>
+// Smooth scroll for TOC
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Trigger MathJax after load
+window.addEventListener('load', () => {
+  if (window.MathJax) MathJax.typesetPromise();
+});
+</script>
+</body>
+</html>

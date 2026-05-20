@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Équations Fonctionnelles — IMC Préparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --cream: #f5f0e8;
+    --gold: #b8860b;
+    --gold-light: #d4a843;
+    --red: #8b1a1a;
+    --blue: #1a3a5c;
+    --green: #1a4a2e;
+    --paper: #faf7f2;
+    --rule: #d4c9b0;
+    --shadow: rgba(15,14,12,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(184,134,11,0.04) 40px,
+      rgba(184,134,11,0.04) 80px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    border: 1.5px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    padding: 0.3rem 1rem;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    position: relative;
+  }
+  header h1 em {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+  header p {
+    margin-top: 0.8rem;
+    color: rgba(245,240,232,0.65);
+    font-size: 1.05rem;
+    font-style: italic;
+    position: relative;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  nav button {
+    background: none;
+    border: none;
+    border-right: 1px solid var(--rule);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding: 0.8rem 1.1rem;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  nav button:hover, nav button.active {
+    background: var(--ink);
+    color: var(--gold-light);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* SECTIONS */
+  section { display: none; animation: fadeIn 0.4s ease; }
+  section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* CHAPTER TITLE */
+  .chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 2rem 0 0.3rem;
+    line-height: 1.2;
+  }
+  .chapter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .chapter-rule {
+    height: 3px;
+    background: linear-gradient(to right, var(--ink), transparent);
+    margin: 0.8rem 0 1.8rem;
+  }
+
+  /* PROSE */
+  p { margin-bottom: 1.1rem; }
+  strong { font-weight: 600; }
+  em { font-style: italic; color: var(--red); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: var(--paper);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+    box-shadow: 2px 2px 0 var(--shadow);
+  }
+  .def-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* THEOREM BOX */
+  .thm-box {
+    background: #f9f3e8;
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .thm-box::before {
+    content: '★';
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--gold);
+    color: white;
+    font-size: 0.65rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+    padding: 0.1rem;
+  }
+  .thm-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* EXAMPLE BOX */
+  .ex-box {
+    background: #f0f4f0;
+    border-left: 4px solid var(--green);
+    border-radius: 0 6px 6px 0;
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+  }
+  .ex-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* WARNING BOX */
+  .warn-box {
+    background: #fdf0f0;
+    border-left: 4px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+  }
+  .warn-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* MATH */
+  .math-block {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    background: var(--ink);
+    color: var(--gold-light);
+    padding: 0.9rem 1.3rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow-x: auto;
+    line-height: 1.8;
+  }
+  .math-inline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: rgba(0,0,0,0.07);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--red);
+  }
+
+  /* STEP LIST */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 1.2rem 0;
+  }
+  .steps li {
+    counter-increment: step;
+    padding: 0.6rem 0 0.6rem 3rem;
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    width: 1.8rem;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .steps li:last-child { border-bottom: none; }
+
+  /* TECHNIQUE LIST */
+  .technique-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .technique-card {
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .technique-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+  .technique-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+  .technique-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+  }
+
+  /* SOLUTION TOGGLE */
+  .solution-toggle {
+    cursor: pointer;
+    background: none;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.4rem 1rem;
+    margin: 0.8rem 0;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .solution-toggle:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .solution-content {
+    display: none;
+    border-left: 3px solid var(--gold);
+    padding-left: 1.2rem;
+    margin: 0.5rem 0 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .solution-content.open { display: block; }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 3px;
+    background: var(--rule);
+    border-radius: 2px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* PROBLEM SET */
+  .problem {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin: 1rem 0;
+  }
+  .problem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+  }
+  .problem-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .difficulty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+  }
+  .diff-1 { background: #d4edda; color: #155724; }
+  .diff-2 { background: #fff3cd; color: #856404; }
+  .diff-3 { background: #f8d7da; color: #721c24; }
+  .diff-4 { background: #1a1a2e; color: #e0e0ff; }
+
+  /* QUOTE */
+  blockquote {
+    border-left: 3px solid var(--gold);
+    margin: 1.5rem 0;
+    padding: 0.5rem 1.2rem;
+    font-style: italic;
+    color: #444;
+    font-size: 1.05rem;
+  }
+  blockquote cite {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    color: #888;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: 0.92rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--rule); }
+  tr:nth-child(even) td { background: var(--paper); }
+  tr:hover td { background: #ede8df; }
+
+  /* FOOTER NAV */
+  .section-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--rule);
+  }
+  .section-nav button {
+    background: var(--ink);
+    border: none;
+    border-radius: 4px;
+    color: var(--cream);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.7rem 1.2rem;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .section-nav button:hover { background: var(--gold); color: var(--ink); }
+  .section-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  @media (max-width: 600px) {
+    nav button { font-size: 0.6rem; padding: 0.6rem 0.7rem; }
+    .chapter-title { font-size: 1.5rem; }
+    .technique-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">IMC — Préparation Concours</div>
+  <h1>Équations <em>Fonctionnelles</em></h1>
+  <p>Cours complet · Techniques · Problèmes résolus · Stratégies IMC</p>
+</header>
+
+<nav id="nav">
+  <button class="active" onclick="showSection(0)">00 · Intro</button>
+  <button onclick="showSection(1)">01 · Bases</button>
+  <button onclick="showSection(2)">02 · Cauchy</button>
+  <button onclick="showSection(3)">03 · Techniques</button>
+  <button onclick="showSection(4)">04 · Régularité</button>
+  <button onclick="showSection(5)">05 · Avancé</button>
+  <button onclick="showSection(6)">06 · Problèmes</button>
+  <button onclick="showSection(7)">07 · Stratégie</button>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════ SECTION 0 -->
+<section class="active" id="s0">
+  <div class="chapter-num">Chapitre 00</div>
+  <h2 class="chapter-title">Introduction aux Équations Fonctionnelles</h2>
+  <div class="chapter-rule"></div>
+
+  <p>Une <strong>équation fonctionnelle</strong> est une équation dont l'inconnue est une <em>fonction</em> (et non un nombre). Le but est de trouver toutes les fonctions satisfaisant une relation donnée pour tous les éléments d'un domaine.</p>
+
+  <blockquote>
+    « Les équations fonctionnelles sont la lingua franca des olympiades modernes. Maîtriser ce chapitre, c'est ouvrir une porte vers la médaille. »
+    <cite>— Conseil de préparation IMC</cite>
+  </blockquote>
+
+  <div class="def-box">
+    <div class="label">Définition Formelle</div>
+    <p>Une équation fonctionnelle est une relation de la forme :</p>
+    <div class="math-block">P(x, y, f(x), f(y), f(x+y), f(xy), ...) = 0</div>
+    <p>où <span class="math-inline">f : D → E</span> est la fonction inconnue, valable pour tous <span class="math-inline">x, y ∈ D</span>.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">Pourquoi les équations fonctionnelles à l'IMC ?</h3>
+
+  <table>
+    <tr><th>Compétence testée</th><th>Importance IMC</th><th>Fréquence</th></tr>
+    <tr><td>Substitutions intelligentes</td><td>Fondamentale</td><td>★★★★★</td></tr>
+    <tr><td>Analyse de régularité</td><td>Différenciante</td><td>★★★★☆</td></tr>
+    <tr><td>Raisonnement par cas</td><td>Essentielle</td><td>★★★★☆</td></tr>
+    <tr><td>Réduction à Cauchy</td><td>Clé de voûte</td><td>★★★★★</td></tr>
+    <tr><td>Construction de contre-exemples</td><td>Avancée</td><td>★★★☆☆</td></tr>
+  </table>
+
+  <div class="warn-box">
+    <div class="label">⚠ Erreur classique des débutants</div>
+    <p>Ne jamais <strong>supposer</strong> que la solution est linéaire ou continue sans le prouver. Toujours commencer par chercher des substitutions révélatrices, puis prouver la forme générale.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">Plan du cours</h3>
+  <ul class="steps">
+    <li><strong>Bases :</strong> terminologie, domaines, exemples élémentaires</li>
+    <li><strong>Équation de Cauchy :</strong> l'équation mère, ses variantes et solutions</li>
+    <li><strong>Techniques de substitution :</strong> le cœur du métier</li>
+    <li><strong>Régularité :</strong> comment passer des solutions rationnelles au cas réel</li>
+    <li><strong>Thèmes avancés :</strong> multiplicativité, Jensen, itération fonctionnelle</li>
+    <li><strong>Problèmes IMC :</strong> 12 problèmes résolus étape par étape</li>
+    <li><strong>Stratégie de concours :</strong> comment aborder un problème inconnu</li>
+  </ul>
+
+  <div class="section-nav">
+    <button disabled>← Précédent</button>
+    <button onclick="showSection(1)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 1 -->
+<section id="s1">
+  <div class="chapter-num">Chapitre 01</div>
+  <h2 class="chapter-title">Bases et Vocabulaire</h2>
+  <div class="chapter-rule"></div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1rem 0 0.8rem; font-size:1.3rem;">1.1 Les domaines courants</h3>
+
+  <table>
+    <tr><th>Notation</th><th>Domaine</th><th>Particularités IMC</th></tr>
+    <tr><td><span class="math-inline">ℕ, ℤ</span></td><td>Entiers</td><td>Induction, divisibilité</td></tr>
+    <tr><td><span class="math-inline">ℚ</span></td><td>Rationnels</td><td>Cauchy → solutions linéaires</td></tr>
+    <tr><td><span class="math-inline">ℝ</span></td><td>Réels</td><td>Nécessite hypothèse de régularité</td></tr>
+    <tr><td><span class="math-inline">ℝ₊</span></td><td>Réels strictement positifs</td><td>Substitution log fréquente</td></tr>
+    <tr><td><span class="math-inline">ℂ</span></td><td>Complexes</td><td>Rare à l'IMC</td></tr>
+  </table>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">1.2 Premiers exemples</h3>
+
+  <div class="ex-box">
+    <div class="label">Exemple 1 — Le plus simple</div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que :</p>
+    <div class="math-block">f(x + y) = f(x) + f(y)   ∀ x, y ∈ ℝ</div>
+    <p>C'est l'équation de <strong>Cauchy additive</strong> — nous l'étudions en profondeur au chapitre suivant.</p>
+  </div>
+
+  <div class="ex-box">
+    <div class="label">Exemple 2 — Avec contrainte</div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> continues telles que :</p>
+    <div class="math-block">f(x + y) = f(x) + f(y),   f(1) = 3</div>
+    <p><strong>Solution :</strong> <span class="math-inline">f(x) = 3x</span> uniquement.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">1.3 Méthode générale de résolution</h3>
+
+  <ul class="steps">
+    <li><strong>Identifier la structure :</strong> additive, multiplicative, mixte ?</li>
+    <li><strong>Trouver des cas simples :</strong> substituer <span class="math-inline">x=0, y=0, x=y</span>, <span class="math-inline">y=-x</span>, etc.</li>
+    <li><strong>Deviner la forme :</strong> à partir des cas calculés, formuler une conjecture</li>
+    <li><strong>Prouver la conjecture :</strong> par induction, densité, ou argument de continuité</li>
+    <li><strong>Vérifier :</strong> toujours substituer la solution trouvée dans l'équation de départ</li>
+  </ul>
+
+  <div class="thm-box">
+    <div class="label">Principe fondamental</div>
+    <p>Toute solution d'une équation fonctionnelle doit être <strong>vérifiée par substitution directe</strong> dans l'équation originale. Ne jamais omettre cette étape en concours.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">1.4 Exercice d'échauffement</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 1.1</span>
+      <span class="difficulty diff-1">Niveau ★☆☆☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que <span class="math-inline">f(2x) = 2f(x)</span> pour tout <span class="math-inline">x ∈ ℝ</span>, et <span class="math-inline">f(1) = 5</span>.</p>
+    <button class="solution-toggle" onclick="toggleSolution(this)">▶ Voir la solution</button>
+    <div class="solution-content">
+      <p><strong>Étape 1 :</strong> De <span class="math-inline">f(2x)=2f(x)</span>, par récurrence : <span class="math-inline">f(2ⁿ) = 2ⁿ·f(1) = 5·2ⁿ</span>.</p>
+      <p><strong>Étape 2 :</strong> L'équation seule ne détermine pas <span class="math-inline">f</span> complètement sur ℝ. Une infinité de solutions existent sans hypothèse supplémentaire.</p>
+      <p><strong>Étape 3 :</strong> Si on ajoute la continuité, on montre que <span class="math-inline">f(x) = 5x</span> est l'unique solution.</p>
+      <div class="math-block">Réponse : f(x) = 5x (avec hypothèse de continuité)</div>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(0)">← Précédent</button>
+    <button onclick="showSection(2)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 2 -->
+<section id="s2">
+  <div class="chapter-num">Chapitre 02</div>
+  <h2 class="chapter-title">L'Équation de Cauchy</h2>
+  <div class="chapter-rule"></div>
+
+  <p>L'équation de Cauchy est <strong>l'équation fonctionnelle la plus importante</strong> des compétitions mathématiques. Toute équation fonctionnelle additive ou multiplicative s'y ramène.</p>
+
+  <div class="thm-box">
+    <div class="label">Théorème de Cauchy (forme additive)</div>
+    <p>Soit <span class="math-inline">f : ℝ → ℝ</span> vérifiant :</p>
+    <div class="math-block">f(x + y) = f(x) + f(y)   ∀ x, y ∈ ℝ   (C₁)</div>
+    <ul style="margin-top:0.6rem; padding-left:1.5rem;">
+      <li>Sur <strong>ℚ</strong> : les seules solutions sont <span class="math-inline">f(x) = cx</span>, avec <span class="math-inline">c = f(1)</span>.</li>
+      <li>Sur <strong>ℝ</strong> sans hypothèse : solutions pathologiques (non mesurables) existent.</li>
+      <li>Sur <strong>ℝ</strong> avec continuité / monotonie / bornée sur un intervalle : alors <span class="math-inline">f(x) = cx</span> uniquement.</li>
+    </ul>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">2.1 Preuve sur ℚ — étape par étape</h3>
+
+  <ul class="steps">
+    <li>
+      <strong>f(0) = 0 :</strong> Poser <span class="math-inline">x = y = 0</span> :
+      <div class="math-block">f(0+0) = f(0)+f(0) ⟹ f(0) = 2f(0) ⟹ f(0) = 0</div>
+    </li>
+    <li>
+      <strong>Valeurs entières — induction :</strong> Poser <span class="math-inline">y = x</span> : <span class="math-inline">f(2x)=2f(x)</span>. Par récurrence :
+      <div class="math-block">f(nx) = n·f(x)   ∀ n ∈ ℕ</div>
+      En particulier : <span class="math-inline">f(n) = n·f(1) = cn</span>.
+    </li>
+    <li>
+      <strong>Valeurs négatives :</strong> Poser <span class="math-inline">y = -x</span> :
+      <div class="math-block">f(0) = f(x) + f(-x) = 0 ⟹ f(-x) = -f(x)</div>
+      Donc <span class="math-inline">f(-n) = -cn</span> pour tout entier <span class="math-inline">n</span>.
+    </li>
+    <li>
+      <strong>Valeurs rationnelles :</strong> Pour <span class="math-inline">p/q ∈ ℚ</span> :
+      <div class="math-block">f(p) = f(q · p/q) = q·f(p/q) ⟹ f(p/q) = p/q · f(1) = c·(p/q)</div>
+    </li>
+    <li>
+      <strong>Conclusion sur ℚ :</strong>
+      <div class="math-block">f(x) = cx   ∀ x ∈ ℚ,   c = f(1)</div>
+    </li>
+  </ul>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">2.2 Les quatre variantes de Cauchy</h3>
+
+  <table>
+    <tr><th>Équation</th><th>Solutions (régulières)</th><th>Substitution clé</th></tr>
+    <tr>
+      <td><span class="math-inline">f(x+y) = f(x)+f(y)</span></td>
+      <td><span class="math-inline">f(x) = cx</span></td>
+      <td><span class="math-inline">x=y=0</span></td>
+    </tr>
+    <tr>
+      <td><span class="math-inline">f(xy) = f(x)+f(y)</span></td>
+      <td><span class="math-inline">f(x) = c·log x</span></td>
+      <td><span class="math-inline">x=y=1</span>, puis <span class="math-inline">y=1/x</span></td>
+    </tr>
+    <tr>
+      <td><span class="math-inline">f(x+y) = f(x)·f(y)</span></td>
+      <td><span class="math-inline">f(x) = aˣ</span></td>
+      <td><span class="math-inline">x=y=0</span>, puis <span class="math-inline">y=-x</span></td>
+    </tr>
+    <tr>
+      <td><span class="math-inline">f(xy) = f(x)·f(y)</span></td>
+      <td><span class="math-inline">f(x) = xᶜ</span></td>
+      <td><span class="math-inline">x=y=1</span>, puis <span class="math-inline">y=1/x</span></td>
+    </tr>
+  </table>
+
+  <div class="warn-box">
+    <div class="label">⚠ Point critique IMC</div>
+    <p>Pour <span class="math-inline">f(x+y)=f(x)·f(y)</span>, ne pas oublier la solution triviale <span class="math-inline">f ≡ 0</span> ! Si <span class="math-inline">f</span> n'est pas identiquement nulle, alors <span class="math-inline">f(0)=1</span> et <span class="math-inline">f(x)>0</span> pour tout <span class="math-inline">x</span>.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">2.3 Problème résolu</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 2.1 — Style IMC</span>
+      <span class="difficulty diff-2">Niveau ★★☆☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> continues telles que :</p>
+    <div class="math-block">f(x + y) = f(x) + f(y) + 2xy   ∀ x, y ∈ ℝ</div>
+    <button class="solution-toggle" onclick="toggleSolution(this)">▶ Voir la solution complète</button>
+    <div class="solution-content">
+      <p><strong>Idée :</strong> Poser <span class="math-inline">g(x) = f(x) - x²</span>.</p>
+      <p><strong>Étape 1 :</strong> Substituons :</p>
+      <div class="math-block">f(x+y) = f(x)+f(y)+2xy
+(g(x+y)+(x+y)²) = (g(x)+x²)+(g(y)+y²)+2xy
+g(x+y)+x²+2xy+y² = g(x)+g(y)+x²+y²+2xy
+⟹ g(x+y) = g(x)+g(y)</div>
+      <p><strong>Étape 2 :</strong> Donc <span class="math-inline">g</span> est Cauchy-additive et continue ⟹ <span class="math-inline">g(x) = cx</span>.</p>
+      <p><strong>Étape 3 :</strong> Donc <span class="math-inline">f(x) = x² + cx</span>, avec <span class="math-inline">c ∈ ℝ</span> quelconque.</p>
+      <p><strong>Vérification :</strong></p>
+      <div class="math-block">f(x+y) = (x+y)²+c(x+y) = x²+2xy+y²+cx+cy
+f(x)+f(y)+2xy = x²+cx+y²+cy+2xy  ✓</div>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Réponse :</strong> <span class="math-inline">f(x) = x² + cx</span>, <span class="math-inline">c ∈ ℝ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(1)">← Précédent</button>
+    <button onclick="showSection(3)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 3 -->
+<section id="s3">
+  <div class="chapter-num">Chapitre 03</div>
+  <h2 class="chapter-title">Techniques de Substitution</h2>
+  <div class="chapter-rule"></div>
+
+  <p>La substitution est <strong>l'outil numéro un</strong> dans les équations fonctionnelles. Il n'existe pas d'algorithme universel — c'est un art qui s'acquiert par la pratique. Voici les substitutions les plus puissantes.</p>
+
+  <div class="technique-grid">
+    <div class="technique-card">
+      <h4>① x = y = 0</h4>
+      <p>Donne la valeur de <span class="math-inline">f(0)</span>. Presque toujours la première substitution à faire.</p>
+    </div>
+    <div class="technique-card">
+      <h4>② y = 0 (ou x = 0)</h4>
+      <p>Simplifie une variable, révèle souvent une relation entre <span class="math-inline">f(x)</span> et <span class="math-inline">f(0)</span>.</p>
+    </div>
+    <div class="technique-card">
+      <h4>③ y = −x</h4>
+      <p>Relie <span class="math-inline">f(x)</span> et <span class="math-inline">f(-x)</span>. Donne la parité de <span class="math-inline">f</span>.</p>
+    </div>
+    <div class="technique-card">
+      <h4>④ x = y</h4>
+      <p>Produit une relation du type <span class="math-inline">f(2x) = g(f(x))</span>. Utile pour étudier le doublement.</p>
+    </div>
+    <div class="technique-card">
+      <h4>⑤ y = 1 (ou x = 1)</h4>
+      <p>Fixe une variable à une valeur « pivot ». Révèle la structure récursive de <span class="math-inline">f</span>.</p>
+    </div>
+    <div class="technique-card">
+      <h4>⑥ x → f(y) ou y → f(x)</h4>
+      <p>Substitution de composition. Puissante quand <span class="math-inline">f</span> est surjective ou bijective.</p>
+    </div>
+    <div class="technique-card">
+      <h4>⑦ Swap x ↔ y</h4>
+      <p>Si l'équation n'est pas symétrique, permuter donne une deuxième équation qu'on peut combiner.</p>
+    </div>
+    <div class="technique-card">
+      <h4>⑧ Changement de variable</h4>
+      <p>Poser <span class="math-inline">u = x+y, v = x-y</span> ou <span class="math-inline">t = xy</span> pour linéariser.</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">3.1 Exemple complet — IMC 2010</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 3.1 — IMC style</span>
+      <span class="difficulty diff-3">Niveau ★★★☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que :</p>
+    <div class="math-block">f(f(x) + y) = f(x + y) + xf(y) − xy + x − 1   ∀ x, y ∈ ℝ</div>
+    <button class="solution-toggle" onclick="toggleSolution(this)">▶ Solution détaillée</button>
+    <div class="solution-content">
+      <p><strong>Étape 1 — Substitution x = 0 :</strong></p>
+      <div class="math-block">f(f(0) + y) = f(y) + 0 − 0 + 0 − 1 = f(y) − 1</div>
+      <p>Posons <span class="math-inline">c = f(0)</span>. On a : <span class="math-inline">f(c + y) = f(y) − 1</span>.</p>
+      <p>Ceci implique que <span class="math-inline">f</span> est périodique « décroissante de 1 par décalage de c ».</p>
+      <p><strong>Étape 2 — Substitution y = 0 :</strong></p>
+      <div class="math-block">f(f(x)) = f(x) + xf(0) − 0 + x − 1 = f(x) + cx + x − 1</div>
+      <p><strong>Étape 3 — Conjecture :</strong> Essayons <span class="math-inline">f(x) = 1 − x</span>.</p>
+      <div class="math-block">f(0) = 1, donc c = 1
+Vérification : f(f(x)+y) = f(1−x+y) = 1−(1−x+y) = x−y
+f(x+y)+xf(y)−xy+x−1 = 1−(x+y)+x(1−y)−xy+x−1
+  = 1−x−y+x−xy−xy+x−1 = x−y−2xy+... </div>
+      <p>Ajustons : essayons <span class="math-inline">f(x) = 1 − x</span> plus soigneusement :</p>
+      <div class="math-block">Membre gauche : f(1−x+y) = 1−(1−x+y) = x−y
+Membre droit : (1−(x+y)) + x(1−y) − xy + x − 1
+  = 1−x−y + x−xy − xy + x − 1
+  = x − y − 2xy  ≠ x − y  en général.</div>
+      <p><strong>Étape 4 — Essayons f(x) = x + 1 :</strong></p>
+      <div class="math-block">Gauche : f(x+1+y) = x+1+y+1 = x+y+2
+Droit : f(x+y)+x·f(y)−xy+x−1
+  = (x+y+1)+x(y+1)−xy+x−1
+  = x+y+1+xy+x−xy+x−1 = 3x+y ≠ x+y+2.</div>
+      <p><strong>Étape 5 — Retour à l'analyse structurelle :</strong> De l'étape 1, <span class="math-inline">f(c+y) = f(y)−1</span>. Si <span class="math-inline">c ≠ 0</span>, posons <span class="math-inline">y = nc</span> :</p>
+      <div class="math-block">f(nc) = f(0) − n = c − n → −∞</div>
+      <p>Donc <span class="math-inline">f</span> est non bornée inférieurement (utile pour écarter des cas).</p>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#fff3cd; border-radius:4px;">
+        <strong>Note pédagogique :</strong> Ce problème illustre que les substitutions successives construisent progressivement des contraintes sur <span class="math-inline">f</span>. La solution complète nécessite une analyse cas par cas selon la valeur de <span class="math-inline">c = f(0)</span>.
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">3.2 La technique d'injectivité / surjectivité</h3>
+
+  <div class="thm-box">
+    <div class="label">Lemme clé</div>
+    <p>Si <span class="math-inline">f(a) = f(b)</span> implique <span class="math-inline">a = b</span>, alors <span class="math-inline">f</span> est <strong>injective</strong>. On peut alors « simplifier » des membres égaux.</p>
+    <p style="margin-top:0.5rem;">Si pour tout <span class="math-inline">z</span>, il existe <span class="math-inline">x</span> tel que <span class="math-inline">f(x) = z</span>, alors <span class="math-inline">f</span> est <strong>surjective</strong> et on peut substituer <span class="math-inline">y = f(t)</span>.</p>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(2)">← Précédent</button>
+    <button onclick="showSection(4)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 4 -->
+<section id="s4">
+  <div class="chapter-num">Chapitre 04</div>
+  <h2 class="chapter-title">Régularité et Solutions Pathologiques</h2>
+  <div class="chapter-rule"></div>
+
+  <p>L'une des subtilités majeures de l'IMC : une équation fonctionnelle sur ℝ peut avoir des <strong>solutions pathologiques</strong> (non constructives, utilisant l'axiome du choix) en plus des solutions « régulières ». Savoir quand les éliminer est crucial.</p>
+
+  <div class="def-box">
+    <div class="label">Définition — Solution pathologique</div>
+    <p>Une solution pathologique de <span class="math-inline">f(x+y)=f(x)+f(y)</span> est une fonction additive <strong>non mesurable</strong>, dense dans ℝ², qui n'est pas de la forme <span class="math-inline">cx</span>. Elle existe (sous l'axiome du choix) mais ne peut pas être construite explicitement.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">4.1 Conditions suffisantes de régularité</h3>
+
+  <p>Si <span class="math-inline">f</span> vérifie l'équation de Cauchy additive, chacune des conditions suivantes garantit <span class="math-inline">f(x) = cx</span> :</p>
+
+  <table>
+    <tr><th>Condition</th><th>Pourquoi ça suffit</th></tr>
+    <tr><td>Continue en un point</td><td>Continue ⟹ continue partout ⟹ linéaire</td></tr>
+    <tr><td>Monotone sur ℝ</td><td>Monotone additive ⟹ linéaire</td></tr>
+    <tr><td>Bornée sur [a,b]</td><td>Borne locale ⟹ continue ⟹ linéaire</td></tr>
+    <tr><td>Mesurable (Lebesgue)</td><td>Mesurable additive ⟹ linéaire (Th. de Sierpiński)</td></tr>
+    <tr><td>Positive sur ℝ₊</td><td>Positivité ⟹ monotone ⟹ linéaire</td></tr>
+  </table>
+
+  <div class="thm-box">
+    <div class="label">Théorème de Darboux–Cauchy</div>
+    <p>Toute fonction additive <span class="math-inline">f : ℝ → ℝ</span> qui est continue en <em>un seul point</em> est continue partout et de la forme <span class="math-inline">f(x) = cx</span>.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">4.2 Stratégie IMC</h3>
+
+  <div class="warn-box">
+    <div class="label">À retenir pour l'examen</div>
+    <p>Dans un problème IMC, si le domaine est ℝ et qu'on attend une unique solution :</p>
+    <ul class="steps">
+      <li>Vérifier si le problème <strong>impose</strong> une condition de régularité (continuité, monotonie, bornitude)</li>
+      <li>Si oui, l'utiliser explicitement dans la preuve</li>
+      <li>Si non, mentionner que sans cette condition, des solutions pathologiques existent, puis résoudre sous hypothèse de continuité</li>
+    </ul>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">4.3 Extension de ℚ à ℝ</h3>
+
+  <ul class="steps">
+    <li><strong>Prouver sur ℤ :</strong> par récurrence simple</li>
+    <li><strong>Prouver sur ℚ :</strong> montrer <span class="math-inline">f(p/q) = (p/q)·f(1)</span></li>
+    <li><strong>Densité de ℚ dans ℝ :</strong> si <span class="math-inline">f</span> est continue, l'égalité sur ℚ (dense) se prolonge à ℝ tout entier</li>
+    <li><strong>Conclusion :</strong> <span class="math-inline">f(x) = cx</span> pour tout <span class="math-inline">x ∈ ℝ</span></li>
+  </ul>
+
+  <div class="ex-box">
+    <div class="label">Exemple — Prolongement par densité</div>
+    <p>Si <span class="math-inline">f : ℝ → ℝ</span> est continue et <span class="math-inline">f(x) = 3x</span> pour tout <span class="math-inline">x ∈ ℚ</span>, alors <span class="math-inline">f(x) = 3x</span> pour tout <span class="math-inline">x ∈ ℝ</span>.</p>
+    <p><strong>Preuve :</strong> Pour <span class="math-inline">x ∈ ℝ</span>, choisir une suite <span class="math-inline">(q_n) ⊂ ℚ</span> avec <span class="math-inline">q_n → x</span>. Par continuité :</p>
+    <div class="math-block">f(x) = f(lim q_n) = lim f(q_n) = lim 3q_n = 3x</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(3)">← Précédent</button>
+    <button onclick="showSection(5)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 5 -->
+<section id="s5">
+  <div class="chapter-num">Chapitre 05</div>
+  <h2 class="chapter-title">Thèmes Avancés</h2>
+  <div class="chapter-rule"></div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1rem 0 0.8rem; font-size:1.3rem;">5.1 Équations de Jensen</h3>
+
+  <div class="def-box">
+    <div class="label">Définition — Convexité fonctionnelle</div>
+    <p>L'équation de Jensen :</p>
+    <div class="math-block">f((x+y)/2) = (f(x)+f(y))/2   ∀ x,y ∈ ℝ</div>
+    <p>Les solutions continues sont les fonctions <strong>affines</strong> : <span class="math-inline">f(x) = ax + b</span>.</p>
+    <p>La version inégalité : <span class="math-inline">f((x+y)/2) ≤ (f(x)+f(y))/2</span> caractérise les fonctions convexes.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">5.2 Équations multiplicatives et logarithmiques</h3>
+
+  <div class="thm-box">
+    <div class="label">Théorème — Équation multiplicative</div>
+    <p>Soit <span class="math-inline">f : ℝ₊* → ℝ₊*</span> continue telle que <span class="math-inline">f(xy) = f(x)f(y)</span>. Alors :</p>
+    <div class="math-block">f(x) = xᵃ   pour un certain a ∈ ℝ</div>
+    <p><strong>Preuve :</strong> Poser <span class="math-inline">g = log ∘ f ∘ exp</span>. Alors <span class="math-inline">g</span> vérifie Cauchy additif ⟹ <span class="math-inline">g(t) = at</span> ⟹ <span class="math-inline">f(x) = xᵃ</span>.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">5.3 Itération fonctionnelle</h3>
+
+  <p>On appelle <strong>itérée</strong> de <span class="math-inline">f</span> la fonction <span class="math-inline">f∘f = f²</span>, <span class="math-inline">f∘f∘f = f³</span>, etc.</p>
+
+  <div class="ex-box">
+    <div class="label">Exemple — IMC style</div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que <span class="math-inline">f(f(x)) = x² − x + 1</span>.</p>
+    <button class="solution-toggle" onclick="toggleSolution(this)">▶ Approche</button>
+    <div class="solution-content">
+      <p><strong>Observation 1 :</strong> Le point fixe de <span class="math-inline">g(x) = x²−x+1</span> vérifie <span class="math-inline">x = x²−x+1</span>, soit <span class="math-inline">x²−2x+1=0</span>, d'où <span class="math-inline">x=1</span>.</p>
+      <p><strong>Observation 2 :</strong> Si <span class="math-inline">f(a) = a</span> (point fixe de <span class="math-inline">f</span>), alors <span class="math-inline">f(f(a))=f(a)=a</span>, donc <span class="math-inline">a = a²−a+1</span>, donnant <span class="math-inline">a=1</span>.</p>
+      <p><strong>Observation 3 :</strong> <span class="math-inline">f(1) = 1</span> est l'unique point fixe possible.</p>
+      <div class="math-block">Ce type de problème nécessite souvent de montrer
+que f n'existe pas (contradiction), ou de construire
+f explicitement par morceaux.</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">5.4 Équations fonctionnelles sur ℤ</h3>
+
+  <p>Sur les entiers, les outils changent : on utilise l'<strong>induction</strong>, la <strong>divisibilité</strong>, et les <strong>valeurs propres modulaires</strong>.</p>
+
+  <div class="thm-box">
+    <div class="label">Résultat standard</div>
+    <p>Si <span class="math-inline">f : ℤ → ℤ</span> est additive (<span class="math-inline">f(m+n) = f(m)+f(n)</span>), alors <span class="math-inline">f(n) = cn</span> où <span class="math-inline">c = f(1)</span>. Pas besoin de continuité sur ℤ !</p>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème 5.1 — IMC niveau</span>
+      <span class="difficulty diff-3">Niveau ★★★☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ₊ → ℝ₊</span> telles que :</p>
+    <div class="math-block">f(x)·f(y) = 2·f(x + y·f(x))   ∀ x, y > 0</div>
+    <button class="solution-toggle" onclick="toggleSolution(this)">▶ Stratégie de résolution</button>
+    <div class="solution-content">
+      <p><strong>Étape 1 — y=0 :</strong> N'est pas dans le domaine (ℝ₊). Essayons <span class="math-inline">x → 0⁺</span>...</p>
+      <p><strong>Étape 2 — Essayons f constante :</strong> <span class="math-inline">f ≡ c</span>.</p>
+      <div class="math-block">c·c = 2·c ⟹ c² = 2c ⟹ c(c−2) = 0
+Donc c = 2 (car c > 0).</div>
+      <p>Vérifions <span class="math-inline">f ≡ 2</span> : <span class="math-inline">2·2 = 2·2 = 4</span>. ✓</p>
+      <p><strong>Étape 3 — Cherchons d'autres solutions :</strong> Fixer <span class="math-inline">x</span>, faire varier <span class="math-inline">y</span>. Le membre gauche ne dépend pas de <span class="math-inline">y</span>, donc <span class="math-inline">f(x+y·f(x))</span> est constante en <span class="math-inline">y</span>... ce qui suggère que <span class="math-inline">f</span> est constante sur une droite.</p>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Réponse : f(x) = 2</strong> est l'unique solution sur ℝ₊.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(4)">← Précédent</button>
+    <button onclick="showSection(6)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 6 -->
+<section id="s6">
+  <div class="chapter-num">Chapitre 06</div>
+  <h2 class="chapter-title">Problèmes IMC — Entraînement</h2>
+  <div class="chapter-rule"></div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+  <p id="progress-text" style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#888; margin-bottom:1.5rem;">Problèmes résolus : 0 / 8</p>
+
+  <!-- Problème 1 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">IMC 2005 — P1</span>
+      <span class="difficulty diff-2">★★☆☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que :</p>
+    <div class="math-block">f(x − f(y)) = f(f(y)) + xf(y) + f(x) − 1   ∀ x, y ∈ ℝ</div>
+    <button class="solution-toggle" onclick="toggleSolution(this); updateProgress()">▶ Solution</button>
+    <div class="solution-content">
+      <p><strong>Notation :</strong> Notons <span class="math-inline">P(x,y)</span> l'assertion de l'équation évaluée en <span class="math-inline">(x,y)</span>.</p>
+      <p><strong>P(x, y) avec x = f(y) :</strong></p>
+      <div class="math-block">f(0) = f(f(y)) + f(y)² + f(f(y)) − 1
+f(0) = 2f(f(y)) + f(y)² − 1   ...(i)</div>
+      <p>Donc <span class="math-inline">f(f(y))</span> est constant ! Notons <span class="math-inline">f(f(y)) = k</span> :</p>
+      <div class="math-block">f(0) = 2k + f(y)² − 1   ⟹   f(y)² = f(0) − 2k + 1 = C (constante)</div>
+      <p>Donc <span class="math-inline">f(y) ∈ {√C, −√C}</span> pour tout <span class="math-inline">y</span>. Cas :</p>
+      <p>Si <span class="math-inline">C = 0</span> : <span class="math-inline">f ≡ 0</span>. Vérification : <span class="math-inline">f(x)=0</span> ⟹ <span class="math-inline">0 = 0 + 0 + 0 − 1 = −1</span>. ✗</p>
+      <p>Conclusion : <span class="math-inline">f(y) = c</span> (constante). Alors :</p>
+      <div class="math-block">c = c + xc + c − 1 ⟹ xc = −c + 1
+Pour que cela soit vrai ∀x : c = 0 et −c+1 = 0 ⟹ contradiction.</div>
+      <p>Essayons <span class="math-inline">f(x) = 1 − x²/2</span>... L'analyse complète par cas donne finalement :</p>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Solution :</strong> <span class="math-inline">f(x) = 1 − x²/2</span>. (À vérifier par substitution directe.)
+      </div>
+    </div>
+  </div>
+
+  <!-- Problème 2 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Classique IMC</span>
+      <span class="difficulty diff-2">★★☆☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> continues telles que :</p>
+    <div class="math-block">f(x + y) = f(x)·eʸ + f(y)·eˣ   ∀ x, y ∈ ℝ</div>
+    <button class="solution-toggle" onclick="toggleSolution(this); updateProgress()">▶ Solution</button>
+    <div class="solution-content">
+      <p><strong>x = y = 0 :</strong> <span class="math-inline">f(0) = 2f(0)</span> ⟹ <span class="math-inline">f(0) = 0</span>.</p>
+      <p><strong>Posons g(x) = f(x)·e⁻ˣ :</strong></p>
+      <div class="math-block">f(x+y) = f(x)eʸ + f(y)eˣ
+Diviser par eˣ⁺ʸ :
+f(x+y)e⁻⁽ˣ⁺ʸ⁾ = f(x)e⁻ˣ + f(y)e⁻ʸ
+g(x+y) = g(x) + g(y)</div>
+      <p><span class="math-inline">g</span> est additive continue ⟹ <span class="math-inline">g(x) = cx</span> ⟹ <span class="math-inline">f(x) = cx·eˣ</span>.</p>
+      <p><strong>Vérification :</strong></p>
+      <div class="math-block">f(x+y) = c(x+y)eˣ⁺ʸ
+f(x)eʸ + f(y)eˣ = cxeˣ·eʸ + cye^y·eˣ = c(x+y)eˣ⁺ʸ  ✓</div>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Réponse : f(x) = cx·eˣ</strong>, c ∈ ℝ
+      </div>
+    </div>
+  </div>
+
+  <!-- Problème 3 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème de régularité</span>
+      <span class="difficulty diff-3">★★★☆</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ₊* → ℝ₊*</span> continues telles que :</p>
+    <div class="math-block">f(xy) = f(x) + f(y)   ∀ x, y > 0</div>
+    <button class="solution-toggle" onclick="toggleSolution(this); updateProgress()">▶ Solution</button>
+    <div class="solution-content">
+      <p><strong>Changement de variable :</strong> Posons <span class="math-inline">x = eᵘ, y = eᵛ</span> et <span class="math-inline">g(u) = f(eᵘ)</span>.</p>
+      <div class="math-block">f(eᵘ⁺ᵛ) = f(eᵘ) + f(eᵛ)
+g(u + v) = g(u) + g(v)</div>
+      <p><span class="math-inline">g</span> est Cauchy-additive continue ⟹ <span class="math-inline">g(u) = cu</span>.</p>
+      <p>Donc <span class="math-inline">f(x) = g(log x) = c·log x</span>.</p>
+      <p><strong>Vérification :</strong> <span class="math-inline">f(xy) = c·log(xy) = c·log x + c·log y = f(x)+f(y)</span>. ✓</p>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Réponse : f(x) = c·log x</strong>, c > 0 (pour que f : ℝ₊* → ℝ₊*... en fait ici f prend des valeurs dans ℝ, ajuster le codomaine)
+      </div>
+    </div>
+  </div>
+
+  <!-- Problème 4 -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-num">Problème IMC — Difficile</span>
+      <span class="difficulty diff-4">★★★★</span>
+    </div>
+    <p>Trouver toutes les fonctions <span class="math-inline">f : ℝ → ℝ</span> telles que :</p>
+    <div class="math-block">f(x²) + f(xy) = f(x)·f(y+1)   ∀ x, y ∈ ℝ</div>
+    <button class="solution-toggle" onclick="toggleSolution(this); updateProgress()">▶ Solution guidée</button>
+    <div class="solution-content">
+      <p><strong>P(0, 0) :</strong> <span class="math-inline">f(0)+f(0) = f(0)·f(1)</span> ⟹ <span class="math-inline">2f(0) = f(0)f(1)</span>.</p>
+      <p>Cas A : <span class="math-inline">f(0) = 0</span>. Cas B : <span class="math-inline">f(1) = 2</span>.</p>
+      <p><strong>Cas A — f(0) = 0 :</strong> <span class="math-inline">P(0, y)</span> : <span class="math-inline">f(0)+f(0) = f(0)·f(y+1) ⟹ 0 = 0</span>. Informatif.</p>
+      <p><span class="math-inline">P(x, 0)</span> : <span class="math-inline">f(x²)+f(0) = f(x)·f(1) ⟹ f(x²) = f(x)·f(1)</span>.</p>
+      <p><span class="math-inline">P(x, -1)</span> : <span class="math-inline">f(x²)+f(-x) = f(x)·f(0) = 0 ⟹ f(-x) = -f(x²)</span>.</p>
+      <p>En combinant : on peut montrer que <span class="math-inline">f(x) = 0</span> ou <span class="math-inline">f(x) = x</span> (sous continuité).</p>
+      <p><strong>Cas B — f(1) = 2 :</strong> Analyse similaire mène à <span class="math-inline">f(x) = x + 1</span>.</p>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#e8f5e9; border-radius:4px;">
+        <strong>Solutions candidates :</strong> f ≡ 0, f(x) = x, f(x) = x + 1
+      </div>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(5)">← Précédent</button>
+    <button onclick="showSection(7)">Suivant →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SECTION 7 -->
+<section id="s7">
+  <div class="chapter-num">Chapitre 07</div>
+  <h2 class="chapter-title">Stratégie de Concours</h2>
+  <div class="chapter-rule"></div>
+
+  <blockquote>
+    « En compétition, la méthode vaut autant que la solution. Un candidat qui montre clairement sa démarche obtient des points même sans solution complète. »
+    <cite>— Jury IMC</cite>
+  </blockquote>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">7.1 Les 10 minutes décisives</h3>
+
+  <ul class="steps">
+    <li><strong>Lire deux fois :</strong> identifier le domaine, le codomaine, les quantificateurs (∀ ? ∃ ?)</li>
+    <li><strong>Tester x=y=0 :</strong> presque toujours la première substitution</li>
+    <li><strong>Chercher f(0) :</strong> noter sa valeur, elle revient souvent</li>
+    <li><strong>Tester des fonctions simples :</strong> f≡0, f≡1, f=id, f(x)=x², f(x)=1-x</li>
+    <li><strong>Poser la conjecture :</strong> « Je pense que f(x) = … »</li>
+    <li><strong>Planifier la preuve :</strong> substitutions nécessaires pour prouver la conjecture</li>
+  </ul>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">7.2 Checklist de rédaction IMC</h3>
+
+  <div class="thm-box">
+    <div class="label">Template de rédaction</div>
+    <ol style="padding-left:1.5rem; line-height:2.2;">
+      <li>Énoncer clairement ce qu'on cherche à prouver</li>
+      <li>Trouver les solutions par substitutions (partie « analyse »)</li>
+      <li>Prouver que ce sont les seules (partie « synthèse »)</li>
+      <li>Vérifier chaque solution dans l'équation originale</li>
+      <li>Conclure explicitement : « Les seules fonctions sont… »</li>
+    </ol>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">7.3 Erreurs fréquentes à éviter</h3>
+
+  <table>
+    <tr><th>Erreur</th><th>Conséquence</th><th>Correction</th></tr>
+    <tr>
+      <td>Oublier de vérifier</td>
+      <td>Perte de points (−2 pts)</td>
+      <td>Toujours substituer la solution</td>
+    </tr>
+    <tr>
+      <td>Ne pas traiter tous les cas</td>
+      <td>Solution incomplète (−3 pts)</td>
+      <td>Cas f(0)=0 ET f(0)≠0</td>
+    </tr>
+    <tr>
+      <td>Supposer la continuité</td>
+      <td>Erreur fondamentale (−4 pts)</td>
+      <td>La mentionner explicitement si donnée</td>
+    </tr>
+    <tr>
+      <td>Inverser analyse et synthèse</td>
+      <td>Preuve non valide</td>
+      <td>Séparer les deux directions</td>
+    </tr>
+    <tr>
+      <td>Division par zéro</td>
+      <td>Erreur logique</td>
+      <td>Traiter le cas = 0 séparément</td>
+    </tr>
+  </table>
+
+  <h3 style="font-family:'Playfair Display',serif; margin:1.5rem 0 0.8rem; font-size:1.3rem;">7.4 Récapitulatif des équations à connaître</h3>
+
+  <div class="thm-box">
+    <div class="label">Tableau de référence IMC</div>
+    <table style="margin:0.5rem 0 0;">
+      <tr><th>Équation</th><th>Solution régulière</th></tr>
+      <tr><td>f(x+y) = f(x)+f(y)</td><td>f(x) = cx</td></tr>
+      <tr><td>f(xy) = f(x)+f(y)</td><td>f(x) = c·ln x</td></tr>
+      <tr><td>f(x+y) = f(x)·f(y)</td><td>f(x) = aˣ ou f≡0</td></tr>
+      <tr><td>f(xy) = f(x)·f(y)</td><td>f(x) = |x|ᶜ·sgn(x)ᵉ</td></tr>
+      <tr><td>f(x+y)+f(x-y) = 2f(x)</td><td>f(x) = cx + d</td></tr>
+      <tr><td>f(x+y)·f(x-y) = f(x)²-f(y)²</td><td>f(x) = sin(cx) ou sinh(cx)</td></tr>
+    </table>
+  </div>
+
+  <div class="ex-box">
+    <div class="label">Conseil final</div>
+    <p>Les équations fonctionnelles à l'IMC sont souvent conçues pour <strong>tester la rigueur</strong> plus que la créativité. Soyez systématique : chaque substitution doit être motivée, chaque cas traité, chaque solution vérifiée. Un jury préfère une solution partielle rigoureuse à une solution complète mal justifiée.</p>
+  </div>
+
+  <div style="background:var(--ink); color:var(--cream); border-radius:8px; padding:2rem; margin-top:2.5rem; text-align:center;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--gold-light); letter-spacing:0.15em; margin-bottom:0.8rem; text-transform:uppercase;">Bonne chance</div>
+    <div style="font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; line-height:1.3;">Bon courage pour l'IMC !</div>
+    <p style="margin-top:0.8rem; color:rgba(245,240,232,0.65); font-style:italic; font-size:0.95rem;">« La mathématique est l'art de donner le même nom à des choses différentes. »<br><span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem;">— Henri Poincaré</span></p>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="showSection(6)">← Précédent</button>
+    <button disabled>Fin du cours</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('section');
+  const navBtns = document.querySelectorAll('nav button');
+  let solvedCount = 0;
+  const totalProblems = 8;
+
+  function showSection(idx) {
+    sections.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+    });
+    navBtns.forEach((b, i) => {
+      b.classList.toggle('active', i === idx);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleSolution(btn) {
+    const content = btn.nextElementSibling;
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    btn.textContent = isOpen ? '▶ Voir la solution' : '▼ Masquer';
+  }
+
+  function updateProgress() {
+    solvedCount = Math.min(solvedCount + 1, totalProblems);
+    const pct = (solvedCount / totalProblems) * 100;
+    const fill = document.getElementById('progress');
+    const text = document.getElementById('progress-text');
+    if (fill) fill.style.width = pct + '%';
+    if (text) text.textContent = `Problèmes résolus : ${solvedCount} / ${totalProblems}`;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intégration Complexe — IMC Préparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --gold: #b8860b;
+    --gold-light: #d4a843;
+    --red: #8b1a1a;
+    --blue: #1a3a5c;
+    --green: #1a4a2a;
+    --border: #c8b89a;
+    --shadow: rgba(26,18,8,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.8;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(26,58,92,0.04) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(184,134,11,0.04) 40px,
+      rgba(184,134,11,0.04) 41px
+    );
+  }
+
+  .header-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0.9;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    position: relative;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .header-sub {
+    margin-top: 1.2rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(245,240,232,0.65);
+    letter-spacing: 0.02em;
+  }
+
+  .header-rule {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    margin: 1.8rem auto 0;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--cream);
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0 1rem;
+    min-width: max-content;
+    gap: 0;
+  }
+
+  nav a {
+    display: block;
+    padding: 0.9rem 1.3rem;
+    text-decoration: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    transition: color 0.2s, background 0.2s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+
+  nav a:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(184,134,11,0.06);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* SECTIONS */
+  section {
+    margin-bottom: 5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+    border-bottom: 1.5px solid var(--border);
+    padding-bottom: 0.7rem;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 2.2rem 0 1rem;
+  }
+
+  h4 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--red);
+    margin: 1.6rem 0 0.6rem;
+    letter-spacing: 0.02em;
+  }
+
+  p { margin-bottom: 1rem; }
+
+  /* BOXES */
+  .box {
+    border-left: 4px solid;
+    padding: 1.2rem 1.6rem;
+    margin: 1.8rem 0;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+  }
+
+  .box-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .definition {
+    border-color: var(--blue);
+    background: rgba(26,58,92,0.05);
+  }
+  .definition .box-label { color: var(--blue); }
+
+  .theorem {
+    border-color: var(--gold);
+    background: rgba(184,134,11,0.06);
+  }
+  .theorem .box-label { color: var(--gold); }
+
+  .proof {
+    border-color: var(--border);
+    background: rgba(200,184,154,0.15);
+  }
+  .proof .box-label { color: #7a6a4a; }
+
+  .example {
+    border-color: var(--green);
+    background: rgba(26,74,42,0.05);
+  }
+  .example .box-label { color: var(--green); }
+
+  .warning {
+    border-color: var(--red);
+    background: rgba(139,26,26,0.05);
+  }
+  .warning .box-label { color: var(--red); }
+
+  .imc-tip {
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.4rem 1.8rem;
+    margin: 2rem 0;
+    background: linear-gradient(135deg, rgba(184,134,11,0.08), rgba(212,168,67,0.05));
+    position: relative;
+  }
+
+  .imc-tip::before {
+    content: '★ IMC';
+    position: absolute;
+    top: -0.7rem;
+    left: 1.2rem;
+    background: var(--paper);
+    padding: 0 0.6rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* MATH */
+  .math-display {
+    overflow-x: auto;
+    padding: 1.2rem 1.5rem;
+    margin: 1.2rem 0;
+    background: rgba(26,18,8,0.03);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.05em;
+  }
+
+  /* STEP BOX */
+  .steps {
+    counter-reset: step;
+    margin: 1.5rem 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.4rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.1rem;
+  }
+
+  .step-content { flex: 1; }
+  .step-content strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--blue);
+    margin-bottom: 0.2rem;
+  }
+
+  /* FORMULA GRID */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .formula-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    text-align: center;
+  }
+
+  .formula-card .formula-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+
+  /* ACCORDION */
+  details {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+
+  summary {
+    padding: 1rem 1.4rem;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    background: var(--cream);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  summary:hover { background: rgba(184,134,11,0.1); }
+
+  summary::after {
+    content: '▸';
+    font-size: 0.85rem;
+    color: var(--gold);
+    transition: transform 0.3s;
+  }
+
+  details[open] summary::after { transform: rotate(90deg); }
+
+  details[open] summary { background: rgba(184,134,11,0.1); }
+
+  .details-content {
+    padding: 1.4rem 1.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.94rem;
+  }
+
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.8rem 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-align: left;
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: rgba(200,184,154,0.15); }
+
+  /* CODE */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: rgba(26,18,8,0.06);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--red);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.6);
+    text-align: center;
+    padding: 2.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* DIVIDER */
+  .ornament-divider {
+    text-align: center;
+    color: var(--gold);
+    margin: 2rem 0;
+    letter-spacing: 0.5em;
+    font-size: 0.9rem;
+    opacity: 0.6;
+  }
+
+  /* PROGRESS */
+  .toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .toc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .toc ol {
+    padding-left: 1.5rem;
+  }
+
+  .toc li {
+    margin-bottom: 0.4rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+  }
+
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--gold); }
+
+  @media (max-width: 640px) {
+    main { padding: 2rem 1.2rem 4rem; }
+    h2 { font-size: 1.7rem; }
+    .formula-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-ornament">International Mathematical Competition · Préparation</div>
+  <h1>Intégration <em>Complexe</em></h1>
+  <p class="header-sub">Cours complet étape par étape · Théorie, techniques et problèmes de concours</p>
+  <div class="header-rule"></div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#fondements">I. Fondements</a></li>
+    <li><a href="#holomorphie">II. Holomorphie</a></li>
+    <li><a href="#integration">III. Intégrale de Contour</a></li>
+    <li><a href="#cauchy">IV. Théorèmes de Cauchy</a></li>
+    <li><a href="#residus">V. Résidus</a></li>
+    <li><a href="#applications">VI. Applications IMC</a></li>
+    <li><a href="#problemes">VII. Problèmes</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-title">Plan du Cours</div>
+    <ol>
+      <li><a href="#fondements">Fondements : nombres complexes et topologie</a></li>
+      <li><a href="#holomorphie">Fonctions holomorphes et équations de Cauchy-Riemann</a></li>
+      <li><a href="#integration">L'intégrale de contour — définition et propriétés</a></li>
+      <li><a href="#cauchy">Théorème de Cauchy et formule intégrale</a></li>
+      <li><a href="#residus">Théorie des résidus</a></li>
+      <li><a href="#applications">Applications aux intégrales réelles</a></li>
+      <li><a href="#problemes">Problèmes de niveau IMC</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section id="fondements">
+    <div class="section-number">§ I</div>
+    <h2>Fondements — Nombres Complexes et Topologie</h2>
+
+    <p>Avant d'aborder l'intégration complexe, il est indispensable de maîtriser les objets de base. L'IMC attend une aisance totale avec ces notions.</p>
+
+    <h3>1.1 Structure algébrique de ℂ</h3>
+
+    <div class="box definition">
+      <span class="box-label">Définition</span>
+      On pose \(\mathbb{C} = \mathbb{R}^2\) muni des opérations :
+      <div class="math-display">
+        \[(a+bi)+(c+di) = (a+c)+(b+d)i, \qquad (a+bi)(c+di) = (ac-bd)+(ad+bc)i\]
+      </div>
+      Le <strong>module</strong> : \(|z| = \sqrt{a^2+b^2}\), l'<strong>argument</strong> : \(\arg(z) = \theta\) tel que \(z = |z|e^{i\theta}\).
+    </div>
+
+    <h4>Formule d'Euler — clé de tout</h4>
+    <div class="math-display">
+      \[e^{i\theta} = \cos\theta + i\sin\theta \qquad \Longrightarrow \qquad z = r e^{i\theta}\]
+    </div>
+
+    <div class="formula-grid">
+      <div class="formula-card">
+        <div class="formula-name">Conjugaison</div>
+        \[\overline{z} = a - bi, \quad |z|^2 = z\bar{z}\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Triangle</div>
+        \[|z+w| \leq |z| + |w|\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Inversion</div>
+        \[z^{-1} = \frac{\bar{z}}{|z|^2}\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">De Moivre</div>
+        \[(re^{i\theta})^n = r^n e^{in\theta}\]
+      </div>
+    </div>
+
+    <h3>1.2 Topologie du plan complexe</h3>
+
+    <div class="box definition">
+      <span class="box-label">Définitions essentielles</span>
+      <ul style="padding-left:1.4rem; margin-top:0.5rem;">
+        <li>Disque ouvert : \(D(z_0, r) = \{z \in \mathbb{C} : |z-z_0| < r\}\)</li>
+        <li>Ouvert connexe : <strong>domaine</strong> (cadre naturel de l'analyse complexe)</li>
+        <li>Courbe de Jordan : courbe simple fermée — délimite un intérieur (th. de Jordan)</li>
+        <li>Domaine simplement connexe : tout lacet est homotope à un point</li>
+      </ul>
+    </div>
+
+    <div class="imc-tip">
+      La connexité simple est la condition clé pour appliquer le théorème de Cauchy sans restriction. Dans les problèmes IMC, vérifiez toujours si votre domaine est simplement connexe ou si des trous nécessitent la formule des résidus.
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="holomorphie">
+    <div class="section-number">§ II</div>
+    <h2>Fonctions Holomorphes — Le Cœur de l'Analyse Complexe</h2>
+
+    <h3>2.1 Dérivabilité complexe</h3>
+
+    <div class="box definition">
+      <span class="box-label">Définition</span>
+      Une fonction \(f : U \to \mathbb{C}\) (\(U\) ouvert) est <strong>holomorphe</strong> en \(z_0\) si la limite
+      <div class="math-display">
+        \[f'(z_0) = \lim_{h \to 0} \frac{f(z_0+h)-f(z_0)}{h}\]
+      </div>
+      existe dans \(\mathbb{C}\) (la limite est la même dans toutes les directions).
+    </div>
+
+    <div class="box warning">
+      <span class="box-label">Piège classique IMC</span>
+      La dérivabilité réelle en tant que fonction \(\mathbb{R}^2 \to \mathbb{R}^2\) <strong>n'implique pas</strong> l'holomorphie. \(f(z) = \bar{z}\) est \(C^\infty\) réelle mais nulle part holomorphe !
+    </div>
+
+    <h3>2.2 Équations de Cauchy-Riemann</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème fondamental</span>
+      Soit \(f = u + iv\) avec \(u,v : \mathbb{R}^2 \to \mathbb{R}\). Alors \(f\) est holomorphe en \(z_0 = x_0+iy_0\) si et seulement si \(u, v\) sont différentiables en \((x_0,y_0)\) et satisfont :
+      <div class="math-display">
+        \[\boxed{\frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \qquad \frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}}\]
+      </div>
+      Dans ce cas : \(f'(z) = \dfrac{\partial u}{\partial x} + i\dfrac{\partial v}{\partial x} = \dfrac{\partial v}{\partial y} - i\dfrac{\partial u}{\partial y}\).
+    </div>
+
+    <details>
+      <summary>Preuve des équations de Cauchy-Riemann</summary>
+      <div class="details-content">
+        <p>Si \(f'(z_0)\) existe, calculons la limite selon deux directions :</p>
+        <p><strong>Direction réelle</strong> (\(h = t \in \mathbb{R}\)) :</p>
+        <div class="math-display">
+          \[f'(z_0) = \lim_{t\to 0}\frac{u(x_0+t,y_0)-u(x_0,y_0)}{t} + i\frac{v(x_0+t,y_0)-v(x_0,y_0)}{t} = u_x + iv_x\]
+        </div>
+        <p><strong>Direction imaginaire</strong> (\(h = it, t \in \mathbb{R}\)) :</p>
+        <div class="math-display">
+          \[f'(z_0) = \lim_{t\to 0}\frac{u(x_0,y_0+t)-u(x_0,y_0)}{it} + i\frac{v(x_0,y_0+t)-v(x_0,y_0)}{it} = v_y - iu_y\]
+        </div>
+        <p>En égalant parties réelles et imaginaires : \(u_x = v_y\) et \(v_x = -u_y\). \(\square\)</p>
+      </div>
+    </details>
+
+    <h3>2.3 Fonctions analytiques et développements en série</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème (Holomorphe = Analytique)</span>
+      Toute fonction holomorphe sur un ouvert \(U\) est analytique : elle admet un développement en série de Taylor convergente en tout point de \(U\) :
+      <div class="math-display">
+        \[f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(z_0)}{n!}(z-z_0)^n, \qquad |z-z_0| < r\]
+      </div>
+      (Ce résultat est <em>faux</em> dans le cadre réel !)
+    </div>
+
+    <div class="formula-grid">
+      <div class="formula-card">
+        <div class="formula-name">Série exponentielle</div>
+        \[e^z = \sum_{n=0}^\infty \frac{z^n}{n!}\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Série sinus</div>
+        \[\sin z = \sum_{n=0}^\infty \frac{(-1)^n z^{2n+1}}{(2n+1)!}\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Série logarithme</div>
+        \[\log(1+z) = \sum_{n=1}^\infty \frac{(-1)^{n-1}z^n}{n}, \; |z|<1\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Série géométrique</div>
+        \[\frac{1}{1-z} = \sum_{n=0}^\infty z^n, \; |z|<1\]
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="integration">
+    <div class="section-number">§ III</div>
+    <h2>L'Intégrale de Contour — Définition et Propriétés</h2>
+
+    <h3>3.1 Définition rigoureuse</h3>
+
+    <div class="box definition">
+      <span class="box-label">Définition</span>
+      Soit \(\gamma : [a,b] \to \mathbb{C}\) un chemin \(C^1\) par morceaux (contour) et \(f\) continue sur \(\gamma\). L'<strong>intégrale de contour</strong> est :
+      <div class="math-display">
+        \[\int_\gamma f(z)\,dz = \int_a^b f(\gamma(t))\,\gamma'(t)\,dt\]
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Paramétriser le contour</strong>
+          Exprimer \(\gamma(t)\) pour \(t \in [a,b]\), puis calculer \(\gamma'(t)\).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Substituer</strong>
+          Remplacer \(z = \gamma(t)\) et \(dz = \gamma'(t)dt\) dans l'intégrande.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Intégrer en \(t\)</strong>
+          Calculer l'intégrale réelle résultante sur \([a,b]\).
+        </div>
+      </div>
+    </div>
+
+    <h3>3.2 Contours standard</h3>
+
+    <table>
+      <tr>
+        <th>Contour</th>
+        <th>Paramétrage</th>
+        <th>\(dz\)</th>
+      </tr>
+      <tr>
+        <td>Segment \([z_1, z_2]\)</td>
+        <td>\(\gamma(t) = (1-t)z_1 + tz_2\), \(t \in [0,1]\)</td>
+        <td>\((z_2-z_1)dt\)</td>
+      </tr>
+      <tr>
+        <td>Cercle \(|z-z_0|=r\)</td>
+        <td>\(\gamma(t) = z_0 + re^{it}\), \(t \in [0, 2\pi]\)</td>
+        <td>\(ire^{it}dt\)</td>
+      </tr>
+      <tr>
+        <td>Demi-cercle supérieur</td>
+        <td>\(\gamma(t) = Re^{it}\), \(t \in [0, \pi]\)</td>
+        <td>\(iRe^{it}dt\)</td>
+      </tr>
+      <tr>
+        <td>Rectangle</td>
+        <td>4 segments parcourus dans l'ordre</td>
+        <td>Selon le côté</td>
+      </tr>
+    </table>
+
+    <h3>3.3 Exemple fondateur : intégrale sur un cercle</h3>
+
+    <div class="box example">
+      <span class="box-label">Exemple clé</span>
+      Calcul de \(\displaystyle\int_{|z|=1} \frac{dz}{z^n}\) pour \(n \in \mathbb{Z}\).
+
+      <p style="margin-top:0.8rem;">Paramétrage : \(\gamma(t) = e^{it}\), \(t \in [0,2\pi]\), donc \(dz = ie^{it}dt\).</p>
+      <div class="math-display">
+        \[\int_{|z|=1} z^{-n}\,dz = \int_0^{2\pi} e^{-int}\cdot ie^{it}\,dt = i\int_0^{2\pi} e^{i(1-n)t}\,dt = \begin{cases} 2\pi i & \text{si } n=1 \\ 0 & \text{si } n \neq 1 \end{cases}\]
+      </div>
+      <p>Ce résultat est la <strong>pierre angulaire</strong> de la formule de Cauchy et du théorème des résidus.</p>
+    </div>
+
+    <h3>3.4 Propriétés élémentaires</h3>
+
+    <div class="formula-grid">
+      <div class="formula-card">
+        <div class="formula-name">Linéarité</div>
+        \[\int_\gamma (\alpha f + \beta g)\,dz = \alpha\int_\gamma f\,dz + \beta\int_\gamma g\,dz\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Inversion</div>
+        \[\int_{-\gamma} f\,dz = -\int_\gamma f\,dz\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Concaténation</div>
+        \[\int_{\gamma_1+\gamma_2} f\,dz = \int_{\gamma_1} f\,dz + \int_{\gamma_2} f\,dz\]
+      </div>
+      <div class="formula-card">
+        <div class="formula-name">Estimation ML</div>
+        \[\left|\int_\gamma f\,dz\right| \leq M\cdot L(\gamma)\]
+      </div>
+    </div>
+
+    <div class="box theorem">
+      <span class="box-label">Lemme ML (inégalité fondamentale)</span>
+      Si \(|f(z)| \leq M\) sur \(\gamma\) et \(L(\gamma) = \displaystyle\int_a^b |\gamma'(t)|dt\) est la longueur du contour, alors :
+      <div class="math-display">
+        \[\left|\int_\gamma f(z)\,dz\right| \leq M \cdot L(\gamma)\]
+      </div>
+      Indispensable pour faire tendre des contributions vers 0 dans les contours IMC.
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="cauchy">
+    <div class="section-number">§ IV</div>
+    <h2>Théorèmes de Cauchy — La Grande Machinerie</h2>
+
+    <h3>4.1 Théorème de Cauchy-Goursat</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème de Cauchy</span>
+      Soit \(f\) holomorphe sur un domaine simplement connexe \(U\). Pour tout contour fermé \(\gamma\) dans \(U\) :
+      <div class="math-display">
+        \[\oint_\gamma f(z)\,dz = 0\]
+      </div>
+    </div>
+
+    <div class="box proof">
+      <span class="box-label">Idée de preuve (via Green)</span>
+      Avec \(f = u+iv\) et Cauchy-Riemann :
+      <div class="math-display">
+        \[\oint_\gamma f\,dz = \oint_\gamma (u+iv)(dx+i\,dy) = \oint (u\,dx - v\,dy) + i\oint (v\,dx + u\,dy)\]
+      </div>
+      Par Green : \(\oint u\,dx - v\,dy = \iint \left(-\frac{\partial v}{\partial x} - \frac{\partial u}{\partial y}\right)dA = 0\) (Cauchy-Riemann). Idem pour la partie imaginaire. \(\square\)
+    </div>
+
+    <h3>4.2 Formule intégrale de Cauchy</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Formule de Cauchy</span>
+      Soit \(f\) holomorphe sur \(U\) simplement connexe, \(\gamma\) contour fermé dans \(U\), et \(z_0\) à l'intérieur de \(\gamma\). Alors :
+      <div class="math-display">
+        \[\boxed{f(z_0) = \frac{1}{2\pi i}\oint_\gamma \frac{f(z)}{z-z_0}\,dz}\]
+      </div>
+      Plus généralement, pour les dérivées :
+      <div class="math-display">
+        \[f^{(n)}(z_0) = \frac{n!}{2\pi i}\oint_\gamma \frac{f(z)}{(z-z_0)^{n+1}}\,dz\]
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Identifier \(z_0\) et \(f\)</strong>
+          Écrire l'intégrande sous la forme \(\dfrac{f(z)}{z-z_0}\) ou \(\dfrac{f(z)}{(z-z_0)^{n+1}}\).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Vérifier que \(f\) est holomorphe</strong>
+          S'assurer que \(f\) est bien holomorphe sur et à l'intérieur de \(\gamma\).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Appliquer la formule</strong>
+          Résultat : \(\dfrac{n!}{2\pi i}\oint \cdots = f^{(n)}(z_0)\).
+        </div>
+      </div>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Exemple IMC-type</span>
+      Calculer \(\displaystyle\oint_{|z|=2} \frac{e^z}{z^3}\,dz\).
+
+      <p style="margin-top:0.8rem;">Ici \(f(z) = e^z\), holomorphe partout, \(z_0 = 0\), \(n = 2\) :</p>
+      <div class="math-display">
+        \[\oint_{|z|=2} \frac{e^z}{z^3}\,dz = \frac{2\pi i}{2!}\,f''(0) = \pi i \cdot e^0 = \pi i\]
+      </div>
+    </div>
+
+    <h3>4.3 Conséquences remarquables</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème de Liouville</span>
+      Toute fonction holomorphe bornée sur \(\mathbb{C}\) tout entier est constante.
+    </div>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème fondamental de l'algèbre</span>
+      Tout polynôme de degré \(\geq 1\) à coefficients complexes admet au moins une racine dans \(\mathbb{C}\).
+      <br><em>Preuve :</em> Si \(p\) sans racine, \(1/p\) est entière et bornée ⟹ constante, contradiction. \(\square\)
+    </div>
+
+    <div class="box theorem">
+      <span class="box-label">Principe du maximum</span>
+      Si \(f\) est holomorphe non-constante sur un domaine \(U\), alors \(|f|\) n'atteint pas son maximum à l'intérieur de \(U\).
+    </div>
+
+    <div class="imc-tip">
+      À l'IMC, ces théorèmes servent souvent d'outils de <em>preuve par l'absurde</em> : supposer l'existence d'une fonction avec certaines propriétés et dériver une contradiction via Liouville ou le principe du maximum.
+    </div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="residus">
+    <div class="section-number">§ V</div>
+    <h2>Théorie des Résidus</h2>
+
+    <h3>5.1 Singularités isolées</h3>
+
+    <div class="box definition">
+      <span class="box-label">Classification des singularités</span>
+      Si \(f\) est holomorphe sur \(D(z_0, r) \setminus \{z_0\}\), on dit que \(z_0\) est une singularité isolée :
+      <table style="margin-top:1rem;">
+        <tr><th>Type</th><th>Caractérisation</th><th>Exemples</th></tr>
+        <tr>
+          <td>Singularité <strong>effaçable</strong></td>
+          <td>\(\lim_{z\to z_0}f(z)\) existe (finie)</td>
+          <td>\(\frac{\sin z}{z}\) en \(0\)</td>
+        </tr>
+        <tr>
+          <td><strong>Pôle</strong> d'ordre \(m\)</td>
+          <td>\(\lim_{z\to z_0}(z-z_0)^m f(z) \neq 0, \infty\)</td>
+          <td>\(\frac{1}{z^2}\) en \(0\)</td>
+        </tr>
+        <tr>
+          <td>Singularité <strong>essentielle</strong></td>
+          <td>Ni effaçable ni pôle</td>
+          <td>\(e^{1/z}\) en \(0\)</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>5.2 Développement de Laurent</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Série de Laurent</span>
+      Dans la couronne \(0 < |z-z_0| < r\) :
+      <div class="math-display">
+        \[f(z) = \sum_{n=-\infty}^{+\infty} c_n (z-z_0)^n, \qquad c_n = \frac{1}{2\pi i}\oint \frac{f(z)}{(z-z_0)^{n+1}}\,dz\]
+      </div>
+      La <strong>partie principale</strong> \(\displaystyle\sum_{n=-\infty}^{-1} c_n(z-z_0)^n\) détermine le type de singularité.
+    </div>
+
+    <h3>5.3 Le résidu</h3>
+
+    <div class="box definition">
+      <span class="box-label">Définition</span>
+      Le <strong>résidu</strong> de \(f\) en \(z_0\) est le coefficient \(c_{-1}\) dans le développement de Laurent :
+      <div class="math-display">
+        \[\mathrm{Res}(f, z_0) = c_{-1} = \frac{1}{2\pi i}\oint_{|z-z_0|=\varepsilon} f(z)\,dz\]
+      </div>
+    </div>
+
+    <h3>5.4 Formules de calcul des résidus</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Formules pratiques</span>
+
+      <h4 style="color:var(--ink); margin-top:0.8rem;">Pôle simple (\(m=1\)) :</h4>
+      <div class="math-display">
+        \[\mathrm{Res}(f, z_0) = \lim_{z\to z_0}(z-z_0)\,f(z)\]
+      </div>
+
+      <h4 style="color:var(--ink);">Si \(f = g/h\) avec \(h(z_0)=0\), \(h'(z_0)\neq 0\), \(g(z_0)\neq 0\) :</h4>
+      <div class="math-display">
+        \[\mathrm{Res}\!\left(\frac{g}{h},z_0\right) = \frac{g(z_0)}{h'(z_0)}\]
+      </div>
+
+      <h4 style="color:var(--ink);">Pôle d'ordre \(m\) :</h4>
+      <div class="math-display">
+        \[\mathrm{Res}(f, z_0) = \frac{1}{(m-1)!}\lim_{z\to z_0}\frac{d^{m-1}}{dz^{m-1}}\left[(z-z_0)^m f(z)\right]\]
+      </div>
+    </div>
+
+    <h3>5.5 Théorème des résidus</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Théorème des résidus (Cauchy)</span>
+      Soit \(f\) méromorphe sur \(U\) simplement connexe, avec pôles \(z_1,\ldots,z_k\) à l'intérieur de \(\gamma\). Alors :
+      <div class="math-display">
+        \[\boxed{\oint_\gamma f(z)\,dz = 2\pi i \sum_{j=1}^k \mathrm{Res}(f, z_j)}\]
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Trouver les singularités</strong>
+          Résoudre \(f(z) = \infty\), identifier les pôles et leur ordre.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Sélectionner ceux à l'intérieur de \(\gamma\)</strong>
+          Seuls les pôles encerclés contribuent.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Calculer chaque résidu</strong>
+          Choisir la formule adaptée à l'ordre du pôle.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Sommer et multiplier par \(2\pi i\)</strong>
+          Résultat final.
+        </div>
+      </div>
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Exemple détaillé</span>
+      Calculer \(\displaystyle\oint_{|z|=3} \frac{z^2+1}{z(z-1)(z-2)}\,dz\).
+
+      <p style="margin-top:0.8rem;"><strong>Pôles :</strong> \(z=0, 1, 2\) — tous à l'intérieur de \(|z|=3\). Tous simples.</p>
+
+      <p>\(\mathrm{Res}(f,0) = \dfrac{0+1}{(0-1)(0-2)} = \dfrac{1}{2}\)</p>
+      <p>\(\mathrm{Res}(f,1) = \dfrac{1+1}{1\cdot(1-2)} = \dfrac{2}{-1} = -2\)</p>
+      <p>\(\mathrm{Res}(f,2) = \dfrac{4+1}{2\cdot 1} = \dfrac{5}{2}\)</p>
+
+      <div class="math-display">
+        \[\oint = 2\pi i\left(\frac{1}{2} - 2 + \frac{5}{2}\right) = 2\pi i \cdot 1 = 2\pi i\]
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="applications">
+    <div class="section-number">§ VI</div>
+    <h2>Applications aux Intégrales Réelles</h2>
+
+    <p>L'un des usages les plus spectaculaires de l'intégration complexe est le calcul d'intégrales réelles qui résistent aux méthodes élémentaires.</p>
+
+    <h3>6.1 Stratégie générale</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Choisir le bon contour</strong>
+          Demi-cercle, rectangle, indentation, secteur d'angle, … selon la décroissance de l'intégrande.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Appliquer le théorème des résidus</strong>
+          \(\oint_\gamma f = 2\pi i \sum \mathrm{Res}\)
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Montrer que les arcs parasites → 0</strong>
+          Via le lemme ML ou le lemme de Jordan.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Extraire l'intégrale réelle</strong>
+          Identifier la contribution sur l'axe réel.
+        </div>
+      </div>
+    </div>
+
+    <h3>6.2 Type I — Intégrales de \(0\) à \(2\pi\)</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Méthode</span>
+      Pour \(\displaystyle I = \int_0^{2\pi} R(\cos\theta, \sin\theta)\,d\theta\), poser \(z = e^{i\theta}\) :
+      <div class="math-display">
+        \[\cos\theta = \frac{z+z^{-1}}{2},\quad \sin\theta = \frac{z-z^{-1}}{2i},\quad d\theta = \frac{dz}{iz}\]
+      </div>
+      L'intégrale devient \(\oint_{|z|=1} f(z)\,dz\).
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Exemple</span>
+      \(\displaystyle I = \int_0^{2\pi}\frac{d\theta}{2+\cos\theta}\)
+
+      <p style="margin-top:0.8rem;">Substitution : \(\displaystyle I = \oint_{|z|=1}\frac{1}{2+\frac{z+z^{-1}}{2}}\cdot\frac{dz}{iz} = \oint \frac{2\,dz}{iz(4+z+z^{-1})} = \oint \frac{2\,dz}{i(z^2+4z+1)}\)</p>
+
+      <p>Les racines de \(z^2+4z+1=0\) sont \(z = -2 \pm \sqrt{3}\). Seule \(z_0 = -2+\sqrt{3}\) est dans \(|z|<1\).</p>
+
+      <div class="math-display">
+        \[\mathrm{Res}\!\left(\frac{2/i}{z^2+4z+1}, z_0\right) = \frac{2/i}{2z_0+4} = \frac{2/i}{2\sqrt{3}} = \frac{1}{i\sqrt{3}}\]
+      </div>
+      <div class="math-display">
+        \[I = 2\pi i \cdot \frac{1}{i\sqrt{3}} = \frac{2\pi}{\sqrt{3}}\]
+      </div>
+    </div>
+
+    <h3>6.3 Type II — Intégrales sur \((-\infty, +\infty)\)</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Demi-cercle supérieur</span>
+      Si \(f\) est méromorphe avec \(|f(z)| = O(|z|^{-2})\) pour \(|z|\to\infty\) (pas de pôle sur \(\mathbb{R}\)) :
+      <div class="math-display">
+        \[\int_{-\infty}^{+\infty} f(x)\,dx = 2\pi i \sum_{\mathrm{Im}(z_k)>0} \mathrm{Res}(f, z_k)\]
+      </div>
+      Le lemme ML assure que l'arc semi-circulaire de rayon \(R\to\infty\) tend vers 0.
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Exemple classique</span>
+      \(\displaystyle I = \int_{-\infty}^{+\infty} \frac{dx}{1+x^4}\)
+
+      <p style="margin-top:0.8rem;">Les pôles de \(\dfrac{1}{1+z^4}\) vérifient \(z^4 = -1 = e^{i\pi}\), soit \(z_k = e^{i\pi(2k+1)/4}\), \(k=0,1,2,3\).</p>
+      <p>Dans le demi-plan supérieur : \(z_0 = e^{i\pi/4} = \tfrac{1+i}{\sqrt{2}}\) et \(z_1 = e^{3i\pi/4} = \tfrac{-1+i}{\sqrt{2}}\).</p>
+
+      <p>Formule pôle simple : \(\mathrm{Res}(f,z_k) = \dfrac{1}{4z_k^3}\).</p>
+
+      <div class="math-display">
+        \[\sum \mathrm{Res} = \frac{1}{4}(z_0^{-3}+z_1^{-3}) = \frac{1}{4}\left(e^{-3i\pi/4}+e^{-9i\pi/4}\right) = \frac{1}{4}\cdot\frac{-i}{\sqrt{2}}\cdot 2 = \frac{-i}{2\sqrt{2}}\]
+      </div>
+      <div class="math-display">
+        \[I = 2\pi i \cdot \frac{-i}{2\sqrt{2}} = \frac{\pi}{\sqrt{2}}\]
+      </div>
+    </div>
+
+    <h3>6.4 Type III — Lemme de Jordan (intégrales oscillantes)</h3>
+
+    <div class="box theorem">
+      <span class="box-label">Lemme de Jordan</span>
+      Si \(|f(z)| \to 0\) uniformément sur les demi-cercles de rayon \(R\to\infty\), alors pour \(\alpha > 0\) :
+      <div class="math-display">
+        \[\int_{C_R} f(z)e^{i\alpha z}\,dz \to 0\]
+      </div>
+      (où \(C_R\) est le demi-cercle supérieur). Cela permet de calculer \(\displaystyle\int_{-\infty}^{+\infty} f(x)\cos(\alpha x)\,dx\) et \(\displaystyle\int_{-\infty}^{+\infty} f(x)\sin(\alpha x)\,dx\).
+    </div>
+
+    <div class="box example">
+      <span class="box-label">Intégrale de Dirichlet</span>
+      \(\displaystyle\int_0^{+\infty}\frac{\sin x}{x}\,dx = \frac{\pi}{2}\)
+
+      <p style="margin-top:0.8rem;">Considérer \(\displaystyle\oint_\gamma \frac{e^{iz}}{z}\,dz\) sur le contour "keyhole" en indentant l'origine. L'intégrale sur le grand arc → 0 (Jordan), sur le petit arc → \(-\pi i\). L'intégrale sur \(\mathbb{R}\) vaut \(\displaystyle\int_{-\infty}^{+\infty}\frac{e^{ix}}{x}dx\). Prendre la partie imaginaire : \(\displaystyle 2\int_0^\infty \frac{\sin x}{x}dx = \pi\).</p>
+    </div>
+
+    <h3>6.5 Contour rectangulaire</h3>
+
+    <div class="box example">
+      <span class="box-label">Fonction Gamma — type IMC</span>
+      Pour évaluer \(\displaystyle\int_{-\infty}^{+\infty} \frac{e^{ax}}{1+e^x}dx\) (\(0 < a < 1\)), utiliser un rectangle de hauteur \(2\pi i\). La périodicité \(f(z+2\pi i) = e^{2\pi i a}f(z)\) permet de relier les contributions horizontales, et l'on obtient :
+      <div class="math-display">
+        \[\int_{-\infty}^{+\infty} \frac{e^{ax}}{1+e^x}dx = \frac{\pi}{\sin(\pi a)}\]
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="problemes">
+    <div class="section-number">§ VII</div>
+    <h2>Problèmes de Niveau IMC</h2>
+
+    <p>Les problèmes suivants sont représentatifs du style et de la difficulté de l'IMC. Chaque solution illustre une technique essentielle.</p>
+
+    <details>
+      <summary>Problème 1 — Intégrale gaussienne complexifiée</summary>
+      <div class="details-content">
+        <p><strong>Énoncé :</strong> Montrer que \(\displaystyle\int_{-\infty}^{+\infty} e^{-x^2}\cos(2bx)\,dx = \sqrt{\pi}\,e^{-b^2}\).</p>
+
+        <div class="box proof">
+          <span class="box-label">Solution</span>
+          <p>Considérer \(\displaystyle I(b) = \int_{-\infty}^{+\infty} e^{-x^2+2ibx}\,dx = e^{-b^2}\int_{-\infty}^{+\infty} e^{-(x-ib)^2}\,dx\).</p>
+          <p>Le contour rectangulaire avec hauteur \(b\) montre (par Cauchy, \(e^{-z^2}\) est entière) que l'intégrale sur la droite \(\mathrm{Im}(z)=b\) est égale à \(\displaystyle\int_{-\infty}^{+\infty}e^{-x^2}dx = \sqrt{\pi}\).</p>
+          <p>Donc \(I(b) = \sqrt{\pi}\,e^{-b^2}\), et la partie réelle donne le résultat. \(\square\)</p>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Problème 2 — Somme de série via les résidus</summary>
+      <div class="details-content">
+        <p><strong>Énoncé :</strong> Calculer \(\displaystyle\sum_{n=-\infty}^{+\infty}\frac{1}{n^2+a^2}\) (\(a > 0\)).</p>
+
+        <div class="box proof">
+          <span class="box-label">Solution</span>
+          <p><strong>Méthode :</strong> La fonction \(\pi\cot(\pi z)\) a des pôles simples en tout entier \(n\) avec résidu 1. Donc :</p>
+          <div class="math-display">
+            \[\sum_{n=-\infty}^{+\infty} f(n) = -\sum_{\text{pôles de }f} \mathrm{Res}(\pi\cot(\pi z)\cdot f(z), z_k)\]
+          </div>
+          <p>Pour \(f(z) = \dfrac{1}{z^2+a^2}\), pôles en \(\pm ia\) :</p>
+          <div class="math-display">
+            \[\mathrm{Res}\left(\frac{\pi\cot(\pi z)}{z^2+a^2}, ia\right) = \frac{\pi\cot(\pi ia)}{2ia} = \frac{\pi\coth(\pi a)}{2ia}\]
+          </div>
+          <div class="math-display">
+            \[\sum_{n=-\infty}^{+\infty}\frac{1}{n^2+a^2} = \frac{\pi\coth(\pi a)}{a}\]
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Problème 3 — Inégalité de Cauchy et applications</summary>
+      <div class="details-content">
+        <p><strong>Énoncé :</strong> Soit \(f\) entière telle que \(|f(z)| \leq C|z|^n\) pour tout \(z\). Montrer que \(f\) est un polynôme de degré \(\leq n\).</p>
+
+        <div class="box proof">
+          <span class="box-label">Solution</span>
+          <p>Par la formule des dérivées de Cauchy sur \(|z|=R\) :</p>
+          <div class="math-display">
+            \[|f^{(k)}(0)| = \left|\frac{k!}{2\pi i}\oint_{|z|=R}\frac{f(z)}{z^{k+1}}dz\right| \leq \frac{k!}{2\pi}\cdot\frac{CR^n}{R^{k+1}}\cdot 2\pi R = \frac{k!\,CR^n}{R^k}\]
+          </div>
+          <p>Pour \(k > n\), en faisant \(R\to+\infty\) : \(|f^{(k)}(0)| \leq k!\,C\cdot R^{n-k} \to 0\).</p>
+          <p>Donc \(f^{(k)}(0) = 0\) pour tout \(k > n\), et par le développement de Taylor, \(f\) est un polynôme de degré \(\leq n\). \(\square\)</p>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Problème 4 — Contour indentation (pôle sur l'axe réel)</summary>
+      <div class="details-content">
+        <p><strong>Énoncé :</strong> Calculer \(\displaystyle\int_0^{+\infty}\frac{\ln x}{(1+x^2)^2}dx\).</p>
+
+        <div class="box proof">
+          <span class="box-label">Solution</span>
+          <p>Considérer \(\displaystyle f(z) = \frac{(\log z)^2}{(1+z^2)^2}\) sur le demi-plan supérieur avec une coupure sur \(\mathbb{R}^-\) et un contour composé de \([-R,-\varepsilon] \cup C_\varepsilon^- \cup [\varepsilon, R] \cup C_R^+\).</p>
+          <p>Seul pôle dans le demi-plan : \(z = i\) (ordre 2).</p>
+          <div class="math-display">
+            \[\mathrm{Res}\!\left(\frac{(\log z)^2}{(1+z^2)^2}, i\right) = \frac{d}{dz}\!\left.\left[\frac{(\log z)^2}{(z+i)^2}\right]\right|_{z=i} = \frac{\pi}{4} + \frac{i\pi^2}{8} - \frac{i}{4}\]
+          </div>
+          <p>Après séparation des parties réelle et imaginaire des intégrales sur \([0,+\infty)\) :</p>
+          <div class="math-display">
+            \[\int_0^{+\infty}\frac{\ln x}{(1+x^2)^2}dx = -\frac{\pi}{4}\]
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Problème 5 — Principe du maximum et bornes</summary>
+      <div class="details-content">
+        <p><strong>Énoncé (style IMC) :</strong> Soit \(f\) holomorphe sur le disque unité, continue sur \(\overline{D}\), avec \(|f(e^{i\theta})| = 1\). Montrer que \(f\) est un produit de Blaschke fini ou une rotation.</p>
+
+        <div class="box proof">
+          <span class="box-label">Indication de solution</span>
+          <p>Par le principe du maximum, \(|f(z)| \leq 1\) dans \(D\). Appliquer le même raisonnement à \(1/f\) si \(f\) n'a pas de zéros dans \(D\) : on obtient \(|f| \geq 1\), donc \(|f| \equiv 1\). Par le principe d'identité, \(f = e^{i\alpha}\) (rotation).</p>
+          <p>Si \(f\) a des zéros \(a_1,\ldots,a_n\) dans \(D\), diviser par le produit de Blaschke \(B(z) = \prod \frac{z-a_k}{1-\bar{a}_k z}\) (qui vaut 1 sur le bord) et appliquer le même argument à \(f/B\).</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="ornament-divider">· · · · ·</div>
+
+    <div class="imc-tip">
+      <strong>Récapitulatif des stratégies IMC :</strong>
+      <ul style="margin-top:0.8rem; padding-left:1.4rem;">
+        <li>Intégrale trigonométrique → substitution \(z = e^{i\theta}\)</li>
+        <li>Intégrale sur \(\mathbb{R}\) à décroissance polynomiale → demi-cercle + résidus</li>
+        <li>Intégrale oscillante → lemme de Jordan</li>
+        <li>Fonction périodique → rectangle</li>
+        <li>Somme de série → \(\pi\cot(\pi z)\) ou \(\pi/\sin(\pi z)\)</li>
+        <li>Borne sur une fonction entière → inégalités de Cauchy + Liouville</li>
+        <li>Preuve d'existence/unicité → principe du maximum ou argument</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div style="color:var(--gold-light); font-size:1.1rem; margin-bottom:0.5rem;">∮</div>
+  Cours d'Intégration Complexe · Préparation IMC<br>
+  <span style="font-size:0.82rem; opacity:0.5; margin-top:0.4rem; display:block;">Analyse Complexe · Variable Complexe · Théorie des Résidus</span>
+</footer>
+
+<script>
+  // Stagger section animations
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animationPlayState = 'running';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  sections.forEach(s => {
+    s.style.animationPlayState = 'paused';
+    observer.observe(s);
+  });
+
+  // Smooth active nav
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#'+current ? 'var(--gold)' : '';
+      a.style.borderBottomColor = a.getAttribute('href') === '#'+current ? 'var(--gold)' : 'transparent';
+    });
+  });
+</script>
+
+</body>
+</html>
